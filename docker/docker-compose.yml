@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  postgres-employee-service:
+    container_name: dkmicroservices-employee
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_employee_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
+  postgres-department-service:
+    container_name: dkmicroservices-department
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_department_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password

@@ -1,0 +1,22 @@
+syntax = "proto3";
+package department.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.department.protobuf";
+option java_outer_classname = "DepartmentProtobuf";
+
+import "employee-service/shared.proto";
+
+message PDepartment {
+  int64 id = 1;
+  string name = 2;
+  repeated employee.service.PEmployee employees = 3;
+}
+
+message PDepartmentResponse {
+  PDepartment department = 1;
+}
+
+message PDepartmentsResponse {
+  repeated PDepartment departments = 1;
+}

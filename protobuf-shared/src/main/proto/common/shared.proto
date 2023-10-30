@@ -1,0 +1,13 @@
+syntax = "proto3";
+package common.protobuf;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.common.protobuf";
+option java_outer_classname = "CommonProtobuf";
+
+enum PPosition {
+  DEVELOPER = 0;
+  QA = 1;
+  TECH_LEAD = 2;
+  PROJECT_MANAGER = 3;
+}

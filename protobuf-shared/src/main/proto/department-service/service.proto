@@ -1,0 +1,14 @@
+syntax = "proto3";
+package department.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.department.service";
+option java_outer_classname = "DepartmentServiceAPI";
+
+import "google/protobuf/wrappers.proto";
+import "department-service/shared.proto";
+
+service DepartmentService {
+  rpc createOrUpdateDepartment (PDepartment) returns (google.protobuf.Int64Value);
+  rpc getDepartmentById (google.protobuf.Int64Value) returns (PDepartmentResponse);
+}
