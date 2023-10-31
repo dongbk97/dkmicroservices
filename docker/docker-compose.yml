@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+  # employee postgres db
   postgres-employee-service:
     container_name: dkmicroservices-employee
     image: postgres:16-alpine
@@ -12,6 +13,7 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
 
+  # department postgres db
   postgres-department-service:
     container_name: dkmicroservices-department
     image: postgres:16-alpine
@@ -22,3 +24,11 @@ services:
       - POSTGRES_DB=dkmicroservices_department_db
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
+
+  # distributed tracing zipkin
+  distributed-tracing:
+    container_name: dkmicroservices-zipkin
+    image: openzipkin/zipkin
+    restart: unless-stopped
+    ports:
+      - "9411:9411"
