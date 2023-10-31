@@ -45,6 +45,11 @@
             <artifactId>protobuf-shared</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>dev.ngdangkiet</groupId>
+            <artifactId>common-shared</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

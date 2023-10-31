@@ -4,7 +4,9 @@ import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
+import dev.ngdangkiet.service.EmployeeService;
 import io.grpc.stub.StreamObserver;
+import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 /**
@@ -13,15 +15,22 @@ import net.devh.boot.grpc.server.service.GrpcService;
  */
 
 @GrpcService
+@RequiredArgsConstructor
 public class EmployeeServiceGrpcServer extends EmployeeServiceGrpc.EmployeeServiceImplBase {
+
+    private final EmployeeService employeeService;
 
     @Override
     public void createOrUpdateEmployee(PEmployee request, StreamObserver<Int64Value> responseObserver) {
-        super.createOrUpdateEmployee(request, responseObserver);
+        Int64Value response = employeeService.createOrUpdateEmployee(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 
     @Override
     public void getEmployeeById(Int64Value request, StreamObserver<PEmployeeResponse> responseObserver) {
-        super.getEmployeeById(request, responseObserver);
+        PEmployeeResponse response = employeeService.getEmployeeById(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 }
