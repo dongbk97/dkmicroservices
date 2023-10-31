@@ -32,5 +32,5 @@ public class EmployeeEntity {
 
     @ManyToOne(targetEntity = PositionEntity.class)
     @JoinColumn(name = "position_id", referencedColumnName = "id")
-    private Long positionId;
+    private PositionEntity position;
 }

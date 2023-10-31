@@ -5,6 +5,7 @@ import dev.ngdangkiet.mapper.ProtobufMapper;
 import dev.ngdangkiet.mapper.ProtobufMapperConfig;
 import dev.ngdangkiet.payload.request.EmployeeRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 /**
  * @author ngdangkiet
@@ -13,4 +14,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = ProtobufMapperConfig.class)
 public interface EmployeeRequestMapper extends ProtobufMapper<EmployeeRequest, PEmployee> {
+
+    EmployeeRequestMapper INSTANCE = Mappers.getMapper(EmployeeRequestMapper.class);
 }

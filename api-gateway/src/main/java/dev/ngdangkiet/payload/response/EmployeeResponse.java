@@ -1,9 +1,8 @@
 package dev.ngdangkiet.payload.response;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.swing.text.Position;
 
 /**
  * @author ngdangkiet
@@ -12,6 +11,7 @@ import javax.swing.text.Position;
 
 @Getter
 @Setter
+@Builder
 public class EmployeeResponse {
 
     private Long id;
@@ -23,6 +23,7 @@ public class EmployeeResponse {
 
     @Getter
     @Setter
+    @Builder
     public static class Position {
 
         private Long id;
@@ -31,6 +32,7 @@ public class EmployeeResponse {
 
     @Getter
     @Setter
+    @Builder(setterPrefix = "set")
     public static class Department {
 
         private Long id;

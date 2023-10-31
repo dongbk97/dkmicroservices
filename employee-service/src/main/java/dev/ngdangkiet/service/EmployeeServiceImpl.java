@@ -4,9 +4,11 @@ import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
 import dev.ngdangkiet.domain.EmployeeEntity;
+import dev.ngdangkiet.domain.PositionEntity;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.mapper.EmployeeMapper;
 import dev.ngdangkiet.repository.EmployeeRepository;
+import dev.ngdangkiet.repository.PositionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,13 +26,19 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final PositionRepository positionRepository;
     private final EmployeeMapper employeeMapper = EmployeeMapper.INSTANCE;
 
     @Override
     public Int64Value createOrUpdateEmployee(PEmployee pEmployee) {
         try {
             EmployeeEntity entity = employeeMapper.toDomain(pEmployee);
-            return Int64Value.of(employeeRepository.save(entity).getId());
+            Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
+            if (position.isPresent()) {
+                return Int64Value.of(employeeRepository.save(entity).getId());
+            } else {
+                return Int64Value.of(ErrorCode.INVALID_DATA);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
