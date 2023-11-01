@@ -1,8 +1,11 @@
 package dev.ngdangkiet.client;
 
 import com.google.protobuf.Int64Value;
+import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeesResponse;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
 import dev.ngdangkiet.error.ErrorHelper;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +35,13 @@ public class EmployeeGrpcClient {
             return response.getData();
         }
         return null;
+    }
+
+    public PEmployeesResponse getEmployees(PGetEmployeesRequest request) {
+        return employeeServiceBlockingStub.getEmployees(request);
+    }
+
+    public EmptyResponse deleteEmployeeById(Long employeeId) {
+        return employeeServiceBlockingStub.deleteEmployeeById(Int64Value.of(employeeId));
     }
 }

@@ -11,3 +11,7 @@ enum PPosition {
   TECH_LEAD = 2;
   PROJECT_MANAGER = 3;
 }
+
+message EmptyResponse {
+  int32 code = 1;
+}
