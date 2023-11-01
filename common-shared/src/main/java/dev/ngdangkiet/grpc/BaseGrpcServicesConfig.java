@@ -20,10 +20,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class BaseGrpcServicesConfig {
 
+    protected final List<ManagedChannel> channels = new ArrayList<>();
     @Qualifier("eurekaClient")
     private final EurekaClient eurekaClient;
-
-    protected final List<ManagedChannel> channels = new ArrayList<>();
 
     public BaseGrpcServicesConfig(EurekaClient eurekaClient) {
         this.eurekaClient = eurekaClient;

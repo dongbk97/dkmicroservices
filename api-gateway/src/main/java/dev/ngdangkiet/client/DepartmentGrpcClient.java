@@ -6,6 +6,7 @@ import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartmentResponse;
 import dev.ngdangkiet.dkmicroservices.department.service.DepartmentServiceGrpc;
 import dev.ngdangkiet.error.ErrorHelper;
 import lombok.RequiredArgsConstructor;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DepartmentGrpcClient {
 
+    @GrpcClient("grpc-department-service")
     private final DepartmentServiceGrpc.DepartmentServiceBlockingStub departmentServiceBlockingStub;
 
     public long createOrUpdateDepartment(PDepartment department) {

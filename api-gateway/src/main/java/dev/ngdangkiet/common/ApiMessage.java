@@ -18,6 +18,7 @@ public class ApiMessage {
     public static ApiMessage CREATE_FAILED = new ApiMessage(-3, "Create failed");
     public static ApiMessage UPDATE_FAILED = new ApiMessage(-4, "Update failed");
     public static ApiMessage DELETE_FAILED = new ApiMessage(-5, "Delete failed");
+    public static ApiMessage UNKNOWN_EXCEPTION = new ApiMessage(-6, "Unknown exception");
 
     private int code;
     private String message;

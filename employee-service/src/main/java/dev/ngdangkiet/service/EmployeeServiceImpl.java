@@ -35,6 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             EmployeeEntity entity = employeeMapper.toDomain(pEmployee);
             Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
             if (position.isPresent()) {
+                entity.setPosition(position.get());
                 return Int64Value.of(employeeRepository.save(entity).getId());
             } else {
                 return Int64Value.of(ErrorCode.INVALID_DATA);

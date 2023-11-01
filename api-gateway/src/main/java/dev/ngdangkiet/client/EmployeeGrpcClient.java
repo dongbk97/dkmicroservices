@@ -6,6 +6,7 @@ import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
 import dev.ngdangkiet.error.ErrorHelper;
 import lombok.RequiredArgsConstructor;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EmployeeGrpcClient {
 
+    @GrpcClient("grpc-employee-service")
     private final EmployeeServiceGrpc.EmployeeServiceBlockingStub employeeServiceBlockingStub;
 
     public long createOrUpdateEmployee(PEmployee employee) {

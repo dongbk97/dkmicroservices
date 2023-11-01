@@ -3,6 +3,7 @@ package dev.ngdangkiet.controller;
 import dev.ngdangkiet.client.EmployeeGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.constant.PositionConstant;
+import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.EmployeeRequestMapper;
 import dev.ngdangkiet.mapper.response.EmployeeResponseMapper;
 import dev.ngdangkiet.payload.request.EmployeeRequest;
@@ -33,11 +34,14 @@ public class EmployeeController {
     public ApiMessage createEmployee(@RequestBody EmployeeRequest request) {
         try {
             var data = employeeGrpcClient.createOrUpdateEmployee(employeeRequestMapper.toProtobuf(request));
+            if (ErrorHelper.isFailed((int) data)) {
+                return ApiMessage.CREATE_FAILED;
+            }
             return ApiMessage.success(data);
         } catch (Exception e) {
             e.printStackTrace();
+            return ApiMessage.UNKNOWN_EXCEPTION;
         }
-        return ApiMessage.CREATE_FAILED;
     }
 
     @GetMapping("/{id}")
