@@ -40,14 +40,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             if (pEmployee.getId() > 0 && employeeRepository.findById(pEmployee.getId()).isEmpty()) {
                 response = ErrorCode.INVALID_DATA;
-            }
-            EmployeeEntity entity = employeeMapper.toDomain(pEmployee);
-            Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
-            if (position.isPresent()) {
-                entity.setPosition(position.get());
-                response = employeeRepository.save(entity).getId();
             } else {
-                response = ErrorCode.INVALID_DATA;
+                EmployeeEntity entity = employeeMapper.toDomain(pEmployee);
+                Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
+                if (position.isPresent()) {
+                    entity.setPosition(position.get());
+                    response = employeeRepository.save(entity).getId();
+                } else {
+                    response = ErrorCode.INVALID_DATA;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

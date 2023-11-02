@@ -30,7 +30,7 @@
         <lombok.version>1.18.30</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <spring-data-commons.version>3.1.2</spring-data-commons.version>
+<!--        <spring-data-commons.version>3.1.2</spring-data-commons.version>-->
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <grpc.version>1.58.0</grpc.version>
         <os-maven.version>1.7.1</os-maven.version>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <version>${spring-data-commons.version}</version>
+<!--            <version>${spring-data-commons.version}</version>-->
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
