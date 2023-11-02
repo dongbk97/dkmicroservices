@@ -8,6 +8,8 @@ services:
     restart: unless-stopped
     ports:
       - "5433:5432"
+    volumes:
+      - ./data/db-employee:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=dkmicroservices_employee_db
       - POSTGRES_USER=user
@@ -20,6 +22,8 @@ services:
     restart: unless-stopped
     ports:
       - "5434:5432"
+    volumes:
+      - ./data/db-department:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=dkmicroservices_department_db
       - POSTGRES_USER=user
