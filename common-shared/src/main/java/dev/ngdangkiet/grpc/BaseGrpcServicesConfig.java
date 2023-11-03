@@ -29,6 +29,7 @@ public class BaseGrpcServicesConfig {
     }
 
     protected InstanceInfo getGrpcInstanceInfo(String serviceName) {
+        // secure = false => non-secure-port (grpc server port)
         return eurekaClient.getNextServerFromEureka(serviceName, false);
     }
 

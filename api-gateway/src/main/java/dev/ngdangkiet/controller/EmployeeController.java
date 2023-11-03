@@ -51,7 +51,7 @@ public class EmployeeController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ApiMessage updateEmployee(@RequestBody EmployeeRequest request) {
         try {
             var data = employeeGrpcClient.createOrUpdateEmployee(employeeRequestMapper.toProtobuf(request));

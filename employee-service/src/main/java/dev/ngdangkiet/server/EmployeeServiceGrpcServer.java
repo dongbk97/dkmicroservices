@@ -1,6 +1,5 @@
 package dev.ngdangkiet.server;
 
-import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;

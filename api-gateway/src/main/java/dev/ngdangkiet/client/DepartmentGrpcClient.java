@@ -1,8 +1,11 @@
 package dev.ngdangkiet.client;
 
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
+import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartment;
 import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartmentResponse;
+import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartmentsResponse;
 import dev.ngdangkiet.dkmicroservices.department.service.DepartmentServiceGrpc;
 import dev.ngdangkiet.error.ErrorHelper;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +35,13 @@ public class DepartmentGrpcClient {
             return response.getData();
         }
         return null;
+    }
+
+    public PDepartmentsResponse getDepartments() {
+        return departmentServiceBlockingStub.getDepartments(Empty.newBuilder().build());
+    }
+
+    public EmptyResponse deleteDepartmentById(Long departmentId) {
+        return departmentServiceBlockingStub.deleteDepartmentById(Int64Value.of(departmentId));
     }
 }

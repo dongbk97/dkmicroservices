@@ -34,3 +34,4 @@ build/
 
 ### Docker ###
 docker/data/*
+docker/cache/*
