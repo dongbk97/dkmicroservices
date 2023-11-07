@@ -3,9 +3,16 @@ spring:
     name: api-gateway
   main:
     web-application-type: reactive
-
   config:
     import: "optional:configserver:http://localhost:8088"
+
+security:
+  auth:
+    login-url: /api/v1/auth/login
+    header-name: Authorization
+    header-prefix: "Bearer "
+    expiration-time: 172800000 # 2 days
+    secret-key: O$G,oIV4H4.!~Jm
 
 grpc:
   client:
@@ -14,4 +21,7 @@ grpc:
       negotiation-type: plaintext
     grpc-employee-service:
       address: static://localhost:8020
+      negotiation-type: plaintext
+    grpc-auth-service:
+      address: static://localhost:8040
       negotiation-type: plaintext

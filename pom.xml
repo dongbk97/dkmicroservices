@@ -23,6 +23,7 @@
         <module>config-server</module>
         <module>common-shared</module>
         <module>api-gateway</module>
+        <module>auth-service</module>
     </modules>
 
     <properties>

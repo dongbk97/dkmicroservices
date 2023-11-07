@@ -8,4 +8,5 @@ package dev.ngdangkiet.constant;
 public class ServiceConstant {
     public static String DEPARTMENT_SERVICE = "department-service";
     public static String EMPLOYEE_SERVICE = "employee-service";
+    public static String AUTH_SERVICE = "auth-service";
 }

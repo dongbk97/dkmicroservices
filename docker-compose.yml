@@ -1,0 +1,92 @@
+version: "3.9"
+
+services:
+  config-server:
+    container_name: dkmicroservices-config-server
+    build: config-server
+    ports:
+      - "8088:8088"
+    restart: unless-stopped
+
+  service-registry:
+    container_name: dkmicroservices-service-registry
+    build: service-registry
+    ports:
+      - "8761:8761"
+    restart: unless-stopped
+    depends_on:
+      - config-server
+
+  auth-service:
+    container_name: dkmicroservices-auth-service
+    build: auth-service
+    ports:
+      - "8004:8004"
+    restart: unless-stopped
+    depends_on:
+      - config-server
+      - service-registry
+      - department-postgres
+
+  department-service:
+    container_name: dkmicroservices-department-service
+    build: department-service
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    depends_on:
+      - config-server
+      - service-registry
+      - department-postgres
+
+  department-postgres:
+    container_name: dkmicroservices-department-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_department_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
+  employee-service:
+    container_name: dkmicroservices-employee-service
+    build: employee-service
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+    depends_on:
+      - config-server
+      - service-registry
+      - employee-postgres
+
+  employee-postgres:
+    container_name: dkmicroservices-employee-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_employee_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
+  api-gateway:
+    container_name: dkmicroservices-api-gateway
+    build: api-gateway
+    ports:
+      - "8003:8003"
+    restart: unless-stopped
+    depends_on:
+      - config-server
+      - service-registry
+      - department-service
+      - employee-service
+
+  distributed-tracing:
+    container_name: dkmicroservices-zipkin
+    image: openzipkin/zipkin
+    restart: unless-stopped
+    ports:
+      - "9411:9411"

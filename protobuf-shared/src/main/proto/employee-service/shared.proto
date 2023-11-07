@@ -10,8 +10,9 @@ message PEmployee {
   int64 department_id = 2;
   string full_name = 3;
   string email = 4;
-  int32 age = 5;
-  int64 position_id = 6;
+  string password = 5;
+  int32 age = 6;
+  int64 position_id = 7;
 }
 
 // PRequest

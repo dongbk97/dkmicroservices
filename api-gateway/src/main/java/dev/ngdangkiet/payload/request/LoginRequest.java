@@ -5,21 +5,15 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-
 /**
  * @author ngdangkiet
- * @since 10/31/2023
+ * @since 11/7/2023
  */
 
 @Getter
 @Setter
-public class EmployeeRequest implements Serializable {
+public class LoginRequest implements Serializable {
 
-    private Long id;
-    private Long departmentId;
-    private String fullName;
     private String email;
     private String password;
-    private Integer age;
-    private Long positionId;
 }

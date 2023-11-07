@@ -20,6 +20,9 @@ public class ApiMessage {
     public static ApiMessage DELETE_FAILED = new ApiMessage(-5, "Delete failed");
     public static ApiMessage UNKNOWN_EXCEPTION = new ApiMessage(-6, "Unknown exception");
 
+    public static ApiMessage UNAUTHORIZED = new ApiMessage(-10, "Unauthorized");
+    public static ApiMessage LOGIN_FAILED = new ApiMessage(-11, "Login failed");
+
     private int code;
     private String message;
     private Object data;

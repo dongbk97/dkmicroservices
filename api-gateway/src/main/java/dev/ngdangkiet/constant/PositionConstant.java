@@ -14,10 +14,10 @@ import java.util.Arrays;
 @Getter
 public enum PositionConstant {
 
-    DEVELOPER(1L, "Developer"),
+    DEVELOPER(1L, "DEVELOPER"),
     QA(2L, "QA"),
-    TECH_LEAD(3L, "Tech lead"),
-    PROJECT_MANAGER(4L, "Project manager");
+    TECH_LEAD(3L, "TECH_LEAD"),
+    PROJECT_MANAGER(4L, "PROJECT_MANAGER");
 
     private final Long id;
     private final String name;

@@ -14,6 +14,8 @@
 
     <properties>
         <grpc-client.version>2.15.0.RELEASE</grpc-client.version>
+        <jakarta-validation.version>3.0.2</jakarta-validation.version>
+        <jackson-databind.version>2.15.2</jackson-databind.version>
     </properties>
 
     <dependencies>
@@ -32,6 +34,18 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta-validation.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
@@ -58,5 +72,9 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>api-gateway</finalName>
+    </build>
 
 </project>

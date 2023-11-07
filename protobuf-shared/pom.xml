@@ -37,6 +37,8 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <finalName>protobuf-shared</finalName>
     </build>
 
 </project>

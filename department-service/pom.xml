@@ -62,4 +62,8 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>department-service</finalName>
+    </build>
+
 </project>

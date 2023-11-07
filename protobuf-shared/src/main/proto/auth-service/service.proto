@@ -1,0 +1,13 @@
+syntax = "proto3";
+package auth.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.auth.service";
+option java_outer_classname = "AuthServiceAPI";
+
+import "auth-service/shared.proto";
+import "google/protobuf/empty.proto";
+
+service AuthService {
+  rpc authentication (auth.service.PLoginRequest) returns (auth.service.PLoginResponse);
+}

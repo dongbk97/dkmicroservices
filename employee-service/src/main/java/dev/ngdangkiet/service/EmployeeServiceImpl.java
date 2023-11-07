@@ -14,6 +14,7 @@ import dev.ngdangkiet.repository.EmployeeRepository;
 import dev.ngdangkiet.repository.PositionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -32,6 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final PositionRepository positionRepository;
+    private final PasswordEncoder passwordEncoder;
     private final EmployeeMapper employeeMapper = EmployeeMapper.INSTANCE;
 
     @Override
@@ -45,6 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
                 if (position.isPresent()) {
                     entity.setPosition(position.get());
+                    entity.setPassword(passwordEncoder.encode(entity.getPassword()));
                     response = employeeRepository.save(entity).getId();
                 } else {
                     response = ErrorCode.INVALID_DATA;

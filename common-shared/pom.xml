@@ -19,4 +19,8 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>common-shared</finalName>
+    </build>
+
 </project>
