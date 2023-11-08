@@ -75,8 +75,8 @@ public class EmployeeController {
             }
 
             var position = EmployeeResponse.Position.builder()
-                    .id(grpcResponse.getId())
-                    .name(PositionConstant.of(grpcResponse.getId()).getName())
+                    .id(grpcResponse.getPositionId())
+                    .name(PositionConstant.of(grpcResponse.getPositionId()).getName())
                     .build();
             var data = employeeResponseMapper.toDomain(grpcResponse);
             data.setPosition(position);

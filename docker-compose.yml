@@ -26,7 +26,7 @@ services:
     depends_on:
       - config-server
       - service-registry
-      - department-postgres
+      - employee-postgres
 
   department-service:
     container_name: dkmicroservices-department-service

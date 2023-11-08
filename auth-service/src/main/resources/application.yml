@@ -20,6 +20,13 @@ spring:
   config:
     import: "optional:configserver:http://localhost:8088"
 
+springbootwebfluxjwt:
+  password:
+    encoder:
+      secret: dkmicroservices
+      iteration: 33
+      keyLength: 256
+
 security:
   auth:
     secret-key: foobar_123456789_foobar_123456789_foobar_123456789_foobar_123456789
