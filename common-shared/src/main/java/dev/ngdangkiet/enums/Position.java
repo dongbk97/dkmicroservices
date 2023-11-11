@@ -1,4 +1,4 @@
-package dev.ngdangkiet.constant;
+package dev.ngdangkiet.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +7,12 @@ import java.util.Arrays;
 
 /**
  * @author ngdangkiet
- * @since 10/31/2023
+ * @since 11/8/2023
  */
 
 @AllArgsConstructor
 @Getter
-public enum PositionConstant {
+public enum Position {
 
     DEVELOPER(1L, "DEVELOPER"),
     QA(2L, "QA"),
@@ -22,8 +22,8 @@ public enum PositionConstant {
     private final Long id;
     private final String name;
 
-    public static PositionConstant of(Long id) {
-        return Arrays.stream(PositionConstant.values())
+    public static Position of(Long id) {
+        return Arrays.stream(Position.values())
                 .filter(p -> p.id.equals(id)).findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid id"));
     }

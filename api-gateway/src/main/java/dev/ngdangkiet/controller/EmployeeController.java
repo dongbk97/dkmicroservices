@@ -2,13 +2,14 @@ package dev.ngdangkiet.controller;
 
 import dev.ngdangkiet.client.EmployeeGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
-import dev.ngdangkiet.constant.PositionConstant;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
+import dev.ngdangkiet.enums.Position;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.EmployeeRequestMapper;
 import dev.ngdangkiet.mapper.response.EmployeeResponseMapper;
 import dev.ngdangkiet.payload.request.EmployeeRequest;
 import dev.ngdangkiet.payload.response.EmployeeResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +39,7 @@ public class EmployeeController {
     private final EmployeeResponseMapper employeeResponseMapper = EmployeeResponseMapper.INSTANCE;
 
     @PostMapping
-    public ApiMessage createEmployee(@RequestBody EmployeeRequest request) {
+    public ApiMessage createEmployee(@Valid @RequestBody EmployeeRequest request) {
         try {
             var data = employeeGrpcClient.createOrUpdateEmployee(employeeRequestMapper.toProtobuf(request));
             if (ErrorHelper.isFailed((int) data)) {
@@ -52,7 +53,7 @@ public class EmployeeController {
     }
 
     @PutMapping
-    public ApiMessage updateEmployee(@RequestBody EmployeeRequest request) {
+    public ApiMessage updateEmployee(@Valid @RequestBody EmployeeRequest request) {
         try {
             var data = employeeGrpcClient.createOrUpdateEmployee(employeeRequestMapper.toProtobuf(request));
             if (ErrorHelper.isFailed((int) data)) {
@@ -76,7 +77,7 @@ public class EmployeeController {
 
             var position = EmployeeResponse.Position.builder()
                     .id(grpcResponse.getPositionId())
-                    .name(PositionConstant.of(grpcResponse.getPositionId()).getName())
+                    .name(Position.of(grpcResponse.getPositionId()).getName())
                     .build();
             var data = employeeResponseMapper.toDomain(grpcResponse);
             data.setPosition(position);

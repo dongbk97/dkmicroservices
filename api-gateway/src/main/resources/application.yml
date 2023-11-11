@@ -4,6 +4,9 @@ spring:
   main:
     web-application-type: reactive
     allow-bean-definition-overriding: true
+  messages:
+    encoding: UTF-8
+    basename: classpath:i18n/messages
   config:
     import: "optional:configserver:http://localhost:8088"
 
