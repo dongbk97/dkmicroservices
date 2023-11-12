@@ -40,6 +40,7 @@ public class WebSecurityConfig {
                         .accessDeniedHandler((swe, e) ->
                                 Mono.fromRunnable(() -> swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN)))
                 )
+
                 .authenticationManager(authenticationManager)
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange(authorizeExchangeSpec ->
@@ -47,6 +48,8 @@ public class WebSecurityConfig {
                                 .pathMatchers(HttpMethod.POST, securityProperties.getLoginUrl()).permitAll()
                                 .pathMatchers(HttpMethod.POST, "/api/v1/employees").permitAll()
                                 .pathMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                                .pathMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                                .pathMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                                 .anyExchange().authenticated()
                 );
 

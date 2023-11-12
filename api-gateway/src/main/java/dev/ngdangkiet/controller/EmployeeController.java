@@ -9,6 +9,7 @@ import dev.ngdangkiet.mapper.request.EmployeeRequestMapper;
 import dev.ngdangkiet.mapper.response.EmployeeResponseMapper;
 import dev.ngdangkiet.payload.request.EmployeeRequest;
 import dev.ngdangkiet.payload.response.EmployeeResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
@@ -29,6 +30,7 @@ import java.util.Objects;
  * @since 10/31/2023
  */
 
+@Tag(name = "Employee", description = "Employee APIs")
 @RestController
 @RequestMapping("/api/v1/employees")
 @RequiredArgsConstructor

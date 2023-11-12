@@ -6,6 +6,7 @@ import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.DepartmentRequestMapper;
 import dev.ngdangkiet.mapper.response.DepartmentResponseMapper;
 import dev.ngdangkiet.payload.request.DepartmentRequest;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ import java.util.Objects;
  * @since 10/31/2023
  */
 
+@Tag(name = "Department", description = "Department APIs")
 @RestController
 @RequestMapping("/api/v1/departments")
 @RequiredArgsConstructor

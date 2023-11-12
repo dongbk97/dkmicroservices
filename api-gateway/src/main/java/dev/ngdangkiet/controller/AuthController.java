@@ -6,6 +6,8 @@ import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.LoginRequestMapper;
 import dev.ngdangkiet.mapper.response.LoginResponseMapper;
 import dev.ngdangkiet.payload.request.LoginRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 11/6/2023
  */
 
+@Tag(name = "Authentication", description = "Authentication APIs")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class AuthController {
     private final LoginRequestMapper loginRequestMapper = LoginRequestMapper.INSTANCE;
     private final LoginResponseMapper loginResponseMapper = LoginResponseMapper.INSTANCE;
 
+    @Operation(summary = "Login by email & password")
     @PostMapping("/login")
     public ApiMessage authentication(@RequestBody LoginRequest request) {
         try {
