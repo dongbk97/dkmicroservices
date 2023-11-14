@@ -1,0 +1,14 @@
+syntax = "proto3";
+package location.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.location.service";
+option java_outer_classname = "LocationServiceAPI";
+
+import "google/protobuf/wrappers.proto";
+import "location-service/shared.proto";
+import "common/shared.proto";
+
+service LocationService {
+  rpc getLocationByName (google.protobuf.StringValue) returns (PLocationResponse);
+}
