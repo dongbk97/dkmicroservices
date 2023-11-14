@@ -2,8 +2,8 @@ FROM openjdk:17-alpine
 
 WORKDIR /app
 
-COPY target/employee-service.jar employee-service.jar
+COPY target/location-service.jar location-service.jar
 
-ENTRYPOINT ["java", "-jar", "employee-service.jar"]
+ENTRYPOINT ["java", "-jar", "location-service.jar"]
 
-EXPOSE 8002
+EXPOSE 8005

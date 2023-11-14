@@ -1,13 +1,8 @@
 package dev.ngdangkiet.client;
 
-import com.google.protobuf.Int64Value;
-import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
-import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
-import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
-import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeesResponse;
-import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
-import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
-import dev.ngdangkiet.error.ErrorHelper;
+import com.google.protobuf.StringValue;
+import dev.ngdangkiet.dkmicroservices.location.protobuf.PLocationsResponse;
+import dev.ngdangkiet.dkmicroservices.location.service.LocationServiceGrpc;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
@@ -19,29 +14,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EmployeeGrpcClient {
+public class LocationGrpcClient {
 
-    @GrpcClient("grpc-employee-service")
-    private final EmployeeServiceGrpc.EmployeeServiceBlockingStub employeeServiceBlockingStub;
+    @GrpcClient("grpc-location-service")
+    private final LocationServiceGrpc.LocationServiceBlockingStub locationServiceBlockingStub;
 
-    public long createOrUpdateEmployee(PEmployee employee) {
-        Int64Value response = employeeServiceBlockingStub.createOrUpdateEmployee(employee);
-        return response.getValue();
-    }
-
-    public PEmployee getEmployeeById(Long employeeId) {
-        PEmployeeResponse response = employeeServiceBlockingStub.getEmployeeById(Int64Value.of(employeeId));
-        if (ErrorHelper.isSuccess(response.getCode())) {
-            return response.getData();
-        }
-        return null;
-    }
-
-    public PEmployeesResponse getEmployees(PGetEmployeesRequest request) {
-        return employeeServiceBlockingStub.getEmployees(request);
-    }
-
-    public EmptyResponse deleteEmployeeById(Long employeeId) {
-        return employeeServiceBlockingStub.deleteEmployeeById(Int64Value.of(employeeId));
+    public PLocationsResponse getLocationsByName(String search) {
+        return locationServiceBlockingStub.getLocationByName(StringValue.of(search));
     }
 }

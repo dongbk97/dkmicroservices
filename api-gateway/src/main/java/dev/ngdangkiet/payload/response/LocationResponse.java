@@ -1,4 +1,4 @@
-package dev.ngdangkiet.payload.request;
+package dev.ngdangkiet.payload.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,4 +9,14 @@ public class LocationResponse {
     String address;
     Double longitude;
     Double latitude;
+    String fromLocation;
+    String toLocation;
+//    @Getter
+//    @Setter
+//    @Builder
+//    public static class Location {
+//        String address;
+//        Double longitude;
+//        Double latitude;
+//    }
 }

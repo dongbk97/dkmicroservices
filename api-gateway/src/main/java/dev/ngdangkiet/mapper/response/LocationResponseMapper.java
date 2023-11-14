@@ -1,19 +1,19 @@
 package dev.ngdangkiet.mapper.response;
 
-import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartment;
+import dev.ngdangkiet.dkmicroservices.location.protobuf.PLocation;
 import dev.ngdangkiet.mapper.ProtobufMapper;
 import dev.ngdangkiet.mapper.ProtobufMapperConfig;
-import dev.ngdangkiet.payload.response.DepartmentResponse;
+import dev.ngdangkiet.payload.response.LocationResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 /**
- * @author ngdangkiet
- * @since 10/31/2023
+ * @author TrongLD
+ * @since 11/09/2023
  */
 
 @Mapper(config = ProtobufMapperConfig.class)
-public interface DepartmentResponseMapper extends ProtobufMapper<DepartmentResponse, PDepartment> {
+public interface LocationResponseMapper extends ProtobufMapper<LocationResponse, PLocation> {
 
-    DepartmentResponseMapper INSTANCE = Mappers.getMapper(DepartmentResponseMapper.class);
+    LocationResponseMapper INSTANCE = Mappers.getMapper(LocationResponseMapper.class);
 }
