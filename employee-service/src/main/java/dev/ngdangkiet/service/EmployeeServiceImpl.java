@@ -52,7 +52,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                     entity.setPassword(pbkdf2Encoder.encode(entity.getPassword()));
                     response = employeeRepository.save(entity).getId();
                     // send notification to new user
-                    rabbitMQProducer.sendWelcomeNotification(response);
+                    if (pEmployee.getId() <= 0) {
+                        rabbitMQProducer.sendWelcomeNotification(response);
+                    }
                 } else {
                     response = ErrorCode.INVALID_DATA;
                 }

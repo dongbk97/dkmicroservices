@@ -6,7 +6,7 @@ spring:
     addresses: localhost:5672
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/dkmicroservices_notification_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:postgresql://localhost:5435/dkmicroservices_notification_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
     username: user
     password: password
     driver-class-name: org.postgresql.Driver
