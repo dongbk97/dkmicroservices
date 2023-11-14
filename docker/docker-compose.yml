@@ -50,3 +50,15 @@ services:
     restart: unless-stopped
     ports:
       - "9411:9411"
+
+  # message broker
+  message-broker:
+    container_name: dkmicroservices-rabbitmq
+    image: rabbitmq:3-management-alpine
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+      - ./rabbitmq/log:/var/log/rabbitmq
