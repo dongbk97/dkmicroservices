@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -19,5 +20,7 @@ public class ApiError {
     private String path;
     private int statusCode;
     private String message;
+    @Builder.Default
+    private LocalDateTime dateTime = LocalDateTime.now();
     private Map<String, Object> errors;
 }

@@ -11,6 +11,7 @@ import dev.ngdangkiet.domain.PositionEntity;
 import dev.ngdangkiet.encoder.PBKDF2Encoder;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.mapper.EmployeeMapper;
+import dev.ngdangkiet.rabbitmq.RabbitMQProducer;
 import dev.ngdangkiet.repository.EmployeeRepository;
 import dev.ngdangkiet.repository.PositionRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final PositionRepository positionRepository;
     private final PBKDF2Encoder pbkdf2Encoder;
     private final EmployeeMapper employeeMapper = EmployeeMapper.INSTANCE;
+    private final RabbitMQProducer rabbitMQProducer;
 
     @Override
     public Int64Value createOrUpdateEmployee(PEmployee pEmployee) {
@@ -49,6 +51,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                     entity.setPosition(position.get());
                     entity.setPassword(pbkdf2Encoder.encode(entity.getPassword()));
                     response = employeeRepository.save(entity).getId();
+                    // send notification to new user
+                    rabbitMQProducer.sendWelcomeNotification(response);
                 } else {
                     response = ErrorCode.INVALID_DATA;
                 }

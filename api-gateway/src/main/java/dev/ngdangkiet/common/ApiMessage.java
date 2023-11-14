@@ -3,6 +3,8 @@ package dev.ngdangkiet.common;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 /**
  * @author ngdangkiet
  * @since 10/31/2023
@@ -25,11 +27,13 @@ public class ApiMessage {
 
     private int code;
     private String message;
+    private LocalDateTime dateTime;
     private Object data;
 
     public ApiMessage(int code, String message) {
         this.code = code;
         this.message = message;
+        this.dateTime = LocalDateTime.now();
     }
 
     public static ApiMessage success(Object data) {

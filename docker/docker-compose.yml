@@ -29,6 +29,20 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
 
+  # notification postgres db
+  postgres-notification-service:
+    container_name: dkmicroservices-notification
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./data/db-notification:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=dkmicroservices_notification_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
   #  # location postgres db
   #  postgres-location-service:
   #    container_name: dkmicroservices-location
