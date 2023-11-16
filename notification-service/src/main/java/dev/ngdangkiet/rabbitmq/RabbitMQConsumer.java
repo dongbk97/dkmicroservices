@@ -32,6 +32,6 @@ public class RabbitMQConsumer {
         if (Objects.nonNull(message.getEmailTemplate())) {
             notificationService.receiveEmailActiveAccount(message);
         } else {
-            notificationService.receiveWelcomeNotification(message);
+            notificationService.receiveNotification(message);
         }    }
 }
