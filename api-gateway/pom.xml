@@ -71,11 +71,11 @@
             <version>${jakarta-validation.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webflux-api -->
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-starter-webflux-api</artifactId>-->
-<!--            <version>${springdoc-openapi.version}</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springdoc</groupId>-->
+        <!--            <artifactId>springdoc-openapi-starter-webflux-api</artifactId>-->
+        <!--            <version>${springdoc-openapi.version}</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>

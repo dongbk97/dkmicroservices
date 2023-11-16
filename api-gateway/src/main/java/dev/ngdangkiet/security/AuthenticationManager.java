@@ -1,5 +1,8 @@
 package dev.ngdangkiet.security;
 
+import dev.ngdangkiet.client.EmployeeGrpcClient;
+import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginResponse;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.exception.JwtParsingException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -8,9 +11,9 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -27,6 +30,7 @@ import java.util.List;
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
     private final JwtUtil jwtUtil;
+    private final EmployeeGrpcClient employeeGrpcClient;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -40,8 +44,22 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
                     .map(valid -> {
                         Claims claims = jwtUtil.getAllClaimsFromToken(token);
                         List<String> authorities = claims.get("authorities", List.class);
-                        return new UsernamePasswordAuthenticationToken(username, null, authorities.stream()
+
+                        PEmployee pEmployee = employeeGrpcClient.getEmployeeByEmail(username);
+                        PLoginResponse pLoginResponse = PLoginResponse.newBuilder()
+                                .setToken(token)
+                                .setUserInfo(PLoginResponse.UserInfo.newBuilder()
+                                        .setId(pEmployee.getId())
+                                        .setEmail(pEmployee.getEmail())
+                                        .setFullName(pEmployee.getFullName())
+                                        .build())
+                                .build();
+
+                        CustomAuthentication customAuthentication = new CustomAuthentication(pLoginResponse, authorities.stream()
                                 .map(SimpleGrantedAuthority::new).toList());
+                        SecurityContextHolder.getContext().setAuthentication(customAuthentication);
+
+                        return customAuthentication;
                     });
         } catch (MalformedJwtException e) {
             e.printStackTrace();

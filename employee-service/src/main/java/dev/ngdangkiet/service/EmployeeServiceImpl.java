@@ -1,6 +1,7 @@
 package dev.ngdangkiet.service;
 
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
@@ -82,6 +83,24 @@ public class EmployeeServiceImpl implements EmployeeService {
             e.printStackTrace();
         }
 
+        return builder.build();
+    }
+
+    @Override
+    public PEmployeeResponse getEmployeeByEmail(StringValue request) {
+        PEmployeeResponse.Builder builder = PEmployeeResponse.newBuilder()
+                .setCode(ErrorCode.FAILED);
+        try {
+            Optional<EmployeeEntity> entity = employeeRepository.findByEmail(request.getValue());
+            if (entity.isPresent()) {
+                builder.setCode(ErrorCode.SUCCESS)
+                        .setData(employeeMapper.toProtobuf(entity.get()));
+            } else {
+                builder.setCode(ErrorCode.INVALID_DATA);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return builder.build();
     }
 

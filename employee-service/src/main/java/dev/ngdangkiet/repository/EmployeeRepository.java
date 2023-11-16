@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author ngdangkiet
@@ -20,4 +21,6 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long> 
             "WHERE (:departmentId = -1 OR e.departmentId = :departmentId) " +
             "AND (:positionId = -1 OR e.position.id = :positionId)")
     List<EmployeeEntity> findByDepartmentAndPosition(long departmentId, long positionId);
+
+    Optional<EmployeeEntity> findByEmail(String email);
 }

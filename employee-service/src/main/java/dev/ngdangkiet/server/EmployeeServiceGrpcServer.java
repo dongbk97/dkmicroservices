@@ -1,6 +1,7 @@
 package dev.ngdangkiet.server;
 
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
@@ -33,6 +34,13 @@ public class EmployeeServiceGrpcServer extends EmployeeServiceGrpc.EmployeeServi
     @Override
     public void getEmployeeById(Int64Value request, StreamObserver<PEmployeeResponse> responseObserver) {
         PEmployeeResponse response = employeeService.getEmployeeById(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getEmployeeByEmail(StringValue request, StreamObserver<PEmployeeResponse> responseObserver) {
+        PEmployeeResponse response = employeeService.getEmployeeByEmail(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

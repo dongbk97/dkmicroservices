@@ -1,6 +1,7 @@
 package dev.ngdangkiet.service;
 
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
@@ -17,6 +18,8 @@ public interface EmployeeService {
     Int64Value createOrUpdateEmployee(PEmployee pEmployee);
 
     PEmployeeResponse getEmployeeById(Int64Value employeeId);
+
+    PEmployeeResponse getEmployeeByEmail(StringValue request);
 
     PEmployeesResponse getEmployees(PGetEmployeesRequest request);
 

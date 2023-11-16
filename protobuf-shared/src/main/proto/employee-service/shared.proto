@@ -22,6 +22,10 @@ message PGetEmployeesRequest {
   int64 position_id = 2;
 }
 
+message PGetEmployeeByEmail {
+  string email = 1;
+}
+
 // PResponse
 message PEmployeeResponse {
   int32 code = 1;
