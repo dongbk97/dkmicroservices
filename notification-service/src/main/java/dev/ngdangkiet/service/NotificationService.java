@@ -9,5 +9,5 @@ import dev.ngdangkiet.domain.JsonMessage;
 
 public interface NotificationService {
 
-    void receiveWelcomeNotification(JsonMessage message);
+    void receiveNotification(JsonMessage message);
 }

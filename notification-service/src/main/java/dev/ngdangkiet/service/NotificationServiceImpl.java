@@ -22,7 +22,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationMapper notificationMapper = NotificationMapper.INSTANCE;
 
     @Override
-    public void receiveWelcomeNotification(JsonMessage message) {
+    public void receiveNotification(JsonMessage message) {
         NotificationEntity entity = notificationMapper.toDomain(message);
         notificationRepository.save(entity);
     }

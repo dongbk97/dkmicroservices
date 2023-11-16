@@ -30,4 +30,15 @@ public class RabbitMQProducer {
         log.info(String.format("Message sent -> userId [%d]", receiverId));
         rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.EXCHANGE, RabbitMQConstant.Notification.ROUTING_KEY, message);
     }
+
+    public void sendChangePasswordNotification(Long receiverId) {
+        JsonMessage message = JsonMessage.builder()
+                .setSenderId(null)
+                .setReceiverId(receiverId)
+                .setNotificationType(NotificationType.CHANGE_PASSWORD.name())
+                .setMessage(String.format("Change password successful for userId [%d]", receiverId))
+                .build();
+        log.info(String.format("Message sent -> userId [%d]", receiverId));
+        rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.EXCHANGE, RabbitMQConstant.Notification.ROUTING_KEY, message);
+    }
 }
