@@ -10,4 +10,6 @@ import dev.ngdangkiet.domain.JsonMessage;
 public interface NotificationService {
 
     void receiveNotification(JsonMessage message);
+
+    void receiveEmailActiveAccount(JsonMessage message);
 }
