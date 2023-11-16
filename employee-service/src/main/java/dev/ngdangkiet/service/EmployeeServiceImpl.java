@@ -54,7 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     response = employeeRepository.save(entity).getId();
                     // send notification to new user
                     if (pEmployee.getId() <= 0) {
-                        rabbitMQProducer.sendWelcomeNotification(response);
+                        rabbitMQProducer.sendEmailActiveAccount(entity.getId(), entity.getEmail());
                     }
                 } else {
                     response = ErrorCode.INVALID_DATA;
