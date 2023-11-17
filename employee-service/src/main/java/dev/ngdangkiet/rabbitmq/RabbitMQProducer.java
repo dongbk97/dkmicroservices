@@ -70,4 +70,18 @@ public class RabbitMQProducer {
         log.info(String.format("Message sent -> userId [%d]", receiverId));
         rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.EXCHANGE, RabbitMQConstant.Notification.ROUTING_KEY, message);
     }
+
+    // send email ...
+    public void sendEmailActiveAccount(Long receiverId, String sendTo) {
+        JsonMessage message = JsonMessage.builder()
+                .setSenderId(null)
+                .setReceiverId(receiverId)
+                .setNotificationType(NotificationType.WELCOME.name())
+                .setReceiverEmail(sendTo)
+                .setEmailTemplate(EmailTemplate.INDEX.getValue())
+                .setMessage(String.format("Welcome new userId [%d]", receiverId))
+                .build();
+        log.info(String.format("Message sent -> userId [%d]", receiverId));
+        rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.EXCHANGE, RabbitMQConstant.Notification.ROUTING_KEY, message);
+    }
 }
