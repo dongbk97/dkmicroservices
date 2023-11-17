@@ -43,20 +43,20 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
 
-  #  # location postgres db
-  #  postgres-location-service:
-  #    container_name: dkmicroservices-location
-  #    image: postgres:16-alpine
-  #    restart: unless-stopped
-  #    ports:
-  #      - "5436:5432"
-  #    # volumes:
-  #    #   - ./data/db-department:/var/lib/postgresql/data
-  #    environment:
-  #      - POSTGRES_DB=dkmicroservices_location_db
-  #      - POSTGRES_USER=user
-  #      - POSTGRES_PASSWORD=password
-  
+  # location postgres db
+  postgres-location-service:
+    container_name: dkmicroservices-location
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5499:5432"
+    volumes:
+      - ./data/db-location:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=dkmicroservices_location_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
   # distributed tracing zipkin
   distributed-tracing:
     container_name: dkmicroservices-zipkin
