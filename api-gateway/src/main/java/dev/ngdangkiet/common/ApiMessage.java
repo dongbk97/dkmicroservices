@@ -1,9 +1,8 @@
 package dev.ngdangkiet.common;
 
+import dev.ngdangkiet.util.DateTimeUtil;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 /**
  * @author ngdangkiet
@@ -27,13 +26,13 @@ public class ApiMessage {
 
     private int code;
     private String message;
-    private LocalDateTime dateTime;
+    private String localDateTime;
     private Object data;
 
     public ApiMessage(int code, String message) {
         this.code = code;
         this.message = message;
-        this.dateTime = LocalDateTime.now();
+        this.localDateTime = DateTimeUtil.formatLocalDateTimeNow();
     }
 
     public static ApiMessage success(Object data) {

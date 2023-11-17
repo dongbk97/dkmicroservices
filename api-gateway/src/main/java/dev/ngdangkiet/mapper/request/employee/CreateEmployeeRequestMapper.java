@@ -1,9 +1,9 @@
-package dev.ngdangkiet.mapper.request;
+package dev.ngdangkiet.mapper.request.employee;
 
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.mapper.ProtobufMapper;
 import dev.ngdangkiet.mapper.ProtobufMapperConfig;
-import dev.ngdangkiet.payload.request.EmployeeRequest;
+import dev.ngdangkiet.payload.request.employee.CreateEmployeeRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
  */
 
 @Mapper(config = ProtobufMapperConfig.class)
-public interface EmployeeRequestMapper extends ProtobufMapper<EmployeeRequest, PEmployee> {
+public interface CreateEmployeeRequestMapper extends ProtobufMapper<CreateEmployeeRequest, PEmployee> {
 
-    EmployeeRequestMapper INSTANCE = Mappers.getMapper(EmployeeRequestMapper.class);
+    CreateEmployeeRequestMapper INSTANCE = Mappers.getMapper(CreateEmployeeRequestMapper.class);
 }

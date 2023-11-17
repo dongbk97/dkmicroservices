@@ -1,10 +1,10 @@
 package dev.ngdangkiet.exception;
 
+import dev.ngdangkiet.util.DateTimeUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -21,6 +21,6 @@ public class ApiError {
     private int statusCode;
     private String message;
     @Builder.Default
-    private LocalDateTime dateTime = LocalDateTime.now();
+    private String dateTime = DateTimeUtil.formatLocalDateTimeNow();
     private Map<String, Object> errors;
 }
