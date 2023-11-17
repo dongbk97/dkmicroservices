@@ -35,8 +35,15 @@ public class ApiMessage {
         this.localDateTime = DateTimeUtil.formatLocalDateTimeNow();
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    public ApiMessage clone() {
+        ApiMessage instance = new ApiMessage(code, message);
+        instance.setData(this.getData());
+        return instance;
+    }
+
     public static ApiMessage success(Object data) {
-        ApiMessage apiMessage = ApiMessage.SUCCESS;
+        ApiMessage apiMessage = ApiMessage.SUCCESS.clone();
         apiMessage.setData(data);
         return apiMessage;
     }

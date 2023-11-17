@@ -31,6 +31,8 @@ public class NotificationEntity {
 
     private Long senderId;
 
+    private String senderName;
+
     private Long receiverId;
 
     private String message;

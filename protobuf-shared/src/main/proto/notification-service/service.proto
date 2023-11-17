@@ -1,0 +1,16 @@
+syntax = "proto3";
+package notification.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.notification.service";
+option java_outer_classname = "NotificationServiceAPI";
+
+import "notification-service/shared.proto";
+import "google/protobuf/wrappers.proto";
+import "common/shared.proto";
+
+service NotificationService {
+
+  rpc getNotifications (PGetNotificationsRequest) returns (PGetNotificationsResponse);
+  rpc seenOrUnseenNotification (google.protobuf.Int64Value) returns (common.protobuf.EmptyResponse);
+}

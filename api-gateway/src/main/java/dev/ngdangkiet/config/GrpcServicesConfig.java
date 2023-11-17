@@ -6,6 +6,7 @@ import dev.ngdangkiet.constant.ServiceConstant;
 import dev.ngdangkiet.dkmicroservices.auth.service.AuthServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.department.service.DepartmentServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
+import dev.ngdangkiet.dkmicroservices.notification.service.NotificationServiceGrpc;
 import dev.ngdangkiet.grpc.BaseGrpcServicesConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,5 +39,11 @@ public class GrpcServicesConfig extends BaseGrpcServicesConfig {
     public AuthServiceGrpc.AuthServiceBlockingStub authServiceBlockingStub() {
         InstanceInfo instanceInfo = getGrpcInstanceInfo(ServiceConstant.AUTH_SERVICE);
         return AuthServiceGrpc.newBlockingStub(newChannel(instanceInfo.getHostName(), instanceInfo.getPort()));
+    }
+
+    @Bean
+    public NotificationServiceGrpc.NotificationServiceBlockingStub notificationServiceBlockingStub() {
+        InstanceInfo instanceInfo = getGrpcInstanceInfo(ServiceConstant.NOTIFICATION_SERVICE);
+        return NotificationServiceGrpc.newBlockingStub(newChannel(instanceInfo.getHostName(), instanceInfo.getPort()));
     }
 }

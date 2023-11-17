@@ -41,3 +41,6 @@ grpc:
     grpc-auth-service:
       address: static://localhost:8040
       negotiation-type: plaintext
+    grpc-notification-service:
+      address: static://localhost:8050
+      negotiation-type: plaintext
