@@ -1,13 +1,16 @@
 package dev.ngdangkiet.server;
 
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PChangePasswordRequest;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeesResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
 import dev.ngdangkiet.service.EmployeeService;
+import dev.ngdangkiet.service.UserService;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -22,6 +25,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 public class EmployeeServiceGrpcServer extends EmployeeServiceGrpc.EmployeeServiceImplBase {
 
     private final EmployeeService employeeService;
+    private final UserService userService;
 
     @Override
     public void createOrUpdateEmployee(PEmployee request, StreamObserver<Int64Value> responseObserver) {
@@ -38,6 +42,13 @@ public class EmployeeServiceGrpcServer extends EmployeeServiceGrpc.EmployeeServi
     }
 
     @Override
+    public void getEmployeeByEmail(StringValue request, StreamObserver<PEmployeeResponse> responseObserver) {
+        PEmployeeResponse response = employeeService.getEmployeeByEmail(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
     public void getEmployees(PGetEmployeesRequest request, StreamObserver<PEmployeesResponse> responseObserver) {
         PEmployeesResponse response = employeeService.getEmployees(request);
         responseObserver.onNext(response);
@@ -47,6 +58,14 @@ public class EmployeeServiceGrpcServer extends EmployeeServiceGrpc.EmployeeServi
     @Override
     public void deleteEmployeeById(Int64Value request, StreamObserver<EmptyResponse> responseObserver) {
         EmptyResponse response = employeeService.deleteEmployeeById(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    // User Account
+    @Override
+    public void changePassword(PChangePasswordRequest request, StreamObserver<EmptyResponse> responseObserver) {
+        EmptyResponse response = userService.changePassword(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

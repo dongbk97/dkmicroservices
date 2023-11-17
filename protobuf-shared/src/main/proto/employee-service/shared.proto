@@ -22,6 +22,17 @@ message PGetEmployeesRequest {
   int64 position_id = 2;
 }
 
+message PGetEmployeeByEmail {
+  string email = 1;
+}
+
+// User Account
+message PChangePasswordRequest {
+  int64 user_id = 1;
+  string current_password = 2;
+  string new_password = 3;
+}
+
 // PResponse
 message PEmployeeResponse {
   int32 code = 1;

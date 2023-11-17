@@ -10,8 +10,13 @@ import "employee-service/shared.proto";
 import "common/shared.proto";
 
 service EmployeeService {
+  // Employee
   rpc createOrUpdateEmployee (PEmployee) returns (google.protobuf.Int64Value);
   rpc getEmployeeById (google.protobuf.Int64Value) returns (PEmployeeResponse);
+  rpc getEmployeeByEmail (google.protobuf.StringValue) returns (PEmployeeResponse);
   rpc getEmployees (PGetEmployeesRequest) returns (PEmployeesResponse);
   rpc deleteEmployeeById (google.protobuf.Int64Value) returns (common.protobuf.EmptyResponse);
+
+  // User Account
+  rpc changePassword (PChangePasswordRequest) returns (common.protobuf.EmptyResponse);
 }

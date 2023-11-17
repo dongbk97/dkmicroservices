@@ -1,6 +1,7 @@
 package dev.ngdangkiet.client;
 
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
@@ -31,6 +32,14 @@ public class EmployeeGrpcClient {
 
     public PEmployee getEmployeeById(Long employeeId) {
         PEmployeeResponse response = employeeServiceBlockingStub.getEmployeeById(Int64Value.of(employeeId));
+        if (ErrorHelper.isSuccess(response.getCode())) {
+            return response.getData();
+        }
+        return null;
+    }
+
+    public PEmployee getEmployeeByEmail(String email) {
+        PEmployeeResponse response = employeeServiceBlockingStub.getEmployeeByEmail(StringValue.of(email));
         if (ErrorHelper.isSuccess(response.getCode())) {
             return response.getData();
         }

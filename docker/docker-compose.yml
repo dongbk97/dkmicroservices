@@ -29,13 +29,27 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
 
+  # notification postgres db
+  postgres-notification-service:
+    container_name: dkmicroservices-notification
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./data/db-notification:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=dkmicroservices_notification_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
   # location postgres db
   postgres-location-service:
     container_name: dkmicroservices-location
     image: postgres:16-alpine
     restart: unless-stopped
     ports:
-      - "5435:5432"
+      - "5499:5432"
     volumes:
       - ./data/db-location:/var/lib/postgresql/data
     environment:
@@ -50,3 +64,15 @@ services:
     restart: unless-stopped
     ports:
       - "9411:9411"
+
+  # message broker
+  message-broker:
+    container_name: dkmicroservices-rabbitmq
+    image: rabbitmq:3-management-alpine
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+      - ./rabbitmq/log:/var/log/rabbitmq

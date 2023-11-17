@@ -5,13 +5,18 @@ import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
 import dev.ngdangkiet.enums.Position;
 import dev.ngdangkiet.error.ErrorHelper;
-import dev.ngdangkiet.mapper.request.EmployeeRequestMapper;
+import dev.ngdangkiet.mapper.request.employee.CreateEmployeeRequestMapper;
+import dev.ngdangkiet.mapper.request.employee.UpdateEmployeeRequestMapper;
 import dev.ngdangkiet.mapper.response.EmployeeResponseMapper;
-import dev.ngdangkiet.payload.request.EmployeeRequest;
+import dev.ngdangkiet.payload.request.employee.CreateEmployeeRequest;
+import dev.ngdangkiet.payload.request.employee.UpdateEmployeeRequest;
 import dev.ngdangkiet.payload.response.EmployeeResponse;
+import dev.ngdangkiet.payload.response.LoginResponse;
+import dev.ngdangkiet.security.SecurityHelper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,16 +39,18 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/v1/employees")
 @RequiredArgsConstructor
+@Slf4j
 public class EmployeeController {
 
     private final EmployeeGrpcClient employeeGrpcClient;
-    private final EmployeeRequestMapper employeeRequestMapper = EmployeeRequestMapper.INSTANCE;
+    private final CreateEmployeeRequestMapper createEmployeeRequestMapper = CreateEmployeeRequestMapper.INSTANCE;
+    private final UpdateEmployeeRequestMapper updateEmployeeRequestMapper = UpdateEmployeeRequestMapper.INSTANCE;
     private final EmployeeResponseMapper employeeResponseMapper = EmployeeResponseMapper.INSTANCE;
 
     @PostMapping
-    public ApiMessage createEmployee(@Valid @RequestBody EmployeeRequest request) {
+    public ApiMessage createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
         try {
-            var data = employeeGrpcClient.createOrUpdateEmployee(employeeRequestMapper.toProtobuf(request));
+            var data = employeeGrpcClient.createOrUpdateEmployee(createEmployeeRequestMapper.toProtobuf(request));
             if (ErrorHelper.isFailed((int) data)) {
                 return ApiMessage.CREATE_FAILED;
             }
@@ -55,9 +62,9 @@ public class EmployeeController {
     }
 
     @PutMapping
-    public ApiMessage updateEmployee(@Valid @RequestBody EmployeeRequest request) {
+    public ApiMessage updateEmployee(@Valid @RequestBody UpdateEmployeeRequest request) {
         try {
-            var data = employeeGrpcClient.createOrUpdateEmployee(employeeRequestMapper.toProtobuf(request));
+            var data = employeeGrpcClient.createOrUpdateEmployee(updateEmployeeRequestMapper.toProtobuf(request));
             if (ErrorHelper.isFailed((int) data)) {
                 return ApiMessage.UPDATE_FAILED;
             }
@@ -95,6 +102,11 @@ public class EmployeeController {
     public ApiMessage getEmployees(@RequestParam(name = "departmentId", required = false) Long departmentId,
                                    @RequestParam(name = "positionId", required = false) Long positionId) {
         try {
+            // Test get from Security Context Holder
+            LoginResponse userLogged = SecurityHelper.getUserLogin();
+            assert userLogged != null;
+            log.info(userLogged.toString());
+            // -------------------------------------
             var grpcResponse = employeeGrpcClient.getEmployees(
                     PGetEmployeesRequest.newBuilder()
                             .setDepartmentId(ObjectUtils.defaultIfNull(departmentId, -1L))

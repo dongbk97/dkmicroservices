@@ -1,5 +1,6 @@
 package dev.ngdangkiet.exception;
 
+import dev.ngdangkiet.util.DateTimeUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +20,7 @@ public class ApiError {
     private String path;
     private int statusCode;
     private String message;
+    @Builder.Default
+    private String dateTime = DateTimeUtil.formatLocalDateTimeNow();
     private Map<String, Object> errors;
 }
