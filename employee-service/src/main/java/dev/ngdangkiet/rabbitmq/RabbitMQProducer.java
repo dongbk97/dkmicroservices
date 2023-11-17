@@ -27,7 +27,7 @@ public class RabbitMQProducer {
                 .setNotificationType(NotificationType.WELCOME.name())
                 .setMessage(String.format("Welcome new userId [%d]", receiverId))
                 .build();
-        log.info(String.format("Message sent -> userId [%d]", receiverId));
+        log.info("Message sent -> userId [{}]", receiverId);
         rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.EXCHANGE, RabbitMQConstant.Notification.ROUTING_KEY, message);
     }
 
@@ -38,7 +38,7 @@ public class RabbitMQProducer {
                 .setNotificationType(NotificationType.CHANGE_PASSWORD.name())
                 .setMessage(String.format("Change password successful for userId [%d]", receiverId))
                 .build();
-        log.info(String.format("Message sent -> userId [%d]", receiverId));
+        log.info("Message sent -> userId [{}]", receiverId);
         rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.EXCHANGE, RabbitMQConstant.Notification.ROUTING_KEY, message);
     }
 }

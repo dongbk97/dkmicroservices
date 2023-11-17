@@ -43,20 +43,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Int64Value createOrUpdateEmployee(PEmployee pEmployee) {
         long response = ErrorCode.FAILED;
         try {
-            if (pEmployee.getId() > 0 && employeeRepository.findById(pEmployee.getId()).isEmpty()) {
+            boolean isNewEmployee = pEmployee.getId() <= 0;
+            if (!isNewEmployee && employeeRepository.findById(pEmployee.getId()).isEmpty()) {
+                log.error("User [{}] not found!", pEmployee.getId());
+                response = ErrorCode.INVALID_DATA;
+            } else if (existsEmail(pEmployee.getId(), pEmployee.getEmail())) {
+                log.error("Email [{}] already exists!", pEmployee.getEmail());
                 response = ErrorCode.INVALID_DATA;
             } else {
                 EmployeeEntity entity = employeeMapper.toDomain(pEmployee);
                 Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
                 if (position.isPresent()) {
                     entity.setPosition(position.get());
-                    entity.setPassword(pbkdf2Encoder.encode(entity.getPassword()));
+                    if (isNewEmployee) {
+                        entity.setPassword(pbkdf2Encoder.encode(entity.getPassword()));
+                    }
                     response = employeeRepository.save(entity).getId();
                     // send notification to new user
-                    if (pEmployee.getId() <= 0) {
+                    if (isNewEmployee) {
                         rabbitMQProducer.sendWelcomeNotification(response);
                     }
                 } else {
+                    log.error("Position [{}] not found!", pEmployee.getPositionId());
                     response = ErrorCode.INVALID_DATA;
                 }
             }
@@ -65,6 +73,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         return Int64Value.of(response);
+    }
+
+    private boolean existsEmail(Long employeeId, String email) {
+        Optional<EmployeeEntity> employee = employeeRepository.findByEmail(email);
+        return employee.isPresent() && (employeeId <= 0 || !employeeId.equals(employee.get().getId()));
     }
 
     @Override
