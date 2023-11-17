@@ -42,5 +42,5 @@ grpc:
       address: static://localhost:8040
       negotiation-type: plaintext
     grpc-location-service:
-      address: static://localhost:8050
+      address: static://localhost:8090
       negotiation-type: plaintext
