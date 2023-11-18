@@ -24,21 +24,21 @@ public class RabbitMQProducer {
         JsonMessage message = JsonMessage.builder()
                 .setSenderId(null)
                 .setReceiverId(receiverId)
-                .setNotificationType(NotificationType.WELCOME.name())
+                .setNotificationType(NotificationType.ALERT.name())
                 .setMessage(String.format("Welcome new userId [%d]", receiverId))
                 .build();
         log.info("Message sent -> userId [{}]", receiverId);
-        rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.EXCHANGE, RabbitMQConstant.Notification.ROUTING_KEY, message);
+        rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.ALERT_EXCHANGE, RabbitMQConstant.Notification.ALERT_ROUTING_KEY, message);
     }
 
     public void sendChangePasswordNotification(Long receiverId) {
         JsonMessage message = JsonMessage.builder()
                 .setSenderId(null)
                 .setReceiverId(receiverId)
-                .setNotificationType(NotificationType.CHANGE_PASSWORD.name())
+                .setNotificationType(NotificationType.ALERT.name())
                 .setMessage(String.format("Change password successful for userId [%d]", receiverId))
                 .build();
         log.info("Message sent -> userId [{}]", receiverId);
-        rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.EXCHANGE, RabbitMQConstant.Notification.ROUTING_KEY, message);
+        rabbitTemplate.convertAndSend(RabbitMQConstant.Notification.ALERT_EXCHANGE, RabbitMQConstant.Notification.ALERT_ROUTING_KEY, message);
     }
 }

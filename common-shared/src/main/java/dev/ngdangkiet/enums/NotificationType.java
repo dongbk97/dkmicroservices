@@ -7,5 +7,5 @@ package dev.ngdangkiet.enums;
 
 public enum NotificationType {
 
-    WELCOME, CHANGE_PASSWORD, REMIND
+    ALERT, EMAIL, SMS, BOT
 }

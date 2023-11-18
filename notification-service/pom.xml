@@ -13,7 +13,7 @@
     <artifactId>notification-service</artifactId>
 
     <properties>
-        <grpc-server.version>2.15.0.RELEASE</grpc-server.version>
+        <grpc-client-server.version>2.15.0.RELEASE</grpc-client-server.version>
     </properties>
 
     <dependencies>
@@ -48,7 +48,12 @@
         <dependency>
             <groupId>net.devh</groupId>
             <artifactId>grpc-server-spring-boot-starter</artifactId>
-            <version>${grpc-server.version}</version>
+            <version>${grpc-client-server.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.devh</groupId>
+            <artifactId>grpc-client-spring-boot-starter</artifactId>
+            <version>${grpc-client-server.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

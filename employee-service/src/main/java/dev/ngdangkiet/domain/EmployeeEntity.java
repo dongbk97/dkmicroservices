@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 /**
  * @author ngdangkiet
  * @since 10/31/2023
@@ -35,6 +37,8 @@ public class EmployeeEntity {
     private Long departmentId;
 
     private Integer age;
+
+    private LocalDate birthDay;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
