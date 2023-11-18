@@ -13,7 +13,8 @@ message PEmployee {
   string password = 5;
   int32 age = 6;
   string gender = 7;
-  int64 position_id = 8;
+  string birthDay = 8;
+  int64 position_id = 9;
 }
 
 // PRequest

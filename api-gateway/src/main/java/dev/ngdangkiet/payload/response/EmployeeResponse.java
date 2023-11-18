@@ -20,6 +20,7 @@ public class EmployeeResponse {
     private Integer age;
     private Position position;
     private Department department;
+    private String birthDay;
 
     @Getter
     @Setter

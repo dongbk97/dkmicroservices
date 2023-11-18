@@ -22,3 +22,9 @@ spring:
 
   config:
     import: "optional:configserver:http://localhost:8088"
+
+grpc:
+  client:
+    grpc-employee-service:
+      address: static://localhost:8020
+      negotiation-type: plaintext

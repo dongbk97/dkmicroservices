@@ -20,8 +20,8 @@ public class RabbitMQConsumer {
 
     private final NotificationService notificationService;
 
-    @RabbitListener(queues = {RabbitMQConstant.Notification.QUEUE})
-    public void receiveNotification(JsonMessage message) {
+    @RabbitListener(queues = {RabbitMQConstant.Notification.ALERT_QUEUE})
+    public void receiveAlertNotification(JsonMessage message) {
         log.info("Received message -> {}", message.toString());
         notificationService.receiveNotification(message);
     }

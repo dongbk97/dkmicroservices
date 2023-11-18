@@ -26,5 +26,6 @@ public class EmployeeRequest implements Serializable {
     private Integer age;
     @ValidationGender
     private String gender;
+    private String birthDay;
     private Long positionId;
 }

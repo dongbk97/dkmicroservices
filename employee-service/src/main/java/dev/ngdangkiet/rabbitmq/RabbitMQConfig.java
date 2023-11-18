@@ -21,20 +21,79 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
+    // QUEUE
     @Bean
-    public Queue queue() {
-        return new Queue(RabbitMQConstant.Notification.QUEUE);
+    public Queue alertQueue() {
+        return new Queue(RabbitMQConstant.Notification.ALERT_QUEUE);
     }
 
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(RabbitMQConstant.Notification.EXCHANGE);
+    public Queue emailQueue() {
+        return new Queue(RabbitMQConstant.Notification.EMAIL_QUEUE);
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange topicExchange) {
-        return BindingBuilder.bind(queue).to(topicExchange).with(RabbitMQConstant.Notification.ROUTING_KEY);
+    public Queue smsQueue() {
+        return new Queue(RabbitMQConstant.Notification.SMS_QUEUE);
     }
+
+    @Bean
+    public Queue botQueue() {
+        return new Queue(RabbitMQConstant.Notification.BOT_QUEUE);
+    }
+    // END QUEUE
+
+    // EXCHANGE
+    @Bean
+    public TopicExchange alertExchange() {
+        return new TopicExchange(RabbitMQConstant.Notification.ALERT_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange emailExchange() {
+        return new TopicExchange(RabbitMQConstant.Notification.EMAIL_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange smsExchange() {
+        return new TopicExchange(RabbitMQConstant.Notification.SMS_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange botExchange() {
+        return new TopicExchange(RabbitMQConstant.Notification.BOT_EXCHANGE);
+    }
+    // END EXCHANGE
+
+    // BINDING
+    @Bean
+    public Binding alertBinding() {
+        return BindingBuilder.bind(alertQueue())
+                .to(alertExchange())
+                .with(RabbitMQConstant.Notification.ALERT_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding emailBinding() {
+        return BindingBuilder.bind(emailQueue())
+                .to(emailExchange())
+                .with(RabbitMQConstant.Notification.EMAIL_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding smsBinding() {
+        return BindingBuilder.bind(smsQueue())
+                .to(smsExchange())
+                .with(RabbitMQConstant.Notification.SMS_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding botBinding() {
+        return BindingBuilder.bind(botQueue())
+                .to(botExchange())
+                .with(RabbitMQConstant.Notification.BOT_ROUTING_KEY);
+    }
+    // END BINDING
 
     @Bean
     public MessageConverter messageConverter() {

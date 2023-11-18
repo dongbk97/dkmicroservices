@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -44,30 +45,37 @@ public class EmployeeServiceImpl implements EmployeeService {
         long response = ErrorCode.FAILED;
         try {
             boolean isNewEmployee = pEmployee.getId() <= 0;
-            if (!isNewEmployee && employeeRepository.findById(pEmployee.getId()).isEmpty()) {
-                log.error("User [{}] not found!", pEmployee.getId());
-                response = ErrorCode.INVALID_DATA;
-            } else if (existsEmail(pEmployee.getId(), pEmployee.getEmail())) {
-                log.error("Email [{}] already exists!", pEmployee.getEmail());
-                response = ErrorCode.INVALID_DATA;
-            } else {
-                EmployeeEntity entity = employeeMapper.toDomain(pEmployee);
-                Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
-                if (position.isPresent()) {
-                    entity.setPosition(position.get());
-                    if (isNewEmployee) {
-                        entity.setPassword(pbkdf2Encoder.encode(entity.getPassword()));
-                    }
-                    response = employeeRepository.save(entity).getId();
-                    // send notification to new user
-                    if (isNewEmployee) {
-                        rabbitMQProducer.sendWelcomeNotification(response);
-                    }
-                } else {
-                    log.error("Position [{}] not found!", pEmployee.getPositionId());
-                    response = ErrorCode.INVALID_DATA;
+            EmployeeEntity employee = null;
+
+            if (!isNewEmployee) {
+                employee = employeeRepository.findById(pEmployee.getId()).orElse(null);
+                if (Objects.isNull(employee)) {
+                    log.error("User [{}] not found!", pEmployee.getId());
+                    return Int64Value.of(ErrorCode.INVALID_DATA);
                 }
             }
+
+            if (existsEmail(pEmployee.getId(), pEmployee.getEmail())) {
+                log.error("Email [{}] already exists!", pEmployee.getEmail());
+                return Int64Value.of(ErrorCode.INVALID_DATA);
+            }
+
+            Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
+            if (position.isEmpty()) {
+                log.error("Position [{}] not found!", pEmployee.getPositionId());
+                return Int64Value.of(ErrorCode.INVALID_DATA);
+            }
+
+            EmployeeEntity entity = employeeMapper.toDomain(pEmployee);
+            entity.setPosition(position.get());
+            entity.setPassword(isNewEmployee ? pbkdf2Encoder.encode(entity.getPassword()) : employee.getPassword());
+            response = employeeRepository.save(entity).getId();
+
+            // send notification to new user
+            if (isNewEmployee) {
+                rabbitMQProducer.sendWelcomeNotification(response);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

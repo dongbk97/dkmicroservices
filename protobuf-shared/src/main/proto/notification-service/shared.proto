@@ -1,0 +1,28 @@
+syntax = "proto3";
+package notification.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.notification.protobuf";
+option java_outer_classname = "NotificationProtobuf";
+
+message PNotification {
+  int64 id = 1;
+  int64 sender_id = 2;
+  string sender_name = 3;
+  string message = 4;
+  string notification_type = 5;
+  bool seen = 6;
+}
+
+// PRequest
+message PGetNotificationsRequest {
+  int64 receiver_id = 1;
+  bool all = 2;
+  bool seen = 3;
+}
+
+// PResponse
+message PGetNotificationsResponse {
+  int32 code = 1;
+  repeated PNotification notifications = 2;
+}
