@@ -13,6 +13,11 @@ public class MessageConstant {
     }
 
     public static class Notification {
+        public static class BeginEndDayOfWeek {
+            public static final String BEGIN_DAY_OF_WEEK = "Wishing everyone a happy and smooth start to the work week, everything goes smoothly and without any difficulties!";
+            public static final String END_DAY_OF_WEEK = "Wishing you a healthy, fun and happy weekend!";
+        }
+
         public static class Holiday {
             public static final String LUNAR_YEAR = "Happy Lunar year <3";
             public static final String NATIONAL_DAY = "Happy National Day <3";
