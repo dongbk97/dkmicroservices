@@ -18,13 +18,13 @@ docker-compose up -d
 
 - Docker Containers
 
-  ![docker-containers](https://github.com/ngdangkiet/dkmicroservices/tree/main/docs/docker-containers.png)
+  ![docker-containers](./docs/docker-containers.png)
 
 ## Project Structure and Technical Stack
 
 - Project Structure
 
-  ![project-structure](https://github.com/ngdangkiet/dkmicroservices/tree/main/docs/project-structure.png)
+  ![project-structure](./docs/project-structure.png)
 - Technical Stack
 
 <table>
@@ -159,18 +159,18 @@ mvn clean install
 
 - Maven
 
-  ![maven](https://github.com/ngdangkiet/dkmicroservices/tree/main/docs/maven.png)
+  ![maven](./docs/maven.png)
 
 - Service run order: service-registry, config-server > department-service, employee-service, auth-service,
   notification-service > api-gateway
 
-  ![service](https://github.com/ngdangkiet/dkmicroservices/tree/main/docs/service.png)
+  ![service](./docs/service.png)
 
 - Open browser and type _http://localhost:8761_. All services already started
 
-  ![eureka](https://github.com/ngdangkiet/dkmicroservices/tree/main/docs/eureka.png)
+  ![eureka](./docs/eureka.png)
 
 - Type _http://localhost:8003/swagger-ui/index.html_
 
-  ![swagger](https://github.com/ngdangkiet/dkmicroservices/tree/main/docs/swagger.png)
+  ![swagger](./docs/swagger.png)
 
