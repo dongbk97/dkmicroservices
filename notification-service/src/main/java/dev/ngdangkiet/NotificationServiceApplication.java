@@ -21,8 +21,8 @@ import java.util.Map;
 @EnableDiscoveryClient
 public class NotificationServiceApplication {
 
-    @Autowired
-    private EmailService emailService;
+//    @Autowired
+//    private EmailService emailService;
 
     public static void main(String[] args) {
         SpringApplication.run(NotificationServiceApplication.class, args);
@@ -41,7 +41,7 @@ public class NotificationServiceApplication {
         properties.put("customerName", "Trong LE");
         details.setProperties(properties);
 //        details.setAttachment("D:\\Trong.le-duc_Project\\Demo\\Sample-SpringBoot-Microservice\\Chat box.pdf");
-        emailService.sendMail(details, true);
+//        emailService.sendMail(details, true);
 
     }
 }

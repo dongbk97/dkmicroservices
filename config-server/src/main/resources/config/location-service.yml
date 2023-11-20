@@ -1,9 +1,9 @@
 server:
-  port: 8009
+  port: 8006
 
 grpc:
   server:
-    port: 8090
+    port: 8060
 
 eureka:
   client:

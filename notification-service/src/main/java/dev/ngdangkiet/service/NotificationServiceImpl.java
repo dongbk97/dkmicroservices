@@ -5,17 +5,14 @@ import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsRequest;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsResponse;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PNotification;
-import dev.ngdangkiet.DTO.EmailDTO;
 import dev.ngdangkiet.domain.JsonMessage;
 import dev.ngdangkiet.domain.NotificationEntity;
 import dev.ngdangkiet.error.ErrorCode;
-import dev.ngdangkiet.mapper.EmailMapper;
 import dev.ngdangkiet.mapper.NotificationMapper;
 import dev.ngdangkiet.mapper.RabbitMQNotificationMapper;
 import dev.ngdangkiet.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,12 +31,6 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final RabbitMQNotificationMapper rabbitMQNotificationMapper = RabbitMQNotificationMapper.INSTANCE;
     private final NotificationMapper notificationMapper = NotificationMapper.INSTANCE;
-
-    // RabbitMQ Services
-    private final EmailMapper emailMapper = EmailMapper.INSTANCE;
-
-    @Autowired
-    EmailService emailService;
 
 
     @Override
@@ -88,12 +79,5 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         return builder.build();
-    }
-
-
-    @Override
-    public void receiveEmailActiveAccount(JsonMessage message) {
-        EmailDTO email = emailMapper.toDomain(message);
-        emailService.sendMail(email, false);
     }
 }

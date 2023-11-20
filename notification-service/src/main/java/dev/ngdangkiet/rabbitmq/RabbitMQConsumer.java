@@ -7,7 +7,6 @@ import dev.ngdangkiet.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -29,9 +28,14 @@ public class RabbitMQConsumer {
     @RabbitListener(queues = {RabbitMQConstant.Notification.ALERT_QUEUE})
     public void receiveAlertNotification(JsonMessage message) {
         log.info("Received message -> {}", message.toString());
-        if (Objects.nonNull(message.getEmailTemplate())) {
-            notificationService.receiveEmailActiveAccount(message);
-        } else {
-            notificationService.receiveNotification(message);
-        }    }
+        notificationService.receiveNotification(message);
+    }
+
+    @RabbitListener(queues = {RabbitMQConstant.Notification.EMAIL_QUEUE})
+    public void receiveAlterEmail(JsonMessage message) {
+        log.info("Received message -> {}", message.toString());
+        if (Objects.nonNull(message.getMessage())) {
+            emailService.receiveAlterEmail(message);
+        }
+    }
 }

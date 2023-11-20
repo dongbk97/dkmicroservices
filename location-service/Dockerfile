@@ -6,4 +6,4 @@ COPY target/location-service.jar location-service.jar
 
 ENTRYPOINT ["java", "-jar", "location-service.jar"]
 
-EXPOSE 8009
+EXPOSE 8006

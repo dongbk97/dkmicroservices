@@ -3,7 +3,7 @@ spring:
     name: location-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5499/dkmicroservices_location_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:postgresql://localhost:5436/dkmicroservices_location_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
     username: user
     password: password
     driver-class-name: org.postgresql.Driver

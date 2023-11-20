@@ -1,12 +1,12 @@
 package dev.ngdangkiet.service;
 
 import dev.ngdangkiet.DTO.EmailDTO;
+import dev.ngdangkiet.domain.JsonMessage;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.util.MapUtils;
+import dev.ngdangkiet.mapper.EmailMapper;
 
 import java.io.File;
 import java.util.Map;
@@ -27,11 +28,11 @@ import java.util.Objects;
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
-    private JavaMailSender emailSender;
+    private final JavaMailSender emailSender;
 
-    @Autowired
-    private TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
+
+    private final EmailMapper emailMapper = EmailMapper.INSTANCE;
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -122,5 +123,11 @@ public class EmailServiceImpl implements EmailService {
             result = result.replace(placeholder, String.valueOf(replacement));
         }
         return result;
+    }
+
+    @Override
+    public void receiveAlterEmail(JsonMessage message) {
+        EmailDTO email = emailMapper.toDomain(message);
+        sendMail(email, false);
     }
 }
