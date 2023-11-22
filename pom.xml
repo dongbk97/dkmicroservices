@@ -26,6 +26,7 @@
         <module>auth-service</module>
         <module>notification-service</module>
         <module>tracking-service</module>
+        <module>location-service</module>
     </modules>
 
     <properties>

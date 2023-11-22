@@ -24,6 +24,8 @@ public class JsonMessage implements Serializable {
 
     private Long senderId;
     private Long receiverId;
+    private String receiverEmail;
     private String message;
     private String notificationType;
+    private String emailTemplate;
 }
