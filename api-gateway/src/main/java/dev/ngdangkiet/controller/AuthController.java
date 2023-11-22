@@ -1,17 +1,21 @@
 package dev.ngdangkiet.controller;
 
+import com.google.protobuf.StringValue;
 import dev.ngdangkiet.client.AuthGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.LoginRequestMapper;
 import dev.ngdangkiet.mapper.response.LoginResponseMapper;
-import dev.ngdangkiet.payload.request.LoginRequest;
+import dev.ngdangkiet.payload.request.auth.LoginRequest;
+import dev.ngdangkiet.payload.response.auth.RefreshTokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -38,6 +42,23 @@ public class AuthController {
                 return ApiMessage.LOGIN_FAILED;
             }
             return ApiMessage.success(loginResponseMapper.toDomain(data));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiMessage.UNKNOWN_EXCEPTION;
+        }
+    }
+
+    @Operation(summary = "Refresh token by tokenUUID")
+    @GetMapping("/refresh-token")
+    public ApiMessage refreshToken(@RequestParam(name = "tokenUUID") String tokenUUID) {
+        try {
+            var data = authGrpcClient.refreshToken(StringValue.of(tokenUUID));
+            if (ErrorHelper.isFailed(data.getCode())) {
+                return ApiMessage.FAILED;
+            }
+            return ApiMessage.success(RefreshTokenResponse.builder()
+                    .setToken(data.getToken())
+                    .build());
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;

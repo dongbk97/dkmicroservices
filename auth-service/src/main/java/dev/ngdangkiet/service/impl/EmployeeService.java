@@ -1,4 +1,4 @@
-package dev.ngdangkiet.service;
+package dev.ngdangkiet.service.impl;
 
 import dev.ngdangkiet.domain.EmployeeEntity;
 import dev.ngdangkiet.repository.EmployeeRepository;

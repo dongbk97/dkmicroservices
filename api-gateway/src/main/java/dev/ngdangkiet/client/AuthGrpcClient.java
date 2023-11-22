@@ -1,7 +1,9 @@
 package dev.ngdangkiet.client;
 
+import com.google.protobuf.StringValue;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginRequest;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginResponse;
+import dev.ngdangkiet.dkmicroservices.auth.protobuf.PRefreshTokenResponse;
 import dev.ngdangkiet.dkmicroservices.auth.service.AuthServiceGrpc;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -21,5 +23,9 @@ public class AuthGrpcClient {
 
     public PLoginResponse authentication(PLoginRequest request) {
         return authServiceBlockingStub.authentication(request);
+    }
+
+    public PRefreshTokenResponse refreshToken(StringValue tokenUUID) {
+        return authServiceBlockingStub.refreshToken(tokenUUID);
     }
 }

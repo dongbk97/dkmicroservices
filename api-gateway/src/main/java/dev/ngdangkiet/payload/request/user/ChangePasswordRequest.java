@@ -1,4 +1,4 @@
-package dev.ngdangkiet.payload.request;
+package dev.ngdangkiet.payload.request.user;
 
 import dev.ngdangkiet.validation.ValidationPassword;
 import lombok.Getter;

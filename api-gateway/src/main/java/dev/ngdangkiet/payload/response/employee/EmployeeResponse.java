@@ -1,4 +1,4 @@
-package dev.ngdangkiet.payload.response;
+package dev.ngdangkiet.payload.response.employee;
 
 import lombok.Builder;
 import lombok.Getter;

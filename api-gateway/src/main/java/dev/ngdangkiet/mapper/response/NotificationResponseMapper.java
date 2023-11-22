@@ -3,7 +3,7 @@ package dev.ngdangkiet.mapper.response;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PNotification;
 import dev.ngdangkiet.mapper.ProtobufMapper;
 import dev.ngdangkiet.mapper.ProtobufMapperConfig;
-import dev.ngdangkiet.payload.response.NotificationResponse;
+import dev.ngdangkiet.payload.response.notification.NotificationResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

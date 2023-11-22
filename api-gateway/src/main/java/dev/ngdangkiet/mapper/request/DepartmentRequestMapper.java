@@ -3,7 +3,7 @@ package dev.ngdangkiet.mapper.request;
 import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartment;
 import dev.ngdangkiet.mapper.ProtobufMapper;
 import dev.ngdangkiet.mapper.ProtobufMapperConfig;
-import dev.ngdangkiet.payload.request.DepartmentRequest;
+import dev.ngdangkiet.payload.request.department.DepartmentRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

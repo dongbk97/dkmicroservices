@@ -46,6 +46,7 @@ public class WebSecurityConfig {
                 .authorizeExchange(authorizeExchangeSpec ->
                         authorizeExchangeSpec.pathMatchers(HttpMethod.OPTIONS).permitAll()
                                 .pathMatchers(HttpMethod.POST, securityProperties.getLoginUrl()).permitAll()
+                                .pathMatchers(HttpMethod.GET, "/api/v1/auth/refresh-token").permitAll()
                                 .pathMatchers(HttpMethod.POST, "/api/v1/employees").permitAll()
                                 .pathMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                                 .pathMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()

@@ -8,7 +8,7 @@ import dev.ngdangkiet.dkmicroservices.employee.protobuf.PChangePasswordRequest;
 import dev.ngdangkiet.domain.tracking.TrackingJson;
 import dev.ngdangkiet.enums.Action;
 import dev.ngdangkiet.error.ErrorHelper;
-import dev.ngdangkiet.payload.request.ChangePasswordRequest;
+import dev.ngdangkiet.payload.request.user.ChangePasswordRequest;
 import dev.ngdangkiet.redis.RedisConfig;
 import dev.ngdangkiet.security.SecurityHelper;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -2,7 +2,7 @@ package dev.ngdangkiet.security;
 
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginResponse;
 import dev.ngdangkiet.mapper.response.LoginResponseMapper;
-import dev.ngdangkiet.payload.response.LoginResponse;
+import dev.ngdangkiet.payload.response.auth.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

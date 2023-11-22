@@ -1,7 +1,7 @@
 package dev.ngdangkiet.service;
 
-import dev.ngdangkiet.dto.EmailDTO;
 import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.dto.EmailDTO;
 
 public interface EmailService {
 
