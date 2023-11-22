@@ -1,7 +1,7 @@
 package dev.ngdangkiet.rabbitmq;
 
 import dev.ngdangkiet.constant.RabbitMQConstant;
-import dev.ngdangkiet.domain.JsonMessage;
+import dev.ngdangkiet.domain.notification.JsonMessage;
 import dev.ngdangkiet.enums.NotificationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

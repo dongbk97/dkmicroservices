@@ -43,20 +43,33 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
 
-  #  # location postgres db
-  #  postgres-location-service:
-  #    container_name: dkmicroservices-location
-  #    image: postgres:16-alpine
-  #    restart: unless-stopped
-  #    ports:
-  #      - "5435:5432"
-  #    # volumes:
-  #    #   - ./data/db-department:/var/lib/postgresql/data
-  #    environment:
-  #      - POSTGRES_DB=dkmicroservices_location_db
-  #      - POSTGRES_USER=user
-  #      - POSTGRES_PASSWORD=password
-  
+  # tracking data elastic search
+  elasticsearch-tracking-service:
+    container_name: dkmicroservices-tracking-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  # tracking data kibana
+  kibana-tracking-service:
+    container_name: dkmicroservices-tracking-kibana
+    image: docker.elastic.co/kibana/kibana:8.11.1
+    restart: unless-stopped
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch-tracking-service
+
   # distributed tracing zipkin
   distributed-tracing:
     container_name: dkmicroservices-zipkin
@@ -76,3 +89,11 @@ services:
     volumes:
       - ./rabbitmq/data:/var/lib/rabbitmq
       - ./rabbitmq/log:/var/log/rabbitmq
+
+  # caching data
+  caching-data:
+    container_name: dkmicroservices-redis
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"

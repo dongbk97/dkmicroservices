@@ -1,4 +1,4 @@
-package dev.ngdangkiet.config;
+package dev.ngdangkiet.elasticsearch;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

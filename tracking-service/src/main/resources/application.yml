@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: tracking-service
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+  elasticsearch:
+    uris: http://localhost:9200
+
+  config:
+    import: "optional:configserver:http://localhost:8088"
