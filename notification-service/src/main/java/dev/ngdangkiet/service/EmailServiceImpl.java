@@ -1,7 +1,7 @@
 package dev.ngdangkiet.service;
 
-import dev.ngdangkiet.DTO.EmailDTO;
 import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.dto.EmailDTO;
 import dev.ngdangkiet.mapper.EmailMapper;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
@@ -55,7 +55,6 @@ public class EmailServiceImpl implements EmailService {
             mimeMessage.setFrom(sender);
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getReceiverEmail()));
             mimeMessage.setSubject(email.getSubject());
-            // Thiết lập nội dung của email
             if (isHTML) {
                 String bodyHTML;
                 if (!MapUtils.isEmpty(email.getProperties())) {

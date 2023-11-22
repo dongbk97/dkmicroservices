@@ -1,4 +1,4 @@
-package dev.ngdangkiet.DTO;
+package dev.ngdangkiet.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmailDTO {
+
     private Long receiverId;
     private String receiverEmail;
     private String message;

@@ -1,4 +1,4 @@
-package dev.ngdangkiet.elasticsearch;
+package dev.ngdangkiet.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;

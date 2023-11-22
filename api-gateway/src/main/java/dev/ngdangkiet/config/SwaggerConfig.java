@@ -1,4 +1,4 @@
-package dev.ngdangkiet.elasticsearch;
+package dev.ngdangkiet.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.models.OpenAPI;
