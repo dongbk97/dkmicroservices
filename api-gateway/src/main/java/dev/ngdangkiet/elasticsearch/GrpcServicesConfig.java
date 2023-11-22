@@ -1,4 +1,4 @@
-package dev.ngdangkiet.config;
+package dev.ngdangkiet.elasticsearch;
 
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
@@ -6,6 +6,7 @@ import dev.ngdangkiet.constant.ServiceConstant;
 import dev.ngdangkiet.dkmicroservices.auth.service.AuthServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.department.service.DepartmentServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
+import dev.ngdangkiet.dkmicroservices.location.service.LocationServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.notification.service.NotificationServiceGrpc;
 import dev.ngdangkiet.grpc.BaseGrpcServicesConfig;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,12 @@ public class GrpcServicesConfig extends BaseGrpcServicesConfig {
     public AuthServiceGrpc.AuthServiceBlockingStub authServiceBlockingStub() {
         InstanceInfo instanceInfo = getGrpcInstanceInfo(ServiceConstant.AUTH_SERVICE);
         return AuthServiceGrpc.newBlockingStub(newChannel(instanceInfo.getHostName(), instanceInfo.getPort()));
+    }
+
+    @Bean
+    public LocationServiceGrpc.LocationServiceBlockingStub locationServiceBlockingStub() {
+        InstanceInfo instanceInfo = getGrpcInstanceInfo(ServiceConstant.LOCATION_SERVICE);
+        return LocationServiceGrpc.newBlockingStub(newChannel(instanceInfo.getHostName(), instanceInfo.getPort()));
     }
 
     @Bean

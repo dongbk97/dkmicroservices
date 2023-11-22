@@ -1,4 +1,4 @@
-package dev.ngdangkiet.config;
+package dev.ngdangkiet.elasticsearch;
 
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;

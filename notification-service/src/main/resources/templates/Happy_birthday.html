@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+</head>
+
+<body style=" margin: 0; font-family: 'Roboto';font-size: 16px;color: #121111;">
+<section style=" padding: 30px;">
+    <div class="section section-open">
+        <div class="order-info" style="padding-top: 21px">
+            <div class="order-title" style="line-height: 150%; margin-bottom: 18px">
+                <p style="margin: 20px 0;">Dear <span style="color: red" th:text="${customerName}"></span>,</p>
+                <p>Thanks for being a fantastic coworker. Here’s hoping you have a wonderful birthday and a year of
+                    blessings such a great coworker deserves. Happy birthday!</p>
+            </div>
+        </div>
+    </div>
+    <div class="more" style="margin-top: 20px">
+        <p>If you have any questions, please call us at 0123456789</p>
+        <p>Thank you for choosing us and we hope that you will visit us again soon.</p>
+    </div>
+    <div class="signature" style="margin-top: 30px;">
+        <p>Cheers,</p>
+        <b>Customer Support</b>
+    </div>
+</section>
+</body>
+</html>

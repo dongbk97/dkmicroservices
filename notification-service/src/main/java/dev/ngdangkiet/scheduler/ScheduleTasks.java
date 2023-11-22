@@ -57,13 +57,13 @@ public class ScheduleTasks {
         }
     }
 
-    @Scheduled(cron = "0 0 8 ? ? MON")
+    @Scheduled(cron = "0 0 8 * * MON")
     public void executeBeginOfTheWeekTask() {
         log.info("Begin day of the week [{}]", LocalDate.now().getDayOfWeek().name());
         setAndSaveNotifications(MessageConstant.Notification.BeginEndDayOfWeek.BEGIN_DAY_OF_WEEK, getEmployees());
     }
 
-    @Scheduled(cron = "0 0 17 ? ? FRI")
+    @Scheduled(cron = "0 0 17 * * FRI")
     public void executeEndOfTheWeekTask() {
         log.info("End day of the week [{}]", LocalDate.now().getDayOfWeek().name());
         setAndSaveNotifications(MessageConstant.Notification.BeginEndDayOfWeek.END_DAY_OF_WEEK, getEmployees());

@@ -1,0 +1,29 @@
+syntax = "proto3";
+package location.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.location.protobuf";
+option java_outer_classname = "LocationProtobuf";
+
+message PLocation {
+  string address = 1;
+  string longitude = 2;
+  string latitude = 3;
+  string fromLocation = 4;
+  string toLocation = 5;
+}
+
+// PRequest
+message PGetLocationsRequest {
+  string address = 1;
+}
+
+// PResponse
+message PLocationResponse {
+  PLocation data = 1;
+}
+
+message PLocationsResponse {
+  //  repeated PLocation data = 1;
+  repeated string addresses = 1;
+}

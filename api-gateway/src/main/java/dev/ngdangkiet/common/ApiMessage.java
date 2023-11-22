@@ -1,5 +1,6 @@
 package dev.ngdangkiet.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import dev.ngdangkiet.util.DateTimeUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiMessage {
 
     public static ApiMessage SUCCESS = new ApiMessage(0, "Success");

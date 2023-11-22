@@ -7,6 +7,12 @@ package dev.ngdangkiet.constant;
 
 public class RabbitMQConstant {
 
+    public static class Tracking {
+        public static final String USER_TRACKING_QUEUE = "user_tracking_queue";
+        public static final String USER_TRACKING_EXCHANGE = "user_tracking_exchange";
+        public static final String USER_TRACKING_ROUTING_KEY = "user_tracking_routing_key";
+    }
+
     public static class Notification {
 
         // ALERT

@@ -7,6 +7,10 @@ spring:
   messages:
     encoding: UTF-8
     basename: classpath:i18n/messages
+  data:
+    redis:
+      host: localhost
+      port: 6379
   config:
     import: "optional:configserver:http://localhost:8088"
 
@@ -43,4 +47,7 @@ grpc:
       negotiation-type: plaintext
     grpc-notification-service:
       address: static://localhost:8050
+      negotiation-type: plaintext
+    grpc-location-service:
+      address: static://localhost:8060
       negotiation-type: plaintext
