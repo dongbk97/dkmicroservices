@@ -18,5 +18,11 @@ message PLoginResponse {
   }
   int32 code = 1;
   string token = 2;
-  UserInfo user_info = 3;
+  string token_UUID = 3;
+  UserInfo user_info = 4;
+}
+
+message PRefreshTokenResponse {
+  int32 code = 1;
+  string token = 2;
 }

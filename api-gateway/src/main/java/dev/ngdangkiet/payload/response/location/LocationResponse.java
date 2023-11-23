@@ -1,4 +1,4 @@
-package dev.ngdangkiet.payload.response;
+package dev.ngdangkiet.payload.response.location;
 
 import lombok.Getter;
 import lombok.Setter;

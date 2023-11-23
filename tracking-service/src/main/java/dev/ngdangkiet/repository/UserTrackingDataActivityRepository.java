@@ -1,5 +1,6 @@
 package dev.ngdangkiet.repository;
 
+import dev.ngdangkiet.domain.UserTrackingDataActivity;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface UserTrackingDataActivityRepository extends ElasticsearchRepository<dev.ngdangkiet.domain.UserTrackingDataActivity, String> {
+public interface UserTrackingDataActivityRepository extends ElasticsearchRepository<UserTrackingDataActivity, Long> {
 }

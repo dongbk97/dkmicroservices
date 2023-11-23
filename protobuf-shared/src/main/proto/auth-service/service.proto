@@ -6,8 +6,10 @@ option java_package = "dev.ngdangkiet.dkmicroservices.auth.service";
 option java_outer_classname = "AuthServiceAPI";
 
 import "auth-service/shared.proto";
+import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 
 service AuthService {
   rpc authentication (auth.service.PLoginRequest) returns (auth.service.PLoginResponse);
+  rpc refreshToken (google.protobuf.StringValue) returns (auth.service.PRefreshTokenResponse);
 }

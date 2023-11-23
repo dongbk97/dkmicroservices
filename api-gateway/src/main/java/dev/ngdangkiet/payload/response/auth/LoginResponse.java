@@ -1,4 +1,4 @@
-package dev.ngdangkiet.payload.response;
+package dev.ngdangkiet.payload.response.auth;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +15,7 @@ import lombok.Setter;
 public class LoginResponse {
 
     private String token;
+    private String tokenUUID;
     private UserInfo userInfo;
 
     @Getter

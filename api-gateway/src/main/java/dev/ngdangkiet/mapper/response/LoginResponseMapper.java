@@ -3,7 +3,7 @@ package dev.ngdangkiet.mapper.response;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginResponse;
 import dev.ngdangkiet.mapper.ProtobufMapper;
 import dev.ngdangkiet.mapper.ProtobufMapperConfig;
-import dev.ngdangkiet.payload.response.LoginResponse;
+import dev.ngdangkiet.payload.response.auth.LoginResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

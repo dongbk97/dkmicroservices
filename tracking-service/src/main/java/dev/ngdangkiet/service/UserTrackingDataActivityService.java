@@ -1,5 +1,7 @@
 package dev.ngdangkiet.service;
 
+import dev.ngdangkiet.dkmicroservices.tracking.protobuf.PGetUserTrackingActivitiesRequest;
+import dev.ngdangkiet.dkmicroservices.tracking.protobuf.PGetUserTrackingActivitiesResponse;
 import dev.ngdangkiet.domain.tracking.UserActivityData;
 
 /**
@@ -10,4 +12,6 @@ import dev.ngdangkiet.domain.tracking.UserActivityData;
 public interface UserTrackingDataActivityService {
 
     void addTrackingUserActivity(UserActivityData userActivityData);
+
+    PGetUserTrackingActivitiesResponse getUserTrackingActivities(PGetUserTrackingActivitiesRequest request);
 }

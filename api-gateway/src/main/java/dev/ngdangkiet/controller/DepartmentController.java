@@ -5,7 +5,7 @@ import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.DepartmentRequestMapper;
 import dev.ngdangkiet.mapper.response.DepartmentResponseMapper;
-import dev.ngdangkiet.payload.request.DepartmentRequest;
+import dev.ngdangkiet.payload.request.department.DepartmentRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;

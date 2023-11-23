@@ -11,4 +11,5 @@ public class ServiceConstant {
     public static String AUTH_SERVICE = "auth-service";
     public static String NOTIFICATION_SERVICE = "notification-service";
     public static String LOCATION_SERVICE = "location-service";
+    public static String TRACKING_SERVICE = "tracking-service";
 }

@@ -1,9 +1,9 @@
 server:
   port: 8007
 
-#grpc:
-#  server:
-#    port: 8070
+grpc:
+  server:
+    port: 8070
 
 eureka:
   client:
@@ -11,7 +11,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     prefer-ip-address: true
-#    non-secure-port: ${grpc.server.port}
+    non-secure-port: ${grpc.server.port}
 
 management:
   tracing:

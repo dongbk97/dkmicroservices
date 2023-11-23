@@ -1,4 +1,4 @@
-package dev.ngdangkiet.payload.request;
+package dev.ngdangkiet.payload.request.location;
 
 import lombok.Getter;
 import lombok.Setter;

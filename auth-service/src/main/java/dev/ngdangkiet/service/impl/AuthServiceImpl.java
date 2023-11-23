@@ -1,4 +1,4 @@
-package dev.ngdangkiet.service;
+package dev.ngdangkiet.service.impl;
 
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginRequest;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginResponse;
@@ -7,6 +7,8 @@ import dev.ngdangkiet.encoder.PBKDF2Encoder;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.jwt.JwtUtil;
 import dev.ngdangkiet.mapper.UserInfoMapper;
+import dev.ngdangkiet.service.AuthService;
+import dev.ngdangkiet.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import reactor.core.publisher.Mono;
 public class AuthServiceImpl implements AuthService {
 
     private final EmployeeService employeeService;
+    private final RefreshTokenService refreshTokenService;
     private final PBKDF2Encoder pbkdf2Encoder;
     private final JwtUtil jwtUtil;
     private final UserInfoMapper userInfoMapper = UserInfoMapper.INSTANCE;
@@ -36,6 +39,7 @@ public class AuthServiceImpl implements AuthService {
             return employee.filter(userDetails -> pbkdf2Encoder.encode(request.getPassword()).equals(userDetails.getPassword()))
                     .map(userDetails -> builder.setCode(ErrorCode.SUCCESS)
                             .setToken(jwtUtil.generateToken(userDetails))
+                            .setTokenUUID(refreshTokenService.createAndGetRefreshToken(userDetails.getId()))
                             .setUserInfo(userInfoMapper.toProtobuf(userDetails))
                             .build())
                     .switchIfEmpty(Mono.just(builder.build())).block();

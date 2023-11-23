@@ -28,8 +28,8 @@ public class UserTrackingDataActivity {
     @Id
     private String id = UUID.randomUUID().toString();
 
-    @Field(type = FieldType.Text, name = "user_json")
-    private String userJson;
+    @Field(type = FieldType.Long, name = "user_id")
+    private Long userId;
 
     @Field(type = FieldType.Text, name = "ip_address")
     private String ipAddress;
