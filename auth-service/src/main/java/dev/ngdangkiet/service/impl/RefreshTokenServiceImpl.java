@@ -44,11 +44,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             return EMPTY;
         }
         try {
-            RefreshTokenEntity refreshToken = RefreshTokenEntity.builder()
-                    .setUser(employee)
-                    .setTokenUUID(UUID.randomUUID().toString())
-                    .setExpirationDate(new Date(new Date().getTime() + expirationTime * 1000))
-                    .build();
+            RefreshTokenEntity refreshToken = refreshTokenRepository.findByUserId(userId)
+                    .orElse(new RefreshTokenEntity());
+            if (Objects.isNull(refreshToken.getUser())) {
+                refreshToken.setUser(employee);
+            }
+            refreshToken.setTokenUUID(UUID.randomUUID().toString());
+            refreshToken.setExpirationDate(new Date(new Date().getTime() + expirationTime * 1000));
 
             return refreshTokenRepository.save(refreshToken).getTokenUUID();
         } catch (Exception e) {
