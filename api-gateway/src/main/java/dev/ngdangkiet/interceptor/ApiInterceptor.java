@@ -68,7 +68,7 @@ public class ApiInterceptor implements WebFilter {
                 TrackingJson trackingJson = redisConfig.getByReadValueAsString(String.format(RedisCacheKeyConstant.Tracking.USER_TRACKING_KEY, userLogged.getToken(), userLogged.getUserInfo().getId()), TrackingJson.class);
 
                 UserActivityData userActivityData = UserActivityData.builder()
-                        .setUserJson(objectMapper.writeValueAsString(userLogged.getUserInfo()))
+                        .setUserId(userLogged.getUserInfo().getId())
                         .setAction(trackingJson.getAction())
                         .setIpAddress(ObjectUtils.defaultIfNull(getIpAddressFromHeader(request), EMPTY))
                         .setRequestUrl(request.getURI().toString())

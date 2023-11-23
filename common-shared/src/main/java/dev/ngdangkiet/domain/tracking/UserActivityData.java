@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Builder(setterPrefix = "set", builderClassName = "newBuilder")
 public class UserActivityData implements Serializable {
 
-    private String userJson;
+    private Long userId;
     private String ipAddress;
     private String requestUrl;
     private String method;

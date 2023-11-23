@@ -1,0 +1,12 @@
+syntax = "proto3";
+package tracking.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.tracking.service";
+option java_outer_classname = "TrackingServiceAPI";
+
+import "tracking-service/shared.proto";
+
+service TrackingService {
+  rpc getUserTrackingActivities (PGetUserTrackingActivitiesRequest) returns (PGetUserTrackingActivitiesResponse);
+}
