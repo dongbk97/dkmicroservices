@@ -21,7 +21,7 @@ import java.io.Serializable;
 @ToString
 @Builder(setterPrefix = "set", builderClassName = "newBuilder")
 public class UserActivityData implements Serializable {
-
+    private String id;
     private Long userId;
     private String ipAddress;
     private String requestUrl;

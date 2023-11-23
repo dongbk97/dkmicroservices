@@ -8,6 +8,7 @@ import dev.ngdangkiet.payload.request.tracking.GetUserTrackingActivitiesRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +35,8 @@ public class TrackingController {
             var response = trackingGrpcClient.getUserTrackingActivities(
                     PGetUserTrackingActivitiesRequest.newBuilder()
                             .setUserId(userTrackingActivitiesRequest.getUserId())
-                            .setAction(userTrackingActivitiesRequest.getAction())
-                            .setMethod(userTrackingActivitiesRequest.getMethod())
+                            .setAction(StringUtils.defaultString(userTrackingActivitiesRequest.getAction()))
+                            .setMethod(StringUtils.defaultString(userTrackingActivitiesRequest.getMethod()))
                             .build()
             );
             return ApiMessage.success(userTrackingActivityMapper.toDomains(response.getDataList()));
