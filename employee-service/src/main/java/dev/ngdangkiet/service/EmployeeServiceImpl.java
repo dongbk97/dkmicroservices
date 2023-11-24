@@ -74,6 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             // send notification to new user
             if (isNewEmployee) {
                 rabbitMQProducer.sendWelcomeNotification(response);
+                rabbitMQProducer.sendWelcomeEmail(pEmployee);
             }
 
         } catch (Exception e) {

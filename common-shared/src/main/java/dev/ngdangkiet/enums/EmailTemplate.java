@@ -7,7 +7,8 @@ package dev.ngdangkiet.enums;
 
 public enum EmailTemplate {
     INDEX("index.html"),
-    HAPPY_BRITHDAY("Happy_birthday.html");
+    HAPPY_BIRTHDAY("Happy_birthday.html"),
+    WELCOME_NEW_USER("Welcome_New_User.html");
 
     private final String value;
 

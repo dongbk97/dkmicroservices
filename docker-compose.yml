@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+  # ================== CONFIG SERVER ==================
   config-server:
     container_name: dkmicroservices-config-server
     build: config-server
@@ -8,15 +9,15 @@ services:
       - "8088:8088"
     restart: unless-stopped
 
+  # ================== SERVICE REGISTRY ==================
   service-registry:
     container_name: dkmicroservices-service-registry
     build: service-registry
     ports:
       - "8761:8761"
     restart: unless-stopped
-    depends_on:
-      - config-server
 
+  # ================== AUTH SERVICE ==================
   auth-service:
     container_name: dkmicroservices-auth-service
     build: auth-service
@@ -28,6 +29,7 @@ services:
       - service-registry
       - employee-postgres
 
+  # ================== DEPARTMENT SERVICE ==================
   department-service:
     container_name: dkmicroservices-department-service
     build: department-service
@@ -50,6 +52,7 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
 
+  # ================== EMPLOYEE SERVICE ==================
   employee-service:
     container_name: dkmicroservices-employee-service
     build: employee-service
@@ -72,6 +75,82 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
 
+  # ================== NOTIFICATION SERVICE ==================
+  notification-service:
+    container_name: dkmicroservices-notification-service
+    build: notification-service
+    ports:
+      - "8005:8005"
+    restart: unless-stopped
+    depends_on:
+      - config-server
+      - service-registry
+      - notification-postgres
+      - employee-service
+
+  notification-postgres:
+    container_name: dkmicroservices-notification-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_notification_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
+  # ================== LOCATION SERVICE ==================
+  location-service:
+    container_name: dkmicroservices-location-service
+    build: location-service
+    ports:
+      - "8006:8006"
+    restart: unless-stopped
+    depends_on:
+      - config-server
+      - service-registry
+      - location-postgres
+
+  location-postgres:
+    container_name: dkmicroservices-location-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_location_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
+  # ================== TRACKING SERVICE ==================
+  tracking-service:
+    container_name: dkmicroservices-tracking-service
+    build: tracking-service
+    ports:
+      - "8007:8007"
+    restart: unless-stopped
+    depends_on:
+      - config-server
+      - service-registry
+      - tracking-elasticsearch
+
+  tracking-elasticsearch:
+    container_name: dkmicroservices-tracking-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  # ================== API GATEWAY ==================
   api-gateway:
     container_name: dkmicroservices-api-gateway
     build: api-gateway
@@ -84,9 +163,27 @@ services:
       - department-service
       - employee-service
 
+  # ================== ZIPKIN ==================
   distributed-tracing:
     container_name: dkmicroservices-zipkin
     image: openzipkin/zipkin
     restart: unless-stopped
     ports:
       - "9411:9411"
+
+  # ================== RABBIT MQ ==================
+  message-broker:
+    container_name: dkmicroservices-rabbitmq
+    image: rabbitmq:3-management-alpine
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  # ================== REDIS ==================
+  caching-data:
+    container_name: dkmicroservices-redis
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"

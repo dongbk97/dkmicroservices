@@ -1,16 +1,21 @@
 package dev.ngdangkiet.service;
 
-import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.domain.JsonMessageEmail;
 import dev.ngdangkiet.dto.EmailDTO;
+
+import java.util.List;
 
 public interface EmailService {
 
-    void sendMail(EmailDTO email, boolean isHTML);
+    void sendMail(EmailDTO email);
 
-    void sendMail(String sendTo, String Subject, String body);
+    void sendSampleEMail(String sendTo, String Subject, String body);
 
-    void sendEmailWithTemplate(EmailDTO email, String templateName);
+    void sendEmailWithTemplate(EmailDTO email);
 
-    void receiveEmailNotification(JsonMessage message);
+    void sendEmailWithTemplate(List<EmailDTO> emails);
+
+
+    void receiveEmailNotification(JsonMessageEmail message);
 
 }
