@@ -1,6 +1,6 @@
 package dev.ngdangkiet.mapper;
 
-import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.domain.JsonMessageEmail;
 import dev.ngdangkiet.dto.EmailDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
  */
 
 @Mapper(config = ProtobufMapperConfig.class)
-public interface EmailMapper extends ProtobufMapper<EmailDTO, JsonMessage> {
+public interface EmailMapper extends ProtobufMapper<EmailDTO, JsonMessageEmail> {
 
     EmailMapper INSTANCE = Mappers.getMapper(EmailMapper.class);
 }

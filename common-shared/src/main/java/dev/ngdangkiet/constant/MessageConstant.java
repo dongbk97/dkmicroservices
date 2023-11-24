@@ -10,6 +10,7 @@ public class MessageConstant {
     public static class Employee {
         public static final String INVALID_GENDER = "employee.invalid.gender";
         public static final String INVALID_PASSWORD = "employee.invalid.password";
+        public static final String WELCOME_NEW_USER = "Welcome To Join Our Team!";
     }
 
     public static class Notification {

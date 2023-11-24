@@ -2,6 +2,7 @@ package dev.ngdangkiet.rabbitmq;
 
 import dev.ngdangkiet.constant.RabbitMQConstant;
 import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.domain.JsonMessageEmail;
 import dev.ngdangkiet.service.EmailService;
 import dev.ngdangkiet.service.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,9 @@ public class RabbitMQConsumer {
     }
 
     @RabbitListener(queues = {RabbitMQConstant.Notification.EMAIL_QUEUE})
-    public void receiveEmailNotification(JsonMessage message) {
+    public void receiveEmailNotification(JsonMessageEmail message) {
         log.info("Received message -> {}", message.toString());
-        if (Objects.nonNull(message.getMessage())) {
+        if (Objects.nonNull(message.getReceiverEmail())) {
             emailService.receiveEmailNotification(message);
         }
     }

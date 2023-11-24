@@ -1,16 +1,17 @@
-package dev.ngdangkiet.dto;
+package dev.ngdangkiet.domain;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Map;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Builder(setterPrefix = "set", builderClassName = "newBuilder")
-public class EmailDTO {
-
+public class JsonMessageEmail implements Serializable {
     private Long receiverId;
     private String receiverEmail;
     private String message;
@@ -18,5 +19,5 @@ public class EmailDTO {
     private String attachment;
     private Map<String, Object> properties;
     private String emailTemplate;
-    private Boolean isHTML = Boolean.FALSE;
+    private Boolean isHtml;
 }

@@ -1,8 +1,7 @@
 package dev.ngdangkiet.service;
 
-import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.domain.JsonMessageEmail;
 import dev.ngdangkiet.dto.EmailDTO;
-import dev.ngdangkiet.mapper.EmailMapper;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -14,12 +13,15 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.util.MapUtils;
+import dev.ngdangkiet.mapper.EmailMapper;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,7 +43,6 @@ public class EmailServiceImpl implements EmailService {
         String result = html;
         for (Map.Entry<String, Object> property : properties.entrySet()) {
             String placeholder = String.format("${%s}", property.getKey());
-//            String placeholder = "${" + property.getKey() + "}";
             Object replacement = property.getValue();
             result = result.replace(placeholder, String.valueOf(replacement));
         }
@@ -49,13 +50,13 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendMail(EmailDTO email, boolean isHTML) {
+    public void sendMail(EmailDTO email) {
         try {
             MimeMessage mimeMessage = emailSender.createMimeMessage();
             mimeMessage.setFrom(sender);
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getReceiverEmail()));
             mimeMessage.setSubject(email.getSubject());
-            if (isHTML) {
+            if (email.getIsHTML()) {
                 String bodyHTML;
                 if (!MapUtils.isEmpty(email.getProperties())) {
                     bodyHTML = replaceProperties(email.getMessage(), email.getProperties());
@@ -67,14 +68,14 @@ public class EmailServiceImpl implements EmailService {
                 mimeMessage.setText(email.getMessage());
             }
             emailSender.send(mimeMessage);
-            log.info("Send Email Successfully!!!");
+            log.info("Send Email to [%d] Successfully!!!" + email.getReceiverEmail());
         } catch (Exception e) {
             log.error("An error occur when send email : " + e.getMessage());
         }
     }
 
     @Override
-    public void sendMail(String sendTo, String Subject, String body) {
+    public void sendSampleEMail(String sendTo, String Subject, String body) {
         try {
             MimeMessage mimeMessage = emailSender.createMimeMessage();
             mimeMessage.setFrom(sender);
@@ -89,7 +90,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmailWithTemplate(EmailDTO details, String templateName) {
+    public void sendEmailWithTemplate(EmailDTO details) {
         try {
             Context context = new Context();
             Map<String, Object> properties = details.getProperties();
@@ -110,7 +111,7 @@ public class EmailServiceImpl implements EmailService {
                 FileSystemResource file = new FileSystemResource(new File(details.getAttachment()));
                 mimeMessageHelper.addAttachment(Objects.requireNonNull(file.getFilename()), file);
             }
-            templateName = StringUtils.hasText(templateName) ? "index.html" : templateName;
+            String templateName = StringUtils.hasText(details.getEmailTemplate()) ? details.getEmailTemplate() : "index.html" ;
             String htmlContent = templateEngine.process(templateName, context);
             mimeMessageHelper.setText(htmlContent, true);
 
@@ -125,8 +126,19 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void receiveEmailNotification(JsonMessage message) {
+    public void sendEmailWithTemplate(List<EmailDTO> emails) {
+        if (!CollectionUtils.isEmpty(emails)) {
+            emails.forEach(this::sendEmailWithTemplate);
+        }
+    }
+
+    @Override
+    public void receiveEmailNotification(JsonMessageEmail message) {
         EmailDTO email = emailMapper.toDomain(message);
-        sendMail(email, false);
+        if(StringUtils.hasText(email.getEmailTemplate())) {
+            sendEmailWithTemplate(email);
+        } else {
+            sendMail(email);
+        }
     }
 }
