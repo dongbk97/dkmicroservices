@@ -1,0 +1,41 @@
+def image = "01092002/ndk-config-server"
+def branch = "main"
+def tag = ""
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'ndk-maven'
+    }
+
+    stages {
+        stage('Build Maven') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/ngdangkiet/ndk-microservices']]])
+                sh 'mvn clean install -Dmaven.test.skip=true'
+            }
+        }
+
+        stage('Package/Build Docker Image'){
+            steps {
+                script {
+                    tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
+                    sh 'docker build -t ${image}:${tag}'
+                }
+            }
+        }
+
+        stage('Docker Push'){
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
+                        tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
+                        sh 'docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}'
+                        sh 'docker push ${image}:${tag}'
+                    }
+                }
+            }
+        }
+    }
+}
