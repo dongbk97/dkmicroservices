@@ -20,11 +20,10 @@ pipeline {
         stage('Docker Build and Push'){
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
+                    withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
                         tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
-                        sh 'docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}'
-                        sh 'docker build -t ${image}:${tag} .'
-                        sh 'docker push ${image}:${tag}'
+                        sh "docker build -t ${image}:${tag} ."
+                        sh "docker push ${image}:${tag}"
                     }
                 }
             }
