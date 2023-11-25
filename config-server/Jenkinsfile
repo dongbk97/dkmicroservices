@@ -17,19 +17,12 @@ pipeline {
             }
         }
 
-        stage('Docker Build Image') {
-            steps {
-                script {
-                    tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
-                    sh "docker build -t ${image}:${tag} ./config-server"
-                }
-            }
-        }
-
-        stage('Docker Push Image to Hub'){
+        stage('Docker Build and Push Image to Hub'){
             steps {
                 script {
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpw')]) {
+                        tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
+                        sh "docker build -t ${image}:${tag} ./config-server"
                         sh "docker push ${image}:${tag}"
                     }
                 }
