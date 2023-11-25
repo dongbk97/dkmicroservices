@@ -29,9 +29,9 @@ pipeline {
         stage('Docker Push'){
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
                         tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
-                        sh 'docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}'
+                        sh 'docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}'
                         sh 'docker push ${image}:${tag}'
                     }
                 }
