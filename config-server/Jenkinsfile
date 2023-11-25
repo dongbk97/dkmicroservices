@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
-                    sh "docker build -t ${image}:${tag} ."
+                    sh "docker build -t ${image}:${tag} ./config-server"
                 }
             }
         }
