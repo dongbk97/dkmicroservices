@@ -13,7 +13,7 @@ pipeline {
         stage('Build Maven') {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/ngdangkiet/ndk-microservices']]])
-                sh 'mvn clean install -pl protobuf-shared, common-shared, location-service -am'
+                sh 'mvn clean install -pl protobuf-shared,common-shared,location-service -am'
             }
         }
 
