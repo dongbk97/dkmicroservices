@@ -1,4 +1,4 @@
-package dev.ngdangkiet.service;
+package dev.ngdangkiet.service.impl;
 
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -15,6 +15,7 @@ import dev.ngdangkiet.mapper.EmployeeMapper;
 import dev.ngdangkiet.rabbitmq.RabbitMQProducer;
 import dev.ngdangkiet.repository.EmployeeRepository;
 import dev.ngdangkiet.repository.PositionRepository;
+import dev.ngdangkiet.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,19 +52,19 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employee = employeeRepository.findById(pEmployee.getId()).orElse(null);
                 if (Objects.isNull(employee)) {
                     log.error("User [{}] not found!", pEmployee.getId());
-                    return Int64Value.of(ErrorCode.INVALID_DATA);
+                    return Int64Value.of(ErrorCode.NOT_FOUND);
                 }
             }
 
             if (existsEmail(pEmployee.getId(), pEmployee.getEmail())) {
                 log.error("Email [{}] already exists!", pEmployee.getEmail());
-                return Int64Value.of(ErrorCode.INVALID_DATA);
+                return Int64Value.of(ErrorCode.ALREADY_EXISTS);
             }
 
             Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
             if (position.isEmpty()) {
                 log.error("Position [{}] not found!", pEmployee.getPositionId());
-                return Int64Value.of(ErrorCode.INVALID_DATA);
+                return Int64Value.of(ErrorCode.NOT_FOUND);
             }
 
             EmployeeEntity entity = employeeMapper.toDomain(pEmployee);
@@ -99,7 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 builder.setCode(ErrorCode.SUCCESS)
                         .setData(employeeMapper.toProtobuf(entity.get()));
             } else {
-                builder.setCode(ErrorCode.INVALID_DATA);
+                builder.setCode(ErrorCode.NOT_FOUND);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,7 +119,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 builder.setCode(ErrorCode.SUCCESS)
                         .setData(employeeMapper.toProtobuf(entity.get()));
             } else {
-                builder.setCode(ErrorCode.INVALID_DATA);
+                builder.setCode(ErrorCode.NOT_FOUND);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,7 +152,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeeRepository.deleteById(request.getValue());
                 builder.setCode(ErrorCode.SUCCESS);
             } else {
-                builder.setCode(ErrorCode.INVALID_DATA);
+                builder.setCode(ErrorCode.NOT_FOUND);
             }
         } catch (Exception e) {
             e.printStackTrace();

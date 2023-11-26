@@ -28,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 /**
  * @author ngdangkiet
  * @since 10/31/2023
@@ -51,10 +49,7 @@ public class EmployeeController {
     public ApiMessage createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
         try {
             var data = employeeGrpcClient.createOrUpdateEmployee(createEmployeeRequestMapper.toProtobuf(request));
-            if (ErrorHelper.isFailed((int) data)) {
-                return ApiMessage.CREATE_FAILED;
-            }
-            return ApiMessage.success(data);
+            return getApiMessageForUpsertEmployee((int) data);
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;
@@ -65,14 +60,15 @@ public class EmployeeController {
     public ApiMessage updateEmployee(@Valid @RequestBody UpdateEmployeeRequest request) {
         try {
             var data = employeeGrpcClient.createOrUpdateEmployee(updateEmployeeRequestMapper.toProtobuf(request));
-            if (ErrorHelper.isFailed((int) data)) {
-                return ApiMessage.UPDATE_FAILED;
-            }
-            return ApiMessage.success(data);
+            return getApiMessageForUpsertEmployee((int) data);
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;
         }
+    }
+
+    private ApiMessage getApiMessageForUpsertEmployee(int code) {
+        return ErrorHelper.isSuccess(code) ? ApiMessage.success(code) : ApiMessage.failed(code);
     }
 
     @GetMapping("/{id}")
@@ -80,15 +76,15 @@ public class EmployeeController {
         try {
             var grpcResponse = employeeGrpcClient.getEmployeeById(id);
 
-            if (Objects.isNull(grpcResponse)) {
-                return ApiMessage.INVALID_DATA;
+            if (ErrorHelper.isFailed(grpcResponse.getCode())) {
+                return ApiMessage.failed(grpcResponse.getCode());
             }
 
             var position = EmployeeResponse.Position.builder()
-                    .id(grpcResponse.getPositionId())
-                    .name(Position.of(grpcResponse.getPositionId()).getName())
+                    .id(grpcResponse.getData().getPositionId())
+                    .name(Position.of(grpcResponse.getData().getPositionId()).getName())
                     .build();
-            var data = employeeResponseMapper.toDomain(grpcResponse);
+            var data = employeeResponseMapper.toDomain(grpcResponse.getData());
             data.setPosition(position);
 
             return ApiMessage.success(data);
@@ -124,10 +120,7 @@ public class EmployeeController {
     public ApiMessage deleteEmployee(@PathVariable(value = "id") Long id) {
         try {
             var grpcResponse = employeeGrpcClient.deleteEmployeeById(id);
-            if (ErrorHelper.isSuccess(grpcResponse.getCode())) {
-                return ApiMessage.SUCCESS;
-            }
-            return ApiMessage.DELETE_FAILED;
+            return ErrorHelper.isSuccess(grpcResponse.getCode()) ? ApiMessage.SUCCESS : ApiMessage.failed(grpcResponse.getCode());
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;

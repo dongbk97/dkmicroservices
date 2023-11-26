@@ -1,5 +1,6 @@
 package dev.ngdangkiet.client;
 
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
@@ -7,6 +8,9 @@ import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeesResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PPosition;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PPositionResponse;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PPositionsResponse;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
 import dev.ngdangkiet.error.ErrorHelper;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +34,8 @@ public class EmployeeGrpcClient {
         return response.getValue();
     }
 
-    public PEmployee getEmployeeById(Long employeeId) {
-        PEmployeeResponse response = employeeServiceBlockingStub.getEmployeeById(Int64Value.of(employeeId));
-        if (ErrorHelper.isSuccess(response.getCode())) {
-            return response.getData();
-        }
-        return null;
+    public PEmployeeResponse getEmployeeById(Long employeeId) {
+        return employeeServiceBlockingStub.getEmployeeById(Int64Value.of(employeeId));
     }
 
     public PEmployee getEmployeeByEmail(String email) {
@@ -52,5 +52,21 @@ public class EmployeeGrpcClient {
 
     public EmptyResponse deleteEmployeeById(Long employeeId) {
         return employeeServiceBlockingStub.deleteEmployeeById(Int64Value.of(employeeId));
+    }
+
+    public long createOrUpdatePosition(PPosition request) {
+        return employeeServiceBlockingStub.createOrUpdatePosition(request).getValue();
+    }
+
+    public PPositionResponse getPositionById(Long positionId) {
+        return employeeServiceBlockingStub.getPositionById(Int64Value.of(positionId));
+    }
+
+    public PPositionsResponse getPositions() {
+        return employeeServiceBlockingStub.getPositions(Empty.newBuilder().build());
+    }
+
+    public EmptyResponse deletePositionById(Long positionId) {
+        return employeeServiceBlockingStub.deletePositionById(Int64Value.of(positionId));
     }
 }

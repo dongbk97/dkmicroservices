@@ -1,4 +1,4 @@
-package dev.ngdangkiet.service;
+package dev.ngdangkiet.service.impl;
 
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PChangePasswordRequest;
@@ -7,6 +7,7 @@ import dev.ngdangkiet.encoder.PBKDF2Encoder;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.rabbitmq.RabbitMQProducer;
 import dev.ngdangkiet.repository.EmployeeRepository;
+import dev.ngdangkiet.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

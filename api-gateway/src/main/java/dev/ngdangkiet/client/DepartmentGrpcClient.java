@@ -7,7 +7,6 @@ import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartment;
 import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartmentResponse;
 import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartmentsResponse;
 import dev.ngdangkiet.dkmicroservices.department.service.DepartmentServiceGrpc;
-import dev.ngdangkiet.error.ErrorHelper;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
@@ -29,12 +28,8 @@ public class DepartmentGrpcClient {
         return response.getValue();
     }
 
-    public PDepartment getDepartmentById(Long departmentId) {
-        PDepartmentResponse response = departmentServiceBlockingStub.getDepartmentById(Int64Value.of(departmentId));
-        if (ErrorHelper.isSuccess(response.getCode())) {
-            return response.getData();
-        }
-        return null;
+    public PDepartmentResponse getDepartmentById(Long departmentId) {
+        return departmentServiceBlockingStub.getDepartmentById(Int64Value.of(departmentId));
     }
 
     public PDepartmentsResponse getDepartments() {
