@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 /**
  * @author ngdangkiet
  * @since 10/31/2023
@@ -37,11 +35,7 @@ public class DepartmentController {
     @PostMapping
     public ApiMessage createDepartment(@RequestBody DepartmentRequest request) {
         try {
-            var data = departmentGrpcClient.createOrUpdateDepartment(departmentRequestMapper.toProtobuf(request));
-            if (ErrorHelper.isFailed((int) data)) {
-                return ApiMessage.CREATE_FAILED;
-            }
-            return ApiMessage.success(data);
+            return getApiMessageForUpsertDepartment(request);
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;
@@ -51,15 +45,16 @@ public class DepartmentController {
     @PutMapping
     public ApiMessage updateDepartment(@RequestBody DepartmentRequest request) {
         try {
-            var data = departmentGrpcClient.createOrUpdateDepartment(departmentRequestMapper.toProtobuf(request));
-            if (ErrorHelper.isFailed((int) data)) {
-                return ApiMessage.UPDATE_FAILED;
-            }
-            return ApiMessage.success(data);
+            return getApiMessageForUpsertDepartment(request);
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;
         }
+    }
+
+    private ApiMessage getApiMessageForUpsertDepartment(DepartmentRequest request) {
+        var data = departmentGrpcClient.createOrUpdateDepartment(departmentRequestMapper.toProtobuf(request));
+        return ErrorHelper.isSuccess((int) data) ? ApiMessage.success(data) : ApiMessage.failed((int) data);
     }
 
     @GetMapping("/{id}")
@@ -67,12 +62,9 @@ public class DepartmentController {
         try {
             var grpcResponse = departmentGrpcClient.getDepartmentById(departmentId);
 
-            if (Objects.isNull(grpcResponse)) {
-                return ApiMessage.INVALID_DATA;
-            }
-
-            var data = departmentResponseMapper.toDomain(grpcResponse);
-            return ApiMessage.success(data);
+            return ErrorHelper.isSuccess(grpcResponse.getCode())
+                    ? ApiMessage.success(departmentResponseMapper.toDomain(grpcResponse.getData()))
+                    : ApiMessage.failed(grpcResponse.getCode());
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;
@@ -94,10 +86,7 @@ public class DepartmentController {
     public ApiMessage deleteDepartmentById(@PathVariable(value = "id") Long departmentId) {
         try {
             var grpcResponse = departmentGrpcClient.deleteDepartmentById(departmentId);
-            if (ErrorHelper.isSuccess(grpcResponse.getCode())) {
-                return ApiMessage.SUCCESS;
-            }
-            return ApiMessage.DELETE_FAILED;
+            return ErrorHelper.isSuccess(grpcResponse.getCode()) ? ApiMessage.SUCCESS : ApiMessage.failed(grpcResponse.getCode());
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;

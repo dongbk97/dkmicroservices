@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -34,17 +35,31 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Int64Value createOrUpdateDepartment(PDepartment pDepartment) {
         long response = ErrorCode.FAILED;
         try {
-            if (pDepartment.getId() > 0 && departmentRepository.findById(pDepartment.getId()).isEmpty()) {
-                response = ErrorCode.INVALID_DATA;
-            } else {
-                DepartmentEntity entity = departmentMapper.toDomain(pDepartment);
-                response = departmentRepository.save(entity).getId();
+            DepartmentEntity entity;
+            if (pDepartment.getId() > 0) {
+                entity = departmentRepository.findById(pDepartment.getId()).orElse(null);
+                if (Objects.isNull(entity)) {
+                    log.error("Department [{}] not found!", pDepartment.getId());
+                    return Int64Value.of(ErrorCode.NOT_FOUND);
+                }
             }
+
+            if (existsDepartment(pDepartment)) {
+                log.error("Department [{}] already exists!", pDepartment.getName());
+                return Int64Value.of(ErrorCode.ALREADY_EXISTS);
+            }
+
+            response = departmentRepository.save(departmentMapper.toDomain(pDepartment)).getId();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return Int64Value.of(response);
+    }
+
+    private boolean existsDepartment(PDepartment pDepartment) {
+        Optional<DepartmentEntity> entity = departmentRepository.findByName(pDepartment.getName());
+        return entity.isPresent() && (pDepartment.getId() <= 0 || pDepartment.getId() != entity.get().getId());
     }
 
     @Override
@@ -57,7 +72,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                 builder.setCode(ErrorCode.SUCCESS)
                         .setData(departmentMapper.toProtobuf(entity.get()));
             } else {
-                builder.setCode(ErrorCode.INVALID_DATA);
+                builder.setCode(ErrorCode.NOT_FOUND);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +106,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                 departmentRepository.deleteById(departmentId.getValue());
                 builder.setCode(ErrorCode.SUCCESS);
             } else {
-                builder.setCode(ErrorCode.INVALID_DATA);
+                builder.setCode(ErrorCode.NOT_FOUND);
             }
         } catch (Exception e) {
             e.printStackTrace();

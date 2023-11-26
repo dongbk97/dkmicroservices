@@ -46,7 +46,7 @@ public class UserController {
                             .build()
             );
 
-            ApiMessage apiMessage = ErrorHelper.isSuccess(response.getCode()) ? ApiMessage.SUCCESS : ApiMessage.UPDATE_FAILED;
+            ApiMessage apiMessage = ErrorHelper.isSuccess(response.getCode()) ? ApiMessage.SUCCESS : ApiMessage.failed(response.getCode());
             cacheTrackingUtil.cacheTrackingJson(Action.CHANGE_PASSWORD.name(), request, apiMessage);
 
             return apiMessage;

@@ -1,8 +1,8 @@
 package dev.ngdangkiet.rabbitmq;
 
 import dev.ngdangkiet.constant.RabbitMQConstant;
-import dev.ngdangkiet.domain.notification.JsonMessage;
 import dev.ngdangkiet.domain.JsonMessageEmail;
+import dev.ngdangkiet.domain.notification.JsonMessage;
 import dev.ngdangkiet.service.EmailService;
 import dev.ngdangkiet.service.NotificationService;
 import lombok.RequiredArgsConstructor;

@@ -2,6 +2,7 @@ package dev.ngdangkiet.service;
 
 import dev.ngdangkiet.domain.JsonMessageEmail;
 import dev.ngdangkiet.dto.EmailDTO;
+import dev.ngdangkiet.mapper.EmailMapper;
 import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -18,7 +19,6 @@ import org.springframework.util.StringUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.util.MapUtils;
-import dev.ngdangkiet.mapper.EmailMapper;
 
 import java.io.File;
 import java.util.List;

@@ -17,6 +17,11 @@ message PEmployee {
   int64 position_id = 9;
 }
 
+message PPosition {
+  int64 id = 1;
+  string name = 2;
+}
+
 // PRequest
 message PGetEmployeesRequest {
   int64 department_id = 1;
@@ -43,4 +48,14 @@ message PEmployeeResponse {
 message PEmployeesResponse {
   int32 code = 1;
   repeated PEmployee data = 2;
+}
+
+message PPositionResponse {
+  int32 code = 1;
+  PPosition data = 2;
+}
+
+message PPositionsResponse {
+  int32 code = 1;
+  repeated PPosition data = 2;
 }
