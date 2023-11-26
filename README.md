@@ -36,10 +36,14 @@ docker-compose up -d
         <td>gRPC Server</td>
         <td>Postgresql</td>
         <td>RabbitMQ</td>
+        <td>ElasticSearch</td>
+        <td>Redis</td>
     </tr>
     <tr>
         <td>Config Server</td>
         <td>x</td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -54,6 +58,8 @@ docker-compose up -d
         <td></td>
         <td></td>
         <td></td>
+        <td></td>
+        <td></td>
     </tr>
     <tr>
         <td>Api Gateway</td>
@@ -62,7 +68,9 @@ docker-compose up -d
         <td>x</td>
         <td></td>
         <td></td>
+        <td>x</td>
         <td></td>
+        <td>x</td>
     </tr>
     <tr>
         <td>Auth Service</td>
@@ -70,6 +78,8 @@ docker-compose up -d
         <td>x</td>
         <td></td>
         <td>x</td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
     </tr>
@@ -81,6 +91,8 @@ docker-compose up -d
         <td>x</td>
         <td>x</td>
         <td>x</td>
+        <td></td>
+        <td></td>
     </tr>
     <tr>
         <td>Department Service</td>
@@ -89,6 +101,8 @@ docker-compose up -d
         <td></td>
         <td>x</td>
         <td>x</td>
+        <td></td>
+        <td></td>
         <td></td>
     </tr>
     <tr>
@@ -99,6 +113,30 @@ docker-compose up -d
         <td>x</td>
         <td>x</td>
         <td>x</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Location Service</td>
+        <td>x</td>
+        <td></td>
+        <td></td>
+        <td>x</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Tracking Service</td>
+        <td>x</td>
+        <td></td>
+        <td></td>
+        <td>x</td>
+        <td></td>
+        <td>x</td>
+        <td>x</td>
+        <td></td>
     </tr>
 </table>
 
@@ -145,6 +183,16 @@ docker-compose up -d
       <td>8005</td>
       <td>8050</td>
   </tr>
+  <tr>
+      <td>Location Service</td>
+      <td>8006</td>
+      <td>8060</td>
+  </tr>
+  <tr>
+      <td>Tracking Service</td>
+      <td>8007</td>
+      <td>8070</td>
+  </tr>
 </table>
 
 ## Run on Local
@@ -174,3 +222,18 @@ mvn clean install
 
   ![swagger](./docs/swagger.png)
 
+## CI/CD
+
+- Pipeline
+  
+  ![pipeline](./docs/pipeline.png)  
+
+- Jenkins
+
+  ![jenkins](./docs/jenkins.png)
+
+  ![cicd-api-gateway](./docs/cicd-api-gateway.png)
+
+- Docker Hub
+
+  ![dockerhub](./docs/docker-hub.png)
