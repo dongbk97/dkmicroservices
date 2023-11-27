@@ -11,4 +11,5 @@ import "common/shared.proto";
 
 service LocationService {
   rpc getLocationByName (google.protobuf.StringValue) returns (PLocationsResponse);
+  rpc calculateDistanceFrom2Point (PGetLocationRequest) returns (PLocationResponse);
 }

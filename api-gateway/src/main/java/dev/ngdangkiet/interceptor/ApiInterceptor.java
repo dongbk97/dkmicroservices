@@ -67,18 +67,21 @@ public class ApiInterceptor implements WebFilter {
                 ServerHttpRequest request = exchange.getRequest();
                 TrackingJson trackingJson = redisConfig.getByReadValueAsString(String.format(RedisCacheKeyConstant.Tracking.USER_TRACKING_KEY, userLogged.getToken(), userLogged.getUserInfo().getId()), TrackingJson.class);
 
-                UserActivityData userActivityData = UserActivityData.builder()
-                        .setUserId(userLogged.getUserInfo().getId())
-                        .setAction(trackingJson.getAction())
-                        .setIpAddress(ObjectUtils.defaultIfNull(getIpAddressFromHeader(request), EMPTY))
-                        .setRequestUrl(request.getURI().toString())
-                        .setMethod(request.getMethod().toString())
-                        .setRequestBodyJson(trackingJson.getRequestBodyJson())
-                        .setResponseBodyJson(trackingJson.getResponseBodyJson())
-                        .setLoggedTime(System.currentTimeMillis())
-                        .build();
+                if (Objects.nonNull(trackingJson)) {
+                    UserActivityData userActivityData = UserActivityData.builder()
+                            .setUserId(userLogged.getUserInfo().getId())
+                            .setAction(trackingJson.getAction())
+                            .setIpAddress(ObjectUtils.defaultIfNull(getIpAddressFromHeader(request), EMPTY))
+                            .setRequestUrl(request.getURI().toString())
+                            .setMethod(request.getMethod().toString())
+                            .setRequestBodyJson(trackingJson.getRequestBodyJson())
+                            .setResponseBodyJson(trackingJson.getResponseBodyJson())
+                            .setLoggedTime(System.currentTimeMillis())
+                            .build();
 
-                rabbitMQProducer.trackingUserActivity(userActivityData);
+                    rabbitMQProducer.trackingUserActivity(userActivityData);
+                }
+
             } catch (JsonProcessingException e) {
                 log.error("Failed when convert object to string: {}", e.getMessage());
                 throw new RuntimeException(e);

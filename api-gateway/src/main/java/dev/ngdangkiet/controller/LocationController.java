@@ -3,6 +3,7 @@ package dev.ngdangkiet.controller;
 
 import dev.ngdangkiet.client.LocationGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
+import dev.ngdangkiet.dkmicroservices.location.protobuf.PLocationResponse;
 import dev.ngdangkiet.dkmicroservices.location.protobuf.PLocationsResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,12 @@ public class LocationController {
         PLocationsResponse response = locationGrpcClient.getLocationsByName(search);
         return ApiMessage.success(response.getAddressesList());
     }
+
+    @GetMapping("/distance")
+    public ApiMessage getDistanceFrom2Locations(@RequestParam String from, @RequestParam String to) {
+        PLocationResponse response = locationGrpcClient.calculateDistanceFrom2Point(from, to);
+        return ApiMessage.success(response.getDistance());
+    }
+
 }
 
