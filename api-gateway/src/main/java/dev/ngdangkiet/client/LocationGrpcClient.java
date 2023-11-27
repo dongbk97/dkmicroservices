@@ -1,6 +1,8 @@
 package dev.ngdangkiet.client;
 
 import com.google.protobuf.StringValue;
+import dev.ngdangkiet.dkmicroservices.location.protobuf.PGetLocationRequest;
+import dev.ngdangkiet.dkmicroservices.location.protobuf.PLocationResponse;
 import dev.ngdangkiet.dkmicroservices.location.protobuf.PLocationsResponse;
 import dev.ngdangkiet.dkmicroservices.location.service.LocationServiceGrpc;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +23,12 @@ public class LocationGrpcClient {
 
     public PLocationsResponse getLocationsByName(String search) {
         return locationServiceBlockingStub.getLocationByName(StringValue.of(search));
+    }
+
+    public PLocationResponse calculateDistanceFrom2Point(String from, String to) {
+        return locationServiceBlockingStub.calculateDistanceFrom2Point(PGetLocationRequest.newBuilder()
+                .setFromLocation(from)
+                .setToLocation(to)
+                .build());
     }
 }

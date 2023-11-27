@@ -14,13 +14,20 @@ message PLocation {
 }
 
 // PRequest
-message PGetLocationsRequest {
+message PGetLocationRequest {
   string address = 1;
+  string fromLocation = 2;
+  string toLocation = 3;
+  string env = 4;
 }
 
 // PResponse
 message PLocationResponse {
-  PLocation data = 1;
+  string address = 1;
+  string fromLocation = 2;
+  string toLocation = 3;
+  string env = 4;
+  double distance = 5;
 }
 
 message PLocationsResponse {
