@@ -1,0 +1,29 @@
+syntax = "proto3";
+package recruitment.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.recruitment.protobuf";
+option java_outer_classname = "JobPostingProtobuf";
+
+message PJobPosting {
+  int64 id = 1;
+  string job_title = 2;
+  string job_description = 3;
+  string posted_date = 4;
+  string application_deadline = 5;
+  string status = 6;
+}
+
+message PGetJobPostingsRequest {
+  string status = 1;
+}
+
+message PJobPostingResponse {
+  int32 code = 1;
+  PJobPosting data = 2;
+}
+
+message PJobPostingsResponse {
+  int32 code = 1;
+  repeated PJobPosting data = 2;
+}

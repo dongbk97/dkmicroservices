@@ -111,7 +111,7 @@ public class EmailServiceImpl implements EmailService {
                 FileSystemResource file = new FileSystemResource(new File(details.getAttachment()));
                 mimeMessageHelper.addAttachment(Objects.requireNonNull(file.getFilename()), file);
             }
-            String templateName = StringUtils.hasText(details.getEmailTemplate()) ? details.getEmailTemplate() : "index.html" ;
+            String templateName = StringUtils.hasText(details.getEmailTemplate()) ? details.getEmailTemplate() : "index.html";
             String htmlContent = templateEngine.process(templateName, context);
             mimeMessageHelper.setText(htmlContent, true);
 
@@ -135,7 +135,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void receiveEmailNotification(JsonMessageEmail message) {
         EmailDTO email = emailMapper.toDomain(message);
-        if(StringUtils.hasText(email.getEmailTemplate())) {
+        if (StringUtils.hasText(email.getEmailTemplate())) {
             sendEmailWithTemplate(email);
         } else {
             sendMail(email);

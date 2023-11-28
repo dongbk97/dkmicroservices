@@ -225,8 +225,8 @@ mvn clean install
 ## CI/CD
 
 - Pipeline
-  
-  ![pipeline](./docs/pipeline.png)  
+
+  ![pipeline](./docs/pipeline.png)
 
 - Jenkins
 

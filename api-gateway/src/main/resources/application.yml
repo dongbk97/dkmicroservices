@@ -54,3 +54,6 @@ grpc:
     grpc-tracking-service:
       address: static://localhost:8070
       negotiation-type: plaintext
+    grpc-recruitment-service:
+      address: static://localhost:8080
+      negotiation-type: plaintext
