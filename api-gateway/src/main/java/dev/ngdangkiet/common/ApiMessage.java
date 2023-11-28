@@ -43,13 +43,6 @@ public class ApiMessage {
         return apiMessage;
     }
 
-    @SuppressWarnings("MethodDoesntCallSuperMethod")
-    public ApiMessage clone() {
-        ApiMessage instance = new ApiMessage(code, message);
-        instance.setData(this.getData());
-        return instance;
-    }
-
     public static ApiMessage failed(int code) {
         return switch (code) {
             case ErrorCode.INVALID_DATA -> ApiMessage.INVALID_DATA;
@@ -57,5 +50,12 @@ public class ApiMessage {
             case ErrorCode.ALREADY_EXISTS -> ApiMessage.ALREADY_EXISTS;
             default -> ApiMessage.FAILED;
         };
+    }
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    public ApiMessage clone() {
+        ApiMessage instance = new ApiMessage(code, message);
+        instance.setData(this.getData());
+        return instance;
     }
 }

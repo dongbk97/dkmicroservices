@@ -1,0 +1,18 @@
+syntax = "proto3";
+package recruitment.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.recruitment.service";
+option java_outer_classname = "JobPostingServiceAPI";
+
+import "recruitment-service/job-posting/shared.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "common/shared.proto";
+
+service JobPostingService {
+  rpc upsertJobPosting (PJobPosting) returns (google.protobuf.Int64Value);
+  rpc getJobPostings (PGetJobPostingsRequest) returns (PJobPostingsResponse);
+  rpc getJobPostingById (google.protobuf.Int64Value) returns (PJobPostingResponse);
+  rpc deleteJobPostingById (google.protobuf.Int64Value) returns (common.protobuf.EmptyResponse);
+}

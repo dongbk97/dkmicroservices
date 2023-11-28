@@ -17,12 +17,12 @@ public interface PositionMapper extends ProtobufMapper<PositionEntity, PPosition
 
     PositionMapper INSTANCE = Mappers.getMapper(PositionMapper.class);
 
-    @Override
-    @Mapping(target = "name", qualifiedByName = "mapProtobufToDomain")
-    PositionEntity toDomain(PPosition protobuf);
-
     @Named("mapProtobufToDomain")
     static String mapProtobufToDomain(String name) {
         return name.toUpperCase();
     }
+
+    @Override
+    @Mapping(target = "name", qualifiedByName = "mapProtobufToDomain")
+    PositionEntity toDomain(PPosition protobuf);
 }
