@@ -1,0 +1,34 @@
+syntax = "proto3";
+package recruitment.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.recruitment.protobuf";
+option java_outer_classname = "ApplicantProtobuf";
+
+import "recruitment-service/job-posting/shared.proto";
+
+message PApplicant {
+  int64 id = 1;
+  PJobPosting job_posting = 2;
+  string applicant_name = 3;
+  string email = 4;
+  string phone_number = 5;
+  string resume_url = 6;
+  string application_date = 7;
+  string status = 8;
+}
+
+message PGetApplicantsRequest {
+  int64 jos_posting_id = 1;
+  string status = 2;
+}
+
+message PApplicantResponse {
+  int32 code = 1;
+  PApplicant data = 2;
+}
+
+message PGetApplicantsResponse {
+  int32 code = 1;
+  repeated PApplicant data = 2;
+}

@@ -4,7 +4,7 @@ import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsRequest;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsResponse;
-import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.domain.notification.alert.JsonMessage;
 
 /**
  * @author ngdangkiet
@@ -13,9 +13,12 @@ import dev.ngdangkiet.domain.notification.JsonMessage;
 
 public interface NotificationService {
 
-    void receiveNotification(JsonMessage message);
+    void receiveNewUserNotification(JsonMessage message);
+
+    void receiveNewApplicantNotification(JsonMessage message);
 
     PGetNotificationsResponse getNotifications(PGetNotificationsRequest request);
 
     EmptyResponse seenOrUnseenNotification(Int64Value request);
+
 }

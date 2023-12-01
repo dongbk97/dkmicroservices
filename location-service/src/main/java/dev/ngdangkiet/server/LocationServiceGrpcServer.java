@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 
-import java.util.List;
-
 /**
  * @author trongld
  * @since 11/09/2023
@@ -24,6 +22,7 @@ import java.util.List;
 public class LocationServiceGrpcServer extends LocationServiceGrpc.LocationServiceImplBase {
 
     private final LocationService locationService;
+
     @Override
     public void getLocationByName(StringValue request, StreamObserver<PLocationsResponse> responseObserver) {
         PLocationsResponse response = locationService.getSameNameLocation(request.getValue());

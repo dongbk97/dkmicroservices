@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CreateEmployeeRequest extends EmployeeRequest {
+public class CreateEmployeeRequest extends UpsertEmployeeRequest {
 
     @ValidationPassword
     private String password;

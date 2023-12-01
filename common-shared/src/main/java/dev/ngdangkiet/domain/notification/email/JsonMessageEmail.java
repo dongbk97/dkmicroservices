@@ -1,4 +1,4 @@
-package dev.ngdangkiet.domain.notification;
+package dev.ngdangkiet.domain.notification.email;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,11 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-
-/**
- * @author ngdangkiet
- * @since 11/14/2023
- */
+import java.util.Map;
 
 @Getter
 @Setter
@@ -20,12 +16,13 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ToString
 @Builder(setterPrefix = "set", builderClassName = "newBuilder")
-public class JsonMessage implements Serializable {
-
-    private Long senderId;
+public class JsonMessageEmail implements Serializable {
     private Long receiverId;
     private String receiverEmail;
     private String message;
-    private String notificationType;
+    private String subject;
+    private String attachment;
+    private Map<String, Object> properties;
     private String emailTemplate;
+    private Boolean isHtml;
 }

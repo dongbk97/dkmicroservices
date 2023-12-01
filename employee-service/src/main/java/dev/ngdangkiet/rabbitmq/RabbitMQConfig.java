@@ -21,79 +21,46 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    // QUEUE
     @Bean
-    public Queue alertQueue() {
-        return new Queue(RabbitMQConstant.Notification.ALERT_QUEUE);
+    public TopicExchange notificationExchange() {
+        return new TopicExchange(RabbitMQConstant.Notification.NOTIFICATION_EXCHANGE);
     }
 
     @Bean
-    public Queue emailQueue() {
-        return new Queue(RabbitMQConstant.Notification.EMAIL_QUEUE);
+    public Queue newUserNotificationQueue() {
+        return new Queue(RabbitMQConstant.Notification.NEW_USER_NOTIFICATION_QUEUE);
     }
 
     @Bean
-    public Queue smsQueue() {
-        return new Queue(RabbitMQConstant.Notification.SMS_QUEUE);
+    public Binding newUserNotificationBinding() {
+        return BindingBuilder.bind(newUserNotificationQueue())
+                .to(notificationExchange())
+                .with(RabbitMQConstant.Notification.NEW_USER_NOTIFICATION_ROUTING_KEY);
     }
 
     @Bean
-    public Queue botQueue() {
-        return new Queue(RabbitMQConstant.Notification.BOT_QUEUE);
-    }
-    // END QUEUE
-
-    // EXCHANGE
-    @Bean
-    public TopicExchange alertExchange() {
-        return new TopicExchange(RabbitMQConstant.Notification.ALERT_EXCHANGE);
+    public Queue newUserEmailNotificationQueue() {
+        return new Queue(RabbitMQConstant.Notification.NEW_USER_EMAIL_NOTIFICATION_QUEUE);
     }
 
     @Bean
-    public TopicExchange emailExchange() {
-        return new TopicExchange(RabbitMQConstant.Notification.EMAIL_EXCHANGE);
+    public Binding newUserEmailNotificationBinding() {
+        return BindingBuilder.bind(newUserEmailNotificationQueue())
+                .to(notificationExchange())
+                .with(RabbitMQConstant.Notification.NEW_USER_EMAIL_NOTIFICATION_ROUTING_KEY);
     }
 
     @Bean
-    public TopicExchange smsExchange() {
-        return new TopicExchange(RabbitMQConstant.Notification.SMS_EXCHANGE);
+    public Queue changePasswordNotificationQueue() {
+        return new Queue(RabbitMQConstant.Notification.CHANGE_PASSWORD_NOTIFICATION_QUEUE);
     }
 
     @Bean
-    public TopicExchange botExchange() {
-        return new TopicExchange(RabbitMQConstant.Notification.BOT_EXCHANGE);
+    public Binding changePasswordNotificationBinding() {
+        return BindingBuilder.bind(changePasswordNotificationQueue())
+                .to(notificationExchange())
+                .with(RabbitMQConstant.Notification.CHANGE_PASSWORD_NOTIFICATION_ROUTING_KEY);
     }
-    // END EXCHANGE
-
-    // BINDING
-    @Bean
-    public Binding alertBinding() {
-        return BindingBuilder.bind(alertQueue())
-                .to(alertExchange())
-                .with(RabbitMQConstant.Notification.ALERT_ROUTING_KEY);
-    }
-
-    @Bean
-    public Binding emailBinding() {
-        return BindingBuilder.bind(emailQueue())
-                .to(emailExchange())
-                .with(RabbitMQConstant.Notification.EMAIL_ROUTING_KEY);
-    }
-
-    @Bean
-    public Binding smsBinding() {
-        return BindingBuilder.bind(smsQueue())
-                .to(smsExchange())
-                .with(RabbitMQConstant.Notification.SMS_ROUTING_KEY);
-    }
-
-    @Bean
-    public Binding botBinding() {
-        return BindingBuilder.bind(botQueue())
-                .to(botExchange())
-                .with(RabbitMQConstant.Notification.BOT_ROUTING_KEY);
-    }
-    // END BINDING
 
     @Bean
     public MessageConverter messageConverter() {

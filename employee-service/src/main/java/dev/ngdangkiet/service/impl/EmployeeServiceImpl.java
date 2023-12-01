@@ -61,9 +61,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 return Int64Value.of(ErrorCode.ALREADY_EXISTS);
             }
 
-            Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPositionId());
+            Optional<PositionEntity> position = positionRepository.findById(pEmployee.getPosition().getId());
             if (position.isEmpty()) {
-                log.error("Position [{}] not found!", pEmployee.getPositionId());
+                log.error("Position [{}] not found!", pEmployee.getPosition().getId());
                 return Int64Value.of(ErrorCode.NOT_FOUND);
             }
 
@@ -74,8 +74,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             // send notification to new user
             if (isNewEmployee) {
-                rabbitMQProducer.sendWelcomeNotification(response);
-                rabbitMQProducer.sendWelcomeEmail(pEmployee);
+                rabbitMQProducer.sendNewUserNotification(response);
+                rabbitMQProducer.sendNewUserEmailNotification(pEmployee);
             }
 
         } catch (Exception e) {

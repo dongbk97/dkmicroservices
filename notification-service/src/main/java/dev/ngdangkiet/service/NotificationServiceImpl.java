@@ -1,12 +1,17 @@
 package dev.ngdangkiet.service;
 
 import com.google.protobuf.Int64Value;
+import dev.ngdangkiet.client.EmployeeGrpcClient;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsRequest;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsResponse;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PNotification;
 import dev.ngdangkiet.domain.NotificationEntity;
-import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.domain.notification.alert.JsonMessage;
+import dev.ngdangkiet.enums.Department;
+import dev.ngdangkiet.enums.NotificationType;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.mapper.NotificationMapper;
 import dev.ngdangkiet.mapper.RabbitMQNotificationMapper;
@@ -28,15 +33,35 @@ import java.util.Objects;
 @Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
+    private final EmployeeGrpcClient employeeGrpcClient;
+
     private final NotificationRepository notificationRepository;
     private final RabbitMQNotificationMapper rabbitMQNotificationMapper = RabbitMQNotificationMapper.INSTANCE;
     private final NotificationMapper notificationMapper = NotificationMapper.INSTANCE;
 
     // RabbitMQ Services
     @Override
-    public void receiveNotification(JsonMessage message) {
-        NotificationEntity entity = rabbitMQNotificationMapper.toDomain(message);
-        notificationRepository.save(entity);
+    public void receiveNewUserNotification(JsonMessage message) {
+        NotificationEntity notification = rabbitMQNotificationMapper.toDomain(message);
+        notificationRepository.save(notification);
+    }
+
+    @Override
+    public void receiveNewApplicantNotification(JsonMessage message) {
+        List<PEmployee> employeesInHRDepartment = employeeGrpcClient.getEmployees(PGetEmployeesRequest.newBuilder()
+                .setDepartmentId(Department.HIRING_DEPARTMENT.getId())
+                .setPositionId(-1L)
+                .build()).getDataList();
+
+        List<NotificationEntity> notifications = employeesInHRDepartment.stream()
+                .map(e -> NotificationEntity.builder()
+                        .setReceiverId(e.getId())
+                        .setNotificationType(NotificationType.ALERT.name())
+                        .setMessage(message.getMessage())
+                        .build())
+                .toList();
+
+        notificationRepository.saveAll(notifications);
     }
 
     // Notification Services
@@ -80,5 +105,4 @@ public class NotificationServiceImpl implements NotificationService {
 
         return builder.build();
     }
-
 }

@@ -1,4 +1,4 @@
-package dev.ngdangkiet.payload.request.recruitment;
+package dev.ngdangkiet.payload.request.recruitment.jobposting;
 
 import dev.ngdangkiet.validation.ValidationDeadline;
 import jakarta.validation.constraints.NotBlank;

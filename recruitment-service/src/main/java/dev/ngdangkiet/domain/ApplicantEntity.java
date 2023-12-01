@@ -48,7 +48,7 @@ public class ApplicantEntity {
 
     private String resumeUrl;
 
-    private LocalDate applicantDate;
+    private LocalDate applicationDate;
 
     @Enumerated(EnumType.STRING)
     private ApplicantStatus status;

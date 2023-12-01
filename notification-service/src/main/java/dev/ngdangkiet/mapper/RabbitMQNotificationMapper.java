@@ -1,7 +1,7 @@
 package dev.ngdangkiet.mapper;
 
 import dev.ngdangkiet.domain.NotificationEntity;
-import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.domain.notification.alert.JsonMessage;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
