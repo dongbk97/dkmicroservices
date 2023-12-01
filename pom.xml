@@ -28,6 +28,7 @@
         <module>tracking-service</module>
         <module>location-service</module>
         <module>recruitment-service</module>
+        <module>attendance-service</module>
     </modules>
 
     <properties>
