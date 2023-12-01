@@ -1,6 +1,6 @@
 package dev.ngdangkiet.mapper;
 
-import dev.ngdangkiet.domain.JsonMessageEmail;
+import dev.ngdangkiet.domain.notification.email.JsonMessageEmail;
 import dev.ngdangkiet.dto.EmailDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

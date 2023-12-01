@@ -3,15 +3,14 @@ package dev.ngdangkiet.controller;
 import dev.ngdangkiet.client.EmployeeGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
-import dev.ngdangkiet.enums.Position;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.employee.CreateEmployeeRequestMapper;
 import dev.ngdangkiet.mapper.request.employee.UpdateEmployeeRequestMapper;
-import dev.ngdangkiet.mapper.response.EmployeeResponseMapper;
+import dev.ngdangkiet.mapper.response.employee.EmployeeDetailResponseMapper;
+import dev.ngdangkiet.mapper.response.employee.EmployeeListResponseMapper;
 import dev.ngdangkiet.payload.request.employee.CreateEmployeeRequest;
 import dev.ngdangkiet.payload.request.employee.UpdateEmployeeRequest;
 import dev.ngdangkiet.payload.response.auth.LoginResponse;
-import dev.ngdangkiet.payload.response.employee.EmployeeResponse;
 import dev.ngdangkiet.security.SecurityHelper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -43,7 +42,8 @@ public class EmployeeController {
     private final EmployeeGrpcClient employeeGrpcClient;
     private final CreateEmployeeRequestMapper createEmployeeRequestMapper = CreateEmployeeRequestMapper.INSTANCE;
     private final UpdateEmployeeRequestMapper updateEmployeeRequestMapper = UpdateEmployeeRequestMapper.INSTANCE;
-    private final EmployeeResponseMapper employeeResponseMapper = EmployeeResponseMapper.INSTANCE;
+    private final EmployeeListResponseMapper employeeListResponseMapper = EmployeeListResponseMapper.INSTANCE;
+    private final EmployeeDetailResponseMapper employeeDetailResponseMapper = EmployeeDetailResponseMapper.INSTANCE;
 
     @PostMapping
     public ApiMessage createEmployee(@Valid @RequestBody CreateEmployeeRequest request) {
@@ -80,14 +80,7 @@ public class EmployeeController {
                 return ApiMessage.failed(grpcResponse.getCode());
             }
 
-            var position = EmployeeResponse.Position.builder()
-                    .id(grpcResponse.getData().getPositionId())
-                    .name(Position.of(grpcResponse.getData().getPositionId()).getName())
-                    .build();
-            var data = employeeResponseMapper.toDomain(grpcResponse.getData());
-            data.setPosition(position);
-
-            return ApiMessage.success(data);
+            return ApiMessage.success(employeeDetailResponseMapper.toDomain(grpcResponse.getData()));
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;
@@ -109,7 +102,7 @@ public class EmployeeController {
                             .setPositionId(ObjectUtils.defaultIfNull(positionId, -1L))
                             .build()
             );
-            return ApiMessage.success(employeeResponseMapper.toDomains(grpcResponse.getDataList()));
+            return ApiMessage.success(employeeListResponseMapper.toDomains(grpcResponse.getDataList()));
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;

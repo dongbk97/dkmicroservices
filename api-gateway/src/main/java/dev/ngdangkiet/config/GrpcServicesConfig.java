@@ -8,6 +8,7 @@ import dev.ngdangkiet.dkmicroservices.department.service.DepartmentServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.location.service.LocationServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.notification.service.NotificationServiceGrpc;
+import dev.ngdangkiet.dkmicroservices.recruitment.service.ApplicantServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.recruitment.service.JobPostingServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.tracking.service.TrackingServiceGrpc;
 import dev.ngdangkiet.grpc.BaseGrpcServicesConfig;
@@ -66,5 +67,11 @@ public class GrpcServicesConfig extends BaseGrpcServicesConfig {
     public JobPostingServiceGrpc.JobPostingServiceBlockingStub jobPostingServiceBlockingStub() {
         InstanceInfo instanceInfo = getGrpcInstanceInfo(ServiceConstant.RECRUITMENT_SERVICE);
         return JobPostingServiceGrpc.newBlockingStub(newChannel(instanceInfo.getHostName(), instanceInfo.getPort()));
+    }
+
+    @Bean
+    public ApplicantServiceGrpc.ApplicantServiceBlockingStub applicantServiceBlockingStub() {
+        InstanceInfo instanceInfo = getGrpcInstanceInfo(ServiceConstant.RECRUITMENT_SERVICE);
+        return ApplicantServiceGrpc.newBlockingStub(newChannel(instanceInfo.getHostName(), instanceInfo.getPort()));
     }
 }

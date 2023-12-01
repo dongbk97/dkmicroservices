@@ -1,9 +1,9 @@
-package dev.ngdangkiet.mapper.request.recruitment;
+package dev.ngdangkiet.mapper.request.recruitment.jobposting;
 
 import dev.ngdangkiet.dkmicroservices.recruitment.protobuf.PJobPosting;
 import dev.ngdangkiet.mapper.ProtobufMapper;
 import dev.ngdangkiet.mapper.ProtobufMapperConfig;
-import dev.ngdangkiet.payload.request.recruitment.UpsertJobPostingRequest;
+import dev.ngdangkiet.payload.request.recruitment.jobposting.UpsertJobPostingRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

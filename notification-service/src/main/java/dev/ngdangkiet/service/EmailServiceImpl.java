@@ -1,6 +1,6 @@
 package dev.ngdangkiet.service;
 
-import dev.ngdangkiet.domain.JsonMessageEmail;
+import dev.ngdangkiet.domain.notification.email.JsonMessageEmail;
 import dev.ngdangkiet.dto.EmailDTO;
 import dev.ngdangkiet.mapper.EmailMapper;
 import jakarta.mail.Message;

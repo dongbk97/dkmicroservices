@@ -1,4 +1,4 @@
-package dev.ngdangkiet.mapper.response;
+package dev.ngdangkiet.mapper.response.employee;
 
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PPosition;
 import dev.ngdangkiet.mapper.ProtobufMapper;

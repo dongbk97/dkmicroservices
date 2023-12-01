@@ -4,7 +4,7 @@ import dev.ngdangkiet.client.EmployeeGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PPosition;
 import dev.ngdangkiet.error.ErrorHelper;
-import dev.ngdangkiet.mapper.response.PositionMapper;
+import dev.ngdangkiet.mapper.response.employee.PositionMapper;
 import dev.ngdangkiet.payload.request.employee.UpsertPositionRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

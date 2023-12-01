@@ -1,8 +1,8 @@
 package dev.ngdangkiet.rabbitmq;
 
 import dev.ngdangkiet.constant.RabbitMQConstant;
-import dev.ngdangkiet.domain.JsonMessageEmail;
-import dev.ngdangkiet.domain.notification.JsonMessage;
+import dev.ngdangkiet.domain.notification.alert.JsonMessage;
+import dev.ngdangkiet.domain.notification.email.JsonMessageEmail;
 import dev.ngdangkiet.service.EmailService;
 import dev.ngdangkiet.service.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +26,19 @@ public class RabbitMQConsumer {
 
     private final EmailService emailService;
 
-    @RabbitListener(queues = {RabbitMQConstant.Notification.ALERT_QUEUE})
-    public void receiveAlertNotification(JsonMessage message) {
+    @RabbitListener(queues = {RabbitMQConstant.Notification.NEW_USER_NOTIFICATION_QUEUE})
+    public void receiveNewUserNotification(JsonMessage message) {
         log.info("Received message -> {}", message.toString());
-        notificationService.receiveNotification(message);
+        notificationService.receiveNewUserNotification(message);
     }
 
-    @RabbitListener(queues = {RabbitMQConstant.Notification.EMAIL_QUEUE})
+    @RabbitListener(queues = {RabbitMQConstant.Notification.NEW_APPLICANT_NOTIFICATION_QUEUE})
+    public void receiveNewApplicantNotification(JsonMessage message) {
+        log.info("Received message -> {}", message.toString());
+        notificationService.receiveNewApplicantNotification(message);
+    }
+
+    @RabbitListener(queues = {RabbitMQConstant.Notification.NEW_USER_EMAIL_NOTIFICATION_QUEUE})
     public void receiveEmailNotification(JsonMessageEmail message) {
         log.info("Received message -> {}", message.toString());
         if (Objects.nonNull(message.getReceiverEmail())) {

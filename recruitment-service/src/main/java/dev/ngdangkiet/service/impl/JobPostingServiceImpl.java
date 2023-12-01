@@ -102,6 +102,7 @@ public class JobPostingServiceImpl implements JobPostingService {
         try {
             JobPostingEntity jobPosting = jobPostingRepository.findById(request.getValue()).orElse(null);
             if (Objects.isNull(jobPosting)) {
+                log.error("Job posting [{}] not found!", request.getValue());
                 builder.setCode(ErrorCode.NOT_FOUND);
             } else {
                 jobPostingRepository.delete(jobPosting);

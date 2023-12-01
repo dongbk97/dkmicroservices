@@ -1,7 +1,9 @@
 package dev.ngdangkiet.mapper;
 
+import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartment;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.domain.EmployeeEntity;
+import dev.ngdangkiet.enums.Department;
 import dev.ngdangkiet.util.DateTimeUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -33,12 +35,21 @@ public interface EmployeeMapper extends ProtobufMapper<EmployeeEntity, PEmployee
         return Objects.nonNull(birthDay) ? birthDay.toString() : EMPTY;
     }
 
+    @Named("mapDepartmentId2PDepartment")
+    static PDepartment mapDepartmentId2PDepartment(Long departmentId) {
+        return PDepartment.newBuilder()
+                .setId(departmentId)
+                .setName(Department.valueOf(departmentId).getName())
+                .build();
+    }
+
     @Override
-    @Mapping(source = "position.id", target = "positionId")
+    @Mapping(source = "departmentId", target = "department", qualifiedByName = "mapDepartmentId2PDepartment")
     @Mapping(target = "birthDay", qualifiedByName = "mapLocalDate2String")
     PEmployee toProtobuf(EmployeeEntity domain);
 
     @Override
+    @Mapping(source = "department.id", target = "departmentId")
     @Mapping(target = "birthDay", qualifiedByName = "mapString2LocalDate")
     EmployeeEntity toDomain(PEmployee protobuf);
 }

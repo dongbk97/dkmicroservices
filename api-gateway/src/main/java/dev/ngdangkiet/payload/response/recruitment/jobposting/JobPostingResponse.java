@@ -1,4 +1,4 @@
-package dev.ngdangkiet.payload.response.recruitment;
+package dev.ngdangkiet.payload.response.recruitment.jobposting;
 
 import lombok.Getter;
 import lombok.Setter;
