@@ -1,4 +1,4 @@
-package dev.ngdangkiet.enums;
+package dev.ngdangkiet.enums.notification;
 
 import dev.ngdangkiet.constant.MessageConstant;
 import lombok.AllArgsConstructor;

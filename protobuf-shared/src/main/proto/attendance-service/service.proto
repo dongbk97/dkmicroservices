@@ -1,0 +1,15 @@
+syntax = "proto3";
+package attendance.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.attendance.service";
+option java_outer_classname = "AttendanceServiceAPI";
+
+import "attendance-service/shared.proto";
+import "google/protobuf/wrappers.proto";
+import "common/shared.proto";
+
+service AttendanceService {
+
+  rpc checkInOut (google.protobuf.Int64Value/*employeeId*/) returns (common.protobuf.EmptyResponse);
+}

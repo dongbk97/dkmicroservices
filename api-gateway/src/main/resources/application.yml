@@ -57,3 +57,6 @@ grpc:
     grpc-recruitment-service:
       address: static://localhost:8080
       negotiation-type: plaintext
+    grpc-attendance-service:
+      address: static://localhost:8090
+      negotiation-type: plaintext

@@ -3,6 +3,7 @@ package dev.ngdangkiet.config;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import dev.ngdangkiet.constant.ServiceConstant;
+import dev.ngdangkiet.dkmicroservices.attendance.service.AttendanceServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.auth.service.AuthServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.department.service.DepartmentServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.employee.service.EmployeeServiceGrpc;
@@ -73,5 +74,11 @@ public class GrpcServicesConfig extends BaseGrpcServicesConfig {
     public ApplicantServiceGrpc.ApplicantServiceBlockingStub applicantServiceBlockingStub() {
         InstanceInfo instanceInfo = getGrpcInstanceInfo(ServiceConstant.RECRUITMENT_SERVICE);
         return ApplicantServiceGrpc.newBlockingStub(newChannel(instanceInfo.getHostName(), instanceInfo.getPort()));
+    }
+
+    @Bean
+    public AttendanceServiceGrpc.AttendanceServiceBlockingStub attendanceServiceBlockingStub() {
+        InstanceInfo instanceInfo = getGrpcInstanceInfo(ServiceConstant.ATTENDANCE_SERVICE);
+        return AttendanceServiceGrpc.newBlockingStub(newChannel(instanceInfo.getHostName(), instanceInfo.getPort()));
     }
 }

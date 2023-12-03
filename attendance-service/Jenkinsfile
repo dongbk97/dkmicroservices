@@ -1,0 +1,40 @@
+def image = "01092002/ndk-attendance-service"
+def branch = "main"
+def tag = ""
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'ndk-maven'
+    }
+
+    stages {
+        stage('Build Maven') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/ngdangkiet/ndk-microservices']]])
+                sh 'mvn clean install -pl protobuf-shared,common-shared,attendance-service -am'
+            }
+        }
+
+        stage('Docker Build Image') {
+            steps {
+                script {
+                    tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
+                    sh "docker build -t ${image}:${tag} ./attendance-service"
+                }
+            }
+        }
+
+        stage('Docker Push Image to Hub'){
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpw')]) {
+                        sh 'docker login -u 01092002 -p ${dockerhubpw}'
+                        sh "docker push ${image}:${tag}"
+                    }
+                }
+            }
+        }
+    }
+}

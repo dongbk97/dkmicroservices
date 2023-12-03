@@ -1,4 +1,4 @@
-package dev.ngdangkiet.enums;
+package dev.ngdangkiet.enums.employee;
 
 /**
  * @author ngdangkiet

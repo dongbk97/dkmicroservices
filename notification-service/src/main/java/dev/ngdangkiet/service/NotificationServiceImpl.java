@@ -10,8 +10,8 @@ import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsRes
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PNotification;
 import dev.ngdangkiet.domain.NotificationEntity;
 import dev.ngdangkiet.domain.notification.alert.JsonMessage;
-import dev.ngdangkiet.enums.Department;
-import dev.ngdangkiet.enums.NotificationType;
+import dev.ngdangkiet.enums.department.Department;
+import dev.ngdangkiet.enums.notification.NotificationType;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.mapper.NotificationMapper;
 import dev.ngdangkiet.mapper.RabbitMQNotificationMapper;

@@ -57,6 +57,20 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
 
+  # attendance postgres db
+  postgres-attendance-service:
+    container_name: dkmicroservices-attendance
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5439:5432"
+    volumes:
+      - ./data/db-attendance:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=dkmicroservices_attendance_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+
   # tracking data elastic search
   elasticsearch-tracking-service:
     container_name: dkmicroservices-tracking-elasticsearch

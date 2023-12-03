@@ -3,7 +3,7 @@ package dev.ngdangkiet.controller;
 import dev.ngdangkiet.client.UserGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PChangePasswordRequest;
-import dev.ngdangkiet.enums.Action;
+import dev.ngdangkiet.enums.tracking.Action;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.payload.request.user.ChangePasswordRequest;
 import dev.ngdangkiet.redis.utils.CacheTrackingUtil;
