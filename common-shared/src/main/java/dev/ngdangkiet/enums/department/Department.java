@@ -1,4 +1,4 @@
-package dev.ngdangkiet.enums;
+package dev.ngdangkiet.enums.department;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

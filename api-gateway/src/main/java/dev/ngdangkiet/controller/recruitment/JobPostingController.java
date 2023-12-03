@@ -3,7 +3,7 @@ package dev.ngdangkiet.controller.recruitment;
 import dev.ngdangkiet.client.RecruitmentGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.dkmicroservices.recruitment.protobuf.PGetJobPostingsRequest;
-import dev.ngdangkiet.enums.JobPostingStatus;
+import dev.ngdangkiet.enums.recruitment.JobPostingStatus;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.recruitment.jobposting.JobPostingRequestMapper;
 import dev.ngdangkiet.mapper.response.recruitment.jobposting.JobPostingResponseMapper;

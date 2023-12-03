@@ -1,6 +1,6 @@
 package dev.ngdangkiet.domain;
 
-import dev.ngdangkiet.enums.InterviewStatus;
+import dev.ngdangkiet.enums.recruitment.InterviewStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

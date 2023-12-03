@@ -1,7 +1,7 @@
 package dev.ngdangkiet.repository;
 
 import dev.ngdangkiet.domain.ApplicantEntity;
-import dev.ngdangkiet.enums.ApplicantStatus;
+import dev.ngdangkiet.enums.recruitment.ApplicantStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

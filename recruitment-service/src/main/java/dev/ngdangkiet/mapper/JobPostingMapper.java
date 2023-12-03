@@ -2,7 +2,7 @@ package dev.ngdangkiet.mapper;
 
 import dev.ngdangkiet.dkmicroservices.recruitment.protobuf.PJobPosting;
 import dev.ngdangkiet.domain.JobPostingEntity;
-import dev.ngdangkiet.enums.JobPostingStatus;
+import dev.ngdangkiet.enums.recruitment.JobPostingStatus;
 import dev.ngdangkiet.util.DateTimeUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

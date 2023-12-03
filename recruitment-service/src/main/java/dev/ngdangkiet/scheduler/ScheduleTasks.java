@@ -1,7 +1,7 @@
 package dev.ngdangkiet.scheduler;
 
 import dev.ngdangkiet.domain.JobPostingEntity;
-import dev.ngdangkiet.enums.JobPostingStatus;
+import dev.ngdangkiet.enums.recruitment.JobPostingStatus;
 import dev.ngdangkiet.repository.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -3,7 +3,7 @@ package dev.ngdangkiet.mapper;
 import dev.ngdangkiet.dkmicroservices.department.protobuf.PDepartment;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.domain.EmployeeEntity;
-import dev.ngdangkiet.enums.Department;
+import dev.ngdangkiet.enums.department.Department;
 import dev.ngdangkiet.util.DateTimeUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

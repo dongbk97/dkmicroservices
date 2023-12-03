@@ -1,4 +1,4 @@
-package dev.ngdangkiet.enums;
+package dev.ngdangkiet.enums.recruitment;
 
 import java.util.Arrays;
 

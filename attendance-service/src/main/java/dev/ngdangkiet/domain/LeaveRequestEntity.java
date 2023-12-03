@@ -1,6 +1,7 @@
 package dev.ngdangkiet.domain;
 
-import dev.ngdangkiet.enums.recruitment.JobPostingStatus;
+import dev.ngdangkiet.enums.attendance.LeaveRequestStatus;
+import dev.ngdangkiet.enums.attendance.LeaveType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,37 +14,38 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.LocalDate;
 
 /**
  * @author ngdangkiet
- * @since 11/27/2023
+ * @since 12/2/2023
  */
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder(setterPrefix = "set", builderClassName = "newBuilder")
 @Entity
-@Table(name = "tbl_job_posting")
-public class JobPostingEntity {
+@Table(name = "tbl_leave_request")
+public class LeaveRequestEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String jobTitle;
-
-    private String jobDescription;
-
-    private LocalDate postedDate;
-
-    private LocalDate applicationDeadline;
+    private Long employeeId;
 
     @Enumerated(EnumType.STRING)
-    private JobPostingStatus status;
+    private LeaveType leaveType;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
+
+    @Enumerated(EnumType.STRING)
+    private LeaveRequestStatus status;
+
+    private String reason;
 }

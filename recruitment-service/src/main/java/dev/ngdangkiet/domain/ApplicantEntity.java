@@ -1,6 +1,6 @@
 package dev.ngdangkiet.domain;
 
-import dev.ngdangkiet.enums.ApplicantStatus;
+import dev.ngdangkiet.enums.recruitment.ApplicantStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

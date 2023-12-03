@@ -7,7 +7,7 @@ import dev.ngdangkiet.dkmicroservices.recruitment.protobuf.PJobPosting;
 import dev.ngdangkiet.dkmicroservices.recruitment.protobuf.PJobPostingResponse;
 import dev.ngdangkiet.dkmicroservices.recruitment.protobuf.PJobPostingsResponse;
 import dev.ngdangkiet.domain.JobPostingEntity;
-import dev.ngdangkiet.enums.JobPostingStatus;
+import dev.ngdangkiet.enums.recruitment.JobPostingStatus;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.mapper.JobPostingMapper;
 import dev.ngdangkiet.repository.JobPostingRepository;

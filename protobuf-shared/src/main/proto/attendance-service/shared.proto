@@ -1,0 +1,27 @@
+syntax = "proto3";
+package attendance.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.attendance.protobuf";
+option java_outer_classname = "AttendanceProtobuf";
+
+message PAttendanceRecord {
+  int64 id = 1;
+  int64 employee_id = 2;
+  string attendance_date = 3;
+  string check_in_time = 4;
+  string check_out_time = 5;
+  double work_hours = 6;
+  string work_time = 7;
+  string status = 8;
+}
+
+message PLeaveRequest {
+  int64 id = 1;
+  int64 employee_id = 2;
+  string leave_type = 3;
+  string start_date = 4;
+  string end_date = 5;
+  string status = 6;
+  string reason = 7;
+}

@@ -1,6 +1,6 @@
 package dev.ngdangkiet.validation;
 
-import dev.ngdangkiet.enums.JobPostingStatus;
+import dev.ngdangkiet.enums.recruitment.JobPostingStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

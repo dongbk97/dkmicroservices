@@ -8,8 +8,8 @@ import dev.ngdangkiet.dkmicroservices.recruitment.protobuf.PGetApplicantsRequest
 import dev.ngdangkiet.dkmicroservices.recruitment.protobuf.PGetApplicantsResponse;
 import dev.ngdangkiet.domain.ApplicantEntity;
 import dev.ngdangkiet.domain.JobPostingEntity;
-import dev.ngdangkiet.enums.ApplicantStatus;
-import dev.ngdangkiet.enums.JobPostingStatus;
+import dev.ngdangkiet.enums.recruitment.ApplicantStatus;
+import dev.ngdangkiet.enums.recruitment.JobPostingStatus;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.mapper.ApplicantMapper;
 import dev.ngdangkiet.rabbitmq.RabbitMQProducer;
