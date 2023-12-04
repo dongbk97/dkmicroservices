@@ -1,7 +1,6 @@
 package dev.ngdangkiet.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.ngdangkiet.constant.RedisCacheKeyConstant;
 import dev.ngdangkiet.domain.tracking.TrackingJson;
 import dev.ngdangkiet.domain.tracking.UserActivityData;
@@ -49,7 +48,6 @@ public class ApiInterceptor implements WebFilter {
             "WL-Proxy-Client-IP",
             "REMOTE_ADDR"
     );
-    private final ObjectMapper objectMapper;
     private final RabbitMQProducer rabbitMQProducer;
     private final RedisConfig redisConfig;
 
@@ -62,7 +60,6 @@ public class ApiInterceptor implements WebFilter {
         }
 
         return chain.filter(exchange).doFinally(signalType -> {
-            log.info("postHandle ...");
             try {
                 ServerHttpRequest request = exchange.getRequest();
                 TrackingJson trackingJson = redisConfig.getByReadValueAsString(String.format(RedisCacheKeyConstant.Tracking.USER_TRACKING_KEY, userLogged.getToken(), userLogged.getUserInfo().getId()), TrackingJson.class);

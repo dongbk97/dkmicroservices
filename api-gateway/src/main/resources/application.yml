@@ -21,6 +21,15 @@ springdoc:
   api-docs:
     path: /v3/api-docs
 
+hazelcast:
+  dkmicroservices:
+    address: localhost:5701
+    cluster_name: dev
+
+rate-limit:
+  limit: 2
+  seconds: 60
+
 cors:
   allowed-origins: "*"
   allowed-methods: "*"

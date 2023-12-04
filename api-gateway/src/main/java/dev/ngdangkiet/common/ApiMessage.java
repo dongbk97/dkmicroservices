@@ -25,6 +25,7 @@ public class ApiMessage {
 
     public static ApiMessage UNAUTHORIZED = new ApiMessage(-10, "Unauthorized");
     public static ApiMessage LOGIN_FAILED = new ApiMessage(-11, "Login failed");
+    public static ApiMessage TOO_MANY_REQUESTS = new ApiMessage(-12, "Too many requests");
 
     private int code;
     private String message;
