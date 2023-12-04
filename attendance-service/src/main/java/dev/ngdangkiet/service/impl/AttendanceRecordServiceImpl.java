@@ -56,8 +56,13 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
                     attendanceRecord.setStatus(AttendanceStatus.EARLY_DEPARTURE);
                 }
                 Duration duration = Duration.between(attendanceRecord.getCheckInTime(), attendanceRecord.getCheckOutTime());
-                attendanceRecord.setWorkHours(duration.toHours() + (Math.floor(((double) duration.toMinutes() / 60) * 100) / 100));
-                attendanceRecord.setWorkTime(String.format("%s:%s", duration.toHours(), duration.toMinutes()));
+
+                long hours = attendanceRecord.getCheckOutTime().isAfter(LocalTime.of(13, 0))
+                        ? duration.toHours() - 1
+                        : duration.toHours();
+
+                attendanceRecord.setWorkHours(hours + (Math.floor(((double) duration.toMinutesPart() / 60) * 100) / 100));
+                attendanceRecord.setWorkTime(String.format("%s:%s", hours, duration.toMinutesPart()));
             }
 
             // TODO: Save changes

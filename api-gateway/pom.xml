@@ -17,6 +17,7 @@
         <jakarta-validation.version>3.0.2</jakarta-validation.version>
         <jsonwebtoken.version>0.11.5</jsonwebtoken.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
+        <hazelcast.version>5.2.1</hazelcast.version>
     </properties>
 
     <dependencies>
@@ -106,6 +107,16 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-spring</artifactId>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>dev.ngdangkiet</groupId>

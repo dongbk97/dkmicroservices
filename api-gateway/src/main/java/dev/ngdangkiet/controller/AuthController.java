@@ -8,6 +8,8 @@ import dev.ngdangkiet.mapper.request.LoginRequestMapper;
 import dev.ngdangkiet.mapper.response.LoginResponseMapper;
 import dev.ngdangkiet.payload.request.auth.LoginRequest;
 import dev.ngdangkiet.payload.response.auth.RefreshTokenResponse;
+import dev.ngdangkiet.ratelimit.RateLimitProperties;
+import dev.ngdangkiet.ratelimit.RefreshTokenCounter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthGrpcClient authGrpcClient;
+    private final RefreshTokenCounter refreshTokenCounter;
+    private final RateLimitProperties rateLimitProperties;
     private final LoginRequestMapper loginRequestMapper = LoginRequestMapper.INSTANCE;
     private final LoginResponseMapper loginResponseMapper = LoginResponseMapper.INSTANCE;
 
@@ -52,13 +56,18 @@ public class AuthController {
     @GetMapping("/refresh-token")
     public ApiMessage refreshToken(@RequestParam(name = "tokenUUID") String tokenUUID) {
         try {
-            var data = authGrpcClient.refreshToken(StringValue.of(tokenUUID));
-            if (ErrorHelper.isFailed(data.getCode())) {
-                return ApiMessage.FAILED;
+            if (refreshTokenCounter.getCounter() < rateLimitProperties.getLimit()) {
+                refreshTokenCounter.increment();
+                var data = authGrpcClient.refreshToken(StringValue.of(tokenUUID));
+                if (ErrorHelper.isFailed(data.getCode())) {
+                    return ApiMessage.FAILED;
+                }
+                return ApiMessage.success(RefreshTokenResponse.builder()
+                        .setToken(data.getToken())
+                        .build());
+            } else {
+                return ApiMessage.TOO_MANY_REQUESTS;
             }
-            return ApiMessage.success(RefreshTokenResponse.builder()
-                    .setToken(data.getToken())
-                    .build());
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;

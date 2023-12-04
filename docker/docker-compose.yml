@@ -144,6 +144,22 @@ services:
     volumes:
       - ./cache:/data
 
+  # hazelcast
+  hazelcast:
+    container_name: dkmicroservices-hazelcast
+    image: hazelcast/hazelcast:5.2.1
+    restart: unless-stopped
+    ports:
+      - "5701:5701"
+  management-center:
+    container_name: dkmicroservices-hazelcast-management
+    image: hazelcast/management-center:5.2.1
+    ports:
+      - "8082:8080"
+    environment:
+      - MC_DEFAULT_CLUSTER=dev
+      - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast
+
   # jenkins
   jenkins:
     container_name: dkmicroservices-jenkins
