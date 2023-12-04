@@ -1,6 +1,10 @@
 package dev.ngdangkiet.server;
 
 import com.google.protobuf.Int64Value;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthResponse;
 import dev.ngdangkiet.dkmicroservices.attendance.service.AttendanceServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.service.AttendanceRecordService;
@@ -22,6 +26,20 @@ public class AttendanceRecordGrpcServer extends AttendanceServiceGrpc.Attendance
     @Override
     public void checkInOut(Int64Value request, StreamObserver<EmptyResponse> responseObserver) {
         EmptyResponse response = attendanceRecordService.checkInOut(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getAttendanceRecords(PGetAttendanceRecordsRequest request, StreamObserver<PGetAttendanceRecordsResponse> responseObserver) {
+        PGetAttendanceRecordsResponse response = attendanceRecordService.getAttendanceRecords(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getTotalWorkingDayInMonth(PGetTotalWorkingDayInMonthRequest request, StreamObserver<PGetTotalWorkingDayInMonthResponse> responseObserver) {
+        PGetTotalWorkingDayInMonthResponse response = attendanceRecordService.getTotalWorkingDayInMonth(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
