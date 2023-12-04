@@ -1,6 +1,8 @@
 package dev.ngdangkiet.client;
 
 import com.google.protobuf.Int64Value;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
 import dev.ngdangkiet.dkmicroservices.attendance.service.AttendanceServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +23,9 @@ public class AttendanceGrpcClient {
 
     public EmptyResponse checkInOut(Long employeeId) {
         return attendanceServiceBlockingStub.checkInOut(Int64Value.of(employeeId));
+    }
+
+    public PGetAttendanceRecordsResponse getAttendanceRecords(PGetAttendanceRecordsRequest request) {
+        return attendanceServiceBlockingStub.getAttendanceRecords(request);
     }
 }

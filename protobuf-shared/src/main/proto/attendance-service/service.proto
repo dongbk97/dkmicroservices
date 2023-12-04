@@ -12,4 +12,6 @@ import "common/shared.proto";
 service AttendanceService {
 
   rpc checkInOut (google.protobuf.Int64Value/*employeeId*/) returns (common.protobuf.EmptyResponse);
+  rpc getAttendanceRecords (PGetAttendanceRecordsRequest) returns (PGetAttendanceRecordsResponse);
+  rpc getTotalWorkingDayInMonth (PGetTotalWorkingDayInMonthRequest) returns (PGetTotalWorkingDayInMonthResponse);
 }

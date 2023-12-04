@@ -2,10 +2,15 @@ package dev.ngdangkiet.service.impl;
 
 import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.constant.ThresholdsConstant;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthResponse;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.domain.AttendanceRecordEntity;
 import dev.ngdangkiet.enums.attendance.AttendanceStatus;
 import dev.ngdangkiet.error.ErrorCode;
+import dev.ngdangkiet.mapper.AttendanceRecordMapper;
 import dev.ngdangkiet.repository.AttendanceRecordRepository;
 import dev.ngdangkiet.service.AttendanceRecordService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +20,9 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.WeekFields;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -28,6 +36,7 @@ import java.util.Objects;
 public class AttendanceRecordServiceImpl implements AttendanceRecordService {
 
     private final AttendanceRecordRepository attendanceRecordRepository;
+    private final AttendanceRecordMapper attendanceRecordMapper = AttendanceRecordMapper.INSTANCE;
 
     @Override
     public EmptyResponse checkInOut(Int64Value employeeId) {
@@ -73,5 +82,38 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
         }
 
         return builder.build();
+    }
+
+    @Override
+    public PGetAttendanceRecordsResponse getAttendanceRecords(PGetAttendanceRecordsRequest request) {
+        PGetAttendanceRecordsResponse.Builder builder = PGetAttendanceRecordsResponse.newBuilder().setCode(ErrorCode.FAILED);
+
+        try {
+            // TODO: get attendance records by request
+            List<AttendanceRecordEntity> attendanceRecords = attendanceRecordRepository.findByEmployeeIdAndYearAndMonth(
+                    request.getEmployeeId(),
+                    request.getYear(),
+                    request.getMonth());
+
+            builder.setCode(ErrorCode.SUCCESS);
+            // TODO: extract by week request
+            if (request.getWeekOfMonth() > 0) {
+                List<AttendanceRecordEntity> filteredAttendanceRecords = attendanceRecords.stream()
+                        .filter(ar -> ar.getAttendanceDate().get(WeekFields.of(Locale.getDefault()).weekOfMonth()) == request.getWeekOfMonth())
+                        .toList();
+                builder.addAllData(attendanceRecordMapper.toProtobufs(filteredAttendanceRecords));
+            } else {
+                builder.addAllData(attendanceRecordMapper.toProtobufs(attendanceRecords));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return builder.build();
+    }
+
+    @Override
+    public PGetTotalWorkingDayInMonthResponse getTotalWorkingDayInMonth(PGetTotalWorkingDayInMonthRequest request) {
+        return null;
     }
 }
