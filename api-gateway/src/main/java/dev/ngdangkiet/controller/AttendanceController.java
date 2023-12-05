@@ -3,10 +3,13 @@ package dev.ngdangkiet.controller;
 import dev.ngdangkiet.client.AttendanceGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
 import dev.ngdangkiet.enums.tracking.Action;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.response.attendance.AttendanceRecordMapper;
 import dev.ngdangkiet.payload.request.attendance.GetAttendanceRecordsRequest;
+import dev.ngdangkiet.payload.request.attendance.GetTotalWorkingDayRequest;
+import dev.ngdangkiet.payload.response.attendance.TotalWorkingDayOfUserResponse;
 import dev.ngdangkiet.redis.utils.CacheTrackingUtil;
 import dev.ngdangkiet.security.SecurityHelper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -68,6 +71,32 @@ public class AttendanceController {
             );
             return ErrorHelper.isSuccess(response.getCode())
                     ? ApiMessage.success(attendanceRecordMapper.toDomains(response.getDataList()))
+                    : ApiMessage.failed(response.getCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiMessage.UNKNOWN_EXCEPTION;
+        }
+    }
+
+    @GetMapping("/total-working-days")
+    public ApiMessage getTotalWorkingDay(@ModelAttribute GetTotalWorkingDayRequest request) {
+        var userLogged = SecurityHelper.getUserLogin();
+        assert userLogged != null;
+
+        try {
+            var response = attendanceGrpcClient.getTotalWorkingDayInMonth(
+                    PGetTotalWorkingDayInMonthRequest.newBuilder()
+                            .setEmployeeId(ObjectUtils.defaultIfNull(request.getEmployeeId(), userLogged.getUserInfo().getId()))
+                            .setMonth(ObjectUtils.defaultIfNull(request.getMonth(), LocalDate.now().getMonthValue()))
+                            .setYear(ObjectUtils.defaultIfNull(request.getYear(), LocalDate.now().getYear()))
+                            .build()
+            );
+            return ErrorHelper.isSuccess(response.getCode())
+                    ? ApiMessage.success(TotalWorkingDayOfUserResponse.builder()
+                    .setTotalDayOfMonth(response.getData().getTotalDayOfMonth())
+                    .setCurrentSystemTotalDayWorking(response.getData().getCurrentSystemTotalDayWorking())
+                    .setCurrentUserTotalDayWorking(response.getData().getCurrentUserTotalDayWorking())
+                    .build())
                     : ApiMessage.failed(response.getCode());
         } catch (Exception e) {
             e.printStackTrace();

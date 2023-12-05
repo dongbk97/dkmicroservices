@@ -13,5 +13,6 @@ public class AttendanceServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(AttendanceServiceApplication.class, args);
+        System.out.println("Attendance Service running!");
     }
 }
