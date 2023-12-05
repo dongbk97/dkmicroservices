@@ -1,5 +1,6 @@
-package dev.ngdangkiet.validation;
+package dev.ngdangkiet.validation.annotation;
 
+import dev.ngdangkiet.validation.LeaveRequestStatusValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -11,16 +12,16 @@ import java.lang.annotation.Target;
 
 /**
  * @author ngdangkiet
- * @since 11/30/2023
+ * @since 12/5/2023
  */
 
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = PhoneNumberValidator.class)
-public @interface ValidationPhoneNumber {
+@Constraint(validatedBy = LeaveRequestStatusValidator.class)
+public @interface ValidationLeaveRequestStatus {
 
-    String message() default "Invalid phone number!";
+    String message() default "Invalid leave request type!";
 
     Class<?>[] groups() default {};
 

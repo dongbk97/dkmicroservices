@@ -9,7 +9,7 @@ import dev.ngdangkiet.mapper.request.recruitment.jobposting.JobPostingRequestMap
 import dev.ngdangkiet.mapper.response.recruitment.jobposting.JobPostingResponseMapper;
 import dev.ngdangkiet.payload.request.recruitment.jobposting.UpdateJobPostingRequest;
 import dev.ngdangkiet.payload.request.recruitment.jobposting.UpsertJobPostingRequest;
-import dev.ngdangkiet.validation.ValidationJobPostingStatus;
+import dev.ngdangkiet.validation.annotation.ValidationJobPostingStatus;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

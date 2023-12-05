@@ -11,12 +11,18 @@ public enum LeaveRequestStatus {
 
     PENDING,
     APPROVED,
-    REJECTED;
+    REJECTED,
+    CANCELED;
 
     public static LeaveRequestStatus of(String value) {
         return Arrays.stream(LeaveRequestStatus.values())
                 .filter(lqs -> lqs.name().equalsIgnoreCase(value))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Leave Request Status!"));
+    }
+
+    public static boolean isValidLeaveRequestStatus(String value) {
+        return Arrays.stream(LeaveRequestStatus.values())
+                .anyMatch(lqs -> lqs.name().equalsIgnoreCase(value));
     }
 }

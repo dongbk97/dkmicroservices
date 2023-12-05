@@ -3,6 +3,7 @@ package dev.ngdangkiet.validation;
 import dev.ngdangkiet.common.Translator;
 import dev.ngdangkiet.constant.MessageConstant;
 import dev.ngdangkiet.enums.employee.Gender;
+import dev.ngdangkiet.validation.annotation.ValidationGender;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;

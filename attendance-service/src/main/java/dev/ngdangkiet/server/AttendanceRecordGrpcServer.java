@@ -1,10 +1,12 @@
 package dev.ngdangkiet.server;
 
 import com.google.protobuf.Int64Value;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PChangeStatusLeaveRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthResponse;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PLeaveRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.service.AttendanceServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.service.AttendanceRecordService;
@@ -40,6 +42,20 @@ public class AttendanceRecordGrpcServer extends AttendanceServiceGrpc.Attendance
     @Override
     public void getTotalWorkingDayInMonth(PGetTotalWorkingDayInMonthRequest request, StreamObserver<PGetTotalWorkingDayInMonthResponse> responseObserver) {
         PGetTotalWorkingDayInMonthResponse response = attendanceRecordService.getTotalWorkingDayInMonth(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void submitLeaveRequest(PLeaveRequest request, StreamObserver<EmptyResponse> responseObserver) {
+        EmptyResponse response = attendanceRecordService.submitLeaveRequest(request);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void changeStatusLeaveRequest(PChangeStatusLeaveRequest request, StreamObserver<EmptyResponse> responseObserver) {
+        EmptyResponse response = attendanceRecordService.changeStatusLeaveRequest(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

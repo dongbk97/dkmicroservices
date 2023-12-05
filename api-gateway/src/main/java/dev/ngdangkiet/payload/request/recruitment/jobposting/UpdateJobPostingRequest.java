@@ -1,6 +1,6 @@
 package dev.ngdangkiet.payload.request.recruitment.jobposting;
 
-import dev.ngdangkiet.validation.ValidationJobPostingStatus;
+import dev.ngdangkiet.validation.annotation.ValidationJobPostingStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

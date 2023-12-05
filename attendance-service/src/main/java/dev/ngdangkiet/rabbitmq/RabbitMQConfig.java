@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author ngdangkiet
- * @since 11/14/2023
+ * @since 12/5/2023
  */
 
 @Configuration
@@ -24,54 +24,6 @@ public class RabbitMQConfig {
     @Bean
     public TopicExchange notificationExchange() {
         return new TopicExchange(RabbitMQConstant.Notification.NOTIFICATION_EXCHANGE);
-    }
-
-    @Bean
-    public Queue newUserNotificationQueue() {
-        return new Queue(RabbitMQConstant.Notification.NEW_USER_NOTIFICATION_QUEUE);
-    }
-
-    @Bean
-    public Binding newUserNotificationBinding() {
-        return BindingBuilder.bind(newUserNotificationQueue())
-                .to(notificationExchange())
-                .with(RabbitMQConstant.Notification.NEW_USER_NOTIFICATION_ROUTING_KEY);
-    }
-
-    @Bean
-    public Queue newUserEmailNotificationQueue() {
-        return new Queue(RabbitMQConstant.Notification.NEW_USER_EMAIL_NOTIFICATION_QUEUE);
-    }
-
-    @Bean
-    public Binding newUserEmailNotificationBinding() {
-        return BindingBuilder.bind(newUserEmailNotificationQueue())
-                .to(notificationExchange())
-                .with(RabbitMQConstant.Notification.NEW_USER_EMAIL_NOTIFICATION_ROUTING_KEY);
-    }
-
-    @Bean
-    public Queue newApplicantNotificationQueue() {
-        return new Queue(RabbitMQConstant.Notification.NEW_APPLICANT_NOTIFICATION_QUEUE);
-    }
-
-    @Bean
-    public Binding newApplicantNotificationBinding() {
-        return BindingBuilder.bind(newApplicantNotificationQueue())
-                .to(notificationExchange())
-                .with(RabbitMQConstant.Notification.NEW_APPLICANT_NOTIFICATION_ROUTING_KEY);
-    }
-
-    @Bean
-    public Queue changePasswordNotificationQueue() {
-        return new Queue(RabbitMQConstant.Notification.CHANGE_PASSWORD_NOTIFICATION_QUEUE);
-    }
-
-    @Bean
-    public Binding changePasswordNotificationBinding() {
-        return BindingBuilder.bind(changePasswordNotificationQueue())
-                .to(notificationExchange())
-                .with(RabbitMQConstant.Notification.CHANGE_PASSWORD_NOTIFICATION_ROUTING_KEY);
     }
 
     @Bean

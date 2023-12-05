@@ -1,6 +1,6 @@
 package dev.ngdangkiet.payload.request.recruitment.jobposting;
 
-import dev.ngdangkiet.validation.ValidationDeadline;
+import dev.ngdangkiet.validation.annotation.ValidationDeadline;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package dev.ngdangkiet.payload.request.recruitment.applicant;
 
-import dev.ngdangkiet.validation.ValidationPhoneNumber;
+import dev.ngdangkiet.validation.annotation.ValidationPhoneNumber;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
