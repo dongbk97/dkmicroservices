@@ -1,5 +1,6 @@
-package dev.ngdangkiet.validation;
+package dev.ngdangkiet.validation.annotation;
 
+import dev.ngdangkiet.validation.PhoneNumberValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -17,10 +18,10 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = ApplicantStatusValidator.class)
-public @interface ValidationApplicantStatus {
+@Constraint(validatedBy = PhoneNumberValidator.class)
+public @interface ValidationPhoneNumber {
 
-    String message() default "Invalid status!";
+    String message() default "Invalid phone number!";
 
     Class<?>[] groups() default {};
 

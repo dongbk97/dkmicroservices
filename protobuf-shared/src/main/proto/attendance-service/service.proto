@@ -14,4 +14,7 @@ service AttendanceService {
   rpc checkInOut (google.protobuf.Int64Value/*employeeId*/) returns (common.protobuf.EmptyResponse);
   rpc getAttendanceRecords (PGetAttendanceRecordsRequest) returns (PGetAttendanceRecordsResponse);
   rpc getTotalWorkingDayInMonth (PGetTotalWorkingDayInMonthRequest) returns (PGetTotalWorkingDayInMonthResponse);
+
+  rpc submitLeaveRequest (PLeaveRequest) returns (common.protobuf.EmptyResponse);
+  rpc changeStatusLeaveRequest (PChangeStatusLeaveRequest) returns (common.protobuf.EmptyResponse);
 }

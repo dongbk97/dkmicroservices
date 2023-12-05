@@ -19,4 +19,9 @@ public enum LeaveType {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Leave Type!"));
     }
+
+    public static boolean isValidLeaveType(String value) {
+        return Arrays.stream(LeaveType.values())
+                .anyMatch(lt -> lt.name().equalsIgnoreCase(value));
+    }
 }

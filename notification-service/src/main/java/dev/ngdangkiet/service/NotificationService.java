@@ -17,6 +17,10 @@ public interface NotificationService {
 
     void receiveNewApplicantNotification(JsonMessage message);
 
+    void receiveNewLeaveRequestNotification(JsonMessage message);
+
+    void receiveNewUpdateLeaveRequestNotification(JsonMessage message);
+
     PGetNotificationsResponse getNotifications(PGetNotificationsRequest request);
 
     EmptyResponse seenOrUnseenNotification(Int64Value request);

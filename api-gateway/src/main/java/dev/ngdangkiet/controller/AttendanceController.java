@@ -2,22 +2,31 @@ package dev.ngdangkiet.controller;
 
 import dev.ngdangkiet.client.AttendanceGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PChangeStatusLeaveRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
 import dev.ngdangkiet.enums.tracking.Action;
 import dev.ngdangkiet.error.ErrorHelper;
+import dev.ngdangkiet.mapper.request.attendance.LeaveRequestMapper;
 import dev.ngdangkiet.mapper.response.attendance.AttendanceRecordMapper;
 import dev.ngdangkiet.payload.request.attendance.GetAttendanceRecordsRequest;
 import dev.ngdangkiet.payload.request.attendance.GetTotalWorkingDayRequest;
+import dev.ngdangkiet.payload.request.attendance.SubmitLeaveRequest;
 import dev.ngdangkiet.payload.response.attendance.TotalWorkingDayOfUserResponse;
 import dev.ngdangkiet.redis.utils.CacheTrackingUtil;
 import dev.ngdangkiet.security.SecurityHelper;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -36,6 +45,7 @@ public class AttendanceController {
     private final AttendanceGrpcClient attendanceGrpcClient;
     private final CacheTrackingUtil cacheTrackingUtil;
     private final AttendanceRecordMapper attendanceRecordMapper = AttendanceRecordMapper.INSTANCE;
+    private final LeaveRequestMapper leaveRequestMapper = LeaveRequestMapper.INSTANCE;
 
     @GetMapping("/check-in-out")
     public ApiMessage checkInOut() {
@@ -97,6 +107,43 @@ public class AttendanceController {
                     .setCurrentSystemTotalDayWorking(response.getData().getCurrentSystemTotalDayWorking())
                     .setCurrentUserTotalDayWorking(response.getData().getCurrentUserTotalDayWorking())
                     .build())
+                    : ApiMessage.failed(response.getCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiMessage.UNKNOWN_EXCEPTION;
+        }
+    }
+
+    @PostMapping("/submit-leave-request")
+    public ApiMessage submitLeaveRequest(@Valid @RequestBody SubmitLeaveRequest request) {
+        var userLogged = SecurityHelper.getUserLogin();
+        assert userLogged != null;
+
+        try {
+            request.setEmployeeId(userLogged.getUserInfo().getId());
+            var response = attendanceGrpcClient.submitLeaveRequest(leaveRequestMapper.toProtobuf(request));
+            return ErrorHelper.isSuccess(response.getCode())
+                    ? ApiMessage.SUCCESS
+                    : ApiMessage.failed(response.getCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiMessage.UNKNOWN_EXCEPTION;
+        }
+    }
+
+    @PatchMapping("/leave-request/{id}")
+    public ApiMessage changeStatusLeaveRequest(@PathVariable Long id, @RequestParam(name = "status") String status) {
+        var userLogged = SecurityHelper.getUserLogin();
+        assert userLogged != null;
+
+        try {
+            var response = attendanceGrpcClient.changeStatusLeaveRequest(PChangeStatusLeaveRequest.newBuilder()
+                    .setId(id)
+                    .setEmployeeId(userLogged.getUserInfo().getId())
+                    .setStatus(status)
+                    .build());
+            return ErrorHelper.isSuccess(response.getCode())
+                    ? ApiMessage.SUCCESS
                     : ApiMessage.failed(response.getCode());
         } catch (Exception e) {
             e.printStackTrace();

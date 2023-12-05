@@ -4,6 +4,7 @@ import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.client.EmployeeGrpcClient;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
+import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployeeResponse;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsRequest;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsResponse;
@@ -13,6 +14,7 @@ import dev.ngdangkiet.domain.notification.alert.JsonMessage;
 import dev.ngdangkiet.enums.department.Department;
 import dev.ngdangkiet.enums.notification.NotificationType;
 import dev.ngdangkiet.error.ErrorCode;
+import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.NotificationMapper;
 import dev.ngdangkiet.mapper.RabbitMQNotificationMapper;
 import dev.ngdangkiet.repository.NotificationRepository;
@@ -62,6 +64,28 @@ public class NotificationServiceImpl implements NotificationService {
                 .toList();
 
         notificationRepository.saveAll(notifications);
+    }
+
+    @Override
+    public void receiveNewLeaveRequestNotification(JsonMessage message) {
+        PEmployeeResponse response = employeeGrpcClient.getEmployeeById(message.getReceiverId());
+        if (ErrorHelper.isFailed(response.getCode())) {
+            throw new RuntimeException(String.format("Employee ID [{%d}] not found!", message.getReceiverId()));
+        }
+        notificationRepository.save(NotificationEntity.builder()
+                .setReceiverId(message.getReceiverId())
+                .setNotificationType(NotificationType.ALERT.name())
+                .setMessage(message.getMessage())
+                .build());
+    }
+
+    @Override
+    public void receiveNewUpdateLeaveRequestNotification(JsonMessage message) {
+        notificationRepository.save(NotificationEntity.builder()
+                .setReceiverId(message.getReceiverId())
+                .setNotificationType(NotificationType.ALERT.name())
+                .setMessage(message.getMessage())
+                .build());
     }
 
     // Notification Services

@@ -1,5 +1,6 @@
-package dev.ngdangkiet.validation;
+package dev.ngdangkiet.validation.annotation;
 
+import dev.ngdangkiet.validation.ApplicantStatusValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -11,16 +12,16 @@ import java.lang.annotation.Target;
 
 /**
  * @author ngdangkiet
- * @since 11/28/2023
+ * @since 11/30/2023
  */
 
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = DeadlineValidator.class)
-public @interface ValidationDeadline {
+@Constraint(validatedBy = ApplicantStatusValidator.class)
+public @interface ValidationApplicantStatus {
 
-    String message() default "Invalid deadline. Shouldn't be null or empty and after date now!";
+    String message() default "Invalid status!";
 
     Class<?>[] groups() default {};
 

@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder(setterPrefix = "set", builderClassName = "newBuilder")
 @Entity
+@ToString
 @Table(name = "tbl_leave_request")
 public class LeaveRequestEntity {
 
@@ -48,4 +50,6 @@ public class LeaveRequestEntity {
     private LeaveRequestStatus status;
 
     private String reason;
+
+    private Long receiverId;
 }

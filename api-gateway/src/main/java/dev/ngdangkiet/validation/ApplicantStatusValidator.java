@@ -1,6 +1,7 @@
 package dev.ngdangkiet.validation;
 
 import dev.ngdangkiet.enums.recruitment.ApplicantStatus;
+import dev.ngdangkiet.validation.annotation.ValidationApplicantStatus;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

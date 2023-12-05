@@ -38,6 +38,18 @@ public class RabbitMQConsumer {
         notificationService.receiveNewApplicantNotification(message);
     }
 
+    @RabbitListener(queues = {RabbitMQConstant.Notification.NEW_LEAVE_REQUEST_NOTIFICATION_QUEUE})
+    public void receiveNewLeaveRequestNotification(JsonMessage message) {
+        log.info("Received message -> {}", message.toString());
+        notificationService.receiveNewLeaveRequestNotification(message);
+    }
+
+    @RabbitListener(queues = {RabbitMQConstant.Notification.NEW_UPDATE_LEAVE_REQUEST_NOTIFICATION_QUEUE})
+    public void receiveNewUpdateLeaveRequestNotification(JsonMessage message) {
+        log.info("Received message -> {}", message.toString());
+        notificationService.receiveNewUpdateLeaveRequestNotification(message);
+    }
+
     @RabbitListener(queues = {RabbitMQConstant.Notification.NEW_USER_EMAIL_NOTIFICATION_QUEUE})
     public void receiveEmailNotification(JsonMessageEmail message) {
         log.info("Received message -> {}", message.toString());

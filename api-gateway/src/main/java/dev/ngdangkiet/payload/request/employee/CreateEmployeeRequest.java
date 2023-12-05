@@ -1,6 +1,6 @@
 package dev.ngdangkiet.payload.request.employee;
 
-import dev.ngdangkiet.validation.ValidationPassword;
+import dev.ngdangkiet.validation.annotation.ValidationPassword;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -2,16 +2,23 @@ package dev.ngdangkiet.service.impl;
 
 import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.constant.ThresholdsConstant;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PChangeStatusLeaveRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthResponse;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PLeaveRequest;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.domain.AttendanceRecordEntity;
+import dev.ngdangkiet.domain.LeaveRequestEntity;
 import dev.ngdangkiet.enums.attendance.AttendanceStatus;
+import dev.ngdangkiet.enums.attendance.LeaveRequestStatus;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.mapper.AttendanceRecordMapper;
+import dev.ngdangkiet.mapper.LeaveRequestMapper;
+import dev.ngdangkiet.rabbitmq.RabbitMQProducer;
 import dev.ngdangkiet.repository.AttendanceRecordRepository;
+import dev.ngdangkiet.repository.LeaveRequestRepository;
 import dev.ngdangkiet.service.AttendanceRecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +45,10 @@ import java.util.Objects;
 public class AttendanceRecordServiceImpl implements AttendanceRecordService {
 
     private final AttendanceRecordRepository attendanceRecordRepository;
+    private final LeaveRequestRepository leaveRequestRepository;
     private final AttendanceRecordMapper attendanceRecordMapper = AttendanceRecordMapper.INSTANCE;
+    private final LeaveRequestMapper leaveRequestMapper = LeaveRequestMapper.INSTANCE;
+    private final RabbitMQProducer rabbitMQProducer;
 
     @Override
     public EmptyResponse checkInOut(Int64Value employeeId) {
@@ -139,6 +149,70 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
                     .setCurrentSystemTotalDayWorking(currentSystemTotalWorkingDay)
                     .setCurrentUserTotalDayWorking(currentUserTotalWorkingDay)
                     .build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return builder.build();
+    }
+
+    @Override
+    public EmptyResponse submitLeaveRequest(PLeaveRequest request) {
+        EmptyResponse.Builder builder = EmptyResponse.newBuilder().setCode(ErrorCode.FAILED);
+
+        try {
+            LeaveRequestEntity leaveRequest;
+            if (request.getId() > 0) {
+                leaveRequest = leaveRequestRepository.findById(request.getId()).orElse(null);
+                if (Objects.isNull(leaveRequest)) {
+                    log.error("LeaveRequest [{}] not found!", request.getId());
+                    return builder.setCode(ErrorCode.NOT_FOUND).build();
+                }
+            }
+
+            leaveRequest = leaveRequestMapper.toDomain(request);
+            leaveRequestRepository.save(leaveRequest);
+            rabbitMQProducer.sendNewLeaveRequestNotification(leaveRequest);
+
+            builder.setCode(ErrorCode.SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return builder.build();
+    }
+
+    @Override
+    public EmptyResponse changeStatusLeaveRequest(PChangeStatusLeaveRequest request) {
+        EmptyResponse.Builder builder = EmptyResponse.newBuilder().setCode(ErrorCode.FAILED);
+
+        try {
+            if (!LeaveRequestStatus.isValidLeaveRequestStatus(request.getStatus())) {
+                log.error("Invalid leave request status!");
+                return builder.setCode(ErrorCode.INVALID_DATA).build();
+            }
+
+            // TODO: Get leave request for update
+            LeaveRequestStatus status = LeaveRequestStatus.of(request.getStatus());
+            boolean isCancelLeaveRequest = LeaveRequestStatus.CANCELED.equals(status);
+            LeaveRequestEntity leaveRequest = isCancelLeaveRequest
+                    ? leaveRequestRepository.findByIdAndEmployeeId(request.getId(), request.getEmployeeId()).orElse(null)
+                    : leaveRequestRepository.findByIdAndReceiverId(request.getId(), request.getEmployeeId()).orElse(null);
+
+            if (Objects.isNull(leaveRequest)) {
+                log.error("LeaveRequest ID [{}] not found!", request.getId());
+                return builder.setCode(ErrorCode.NOT_FOUND).build();
+            }
+
+            leaveRequest.setStatus(status);
+            leaveRequestRepository.save(leaveRequest);
+
+            // TODO: Send notification to employee
+            if (!isCancelLeaveRequest) {
+                rabbitMQProducer.sendNewUpdateLeaveRequestNotification(leaveRequest);
+            }
+
+            builder.setCode(ErrorCode.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
         }

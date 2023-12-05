@@ -1,6 +1,6 @@
 package dev.ngdangkiet.payload.request.employee;
 
-import dev.ngdangkiet.validation.ValidationGender;
+import dev.ngdangkiet.validation.annotation.ValidationGender;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -3,6 +3,7 @@ package dev.ngdangkiet.validation;
 import dev.ngdangkiet.common.Translator;
 import dev.ngdangkiet.constant.MessageConstant;
 import dev.ngdangkiet.constant.ValidateConstant;
+import dev.ngdangkiet.validation.annotation.ValidationPassword;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
