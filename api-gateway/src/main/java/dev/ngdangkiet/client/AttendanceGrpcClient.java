@@ -3,6 +3,8 @@ package dev.ngdangkiet.client;
 import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
 import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthResponse;
 import dev.ngdangkiet.dkmicroservices.attendance.service.AttendanceServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +29,9 @@ public class AttendanceGrpcClient {
 
     public PGetAttendanceRecordsResponse getAttendanceRecords(PGetAttendanceRecordsRequest request) {
         return attendanceServiceBlockingStub.getAttendanceRecords(request);
+    }
+
+    public PGetTotalWorkingDayInMonthResponse getTotalWorkingDayInMonth(PGetTotalWorkingDayInMonthRequest request) {
+        return attendanceServiceBlockingStub.getTotalWorkingDayInMonth(request);
     }
 }

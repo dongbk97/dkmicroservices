@@ -17,9 +17,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
@@ -114,6 +116,59 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
 
     @Override
     public PGetTotalWorkingDayInMonthResponse getTotalWorkingDayInMonth(PGetTotalWorkingDayInMonthRequest request) {
-        return null;
+        PGetTotalWorkingDayInMonthResponse.Builder builder = PGetTotalWorkingDayInMonthResponse.newBuilder().setCode(ErrorCode.FAILED);
+
+        try {
+            // TODO: Get total day in month exclude Sar and Sun
+            YearMonth yearMonth = YearMonth.of(request.getYear(), request.getMonth());
+            log.info("Total day in month [{}] of year [{}]: [{}]", request.getMonth(), request.getYear(), yearMonth.lengthOfMonth());
+            int totalDayInMonthExcludeSarAndSun = totalDayExcludeSarAndSun(yearMonth.getYear(), yearMonth.getMonthValue(), yearMonth.lengthOfMonth());
+            log.info("Total day in month [{}] of year [{}] exclude Sar and Sun: [{}]", request.getMonth(), request.getYear(), totalDayInMonthExcludeSarAndSun);
+
+            // TODO: Get current system and user total working day
+            LocalDate localDate = LocalDate.now();
+            double currentSystemTotalWorkingDay = request.getMonth() == localDate.getMonthValue() && request.getYear() == localDate.getYear()
+                    ? totalDayExcludeSarAndSun(request.getYear(), request.getMonth(), localDate.getDayOfMonth())
+                    : totalDayInMonthExcludeSarAndSun;
+
+            double currentUserTotalWorkingDay = totalWorkingDayOfUser(request.getEmployeeId(), request.getYear(), request.getMonth());
+
+            // TODO: Response data
+            builder.setCode(ErrorCode.SUCCESS).setData(PGetTotalWorkingDayInMonthResponse.Data.newBuilder()
+                    .setTotalDayOfMonth(totalDayInMonthExcludeSarAndSun)
+                    .setCurrentSystemTotalDayWorking(currentSystemTotalWorkingDay)
+                    .setCurrentUserTotalDayWorking(currentUserTotalWorkingDay)
+                    .build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return builder.build();
+    }
+
+    private int totalDayExcludeSarAndSun(int year, int month, int days) {
+        int totalDayInMonthExcludeSarAndSun = 0;
+        for (int i = 1; i <= days; i++) {
+            LocalDate localDate = LocalDate.of(year, month, i);
+            if (!localDate.getDayOfWeek().equals(DayOfWeek.SATURDAY) && !localDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                totalDayInMonthExcludeSarAndSun++;
+            }
+        }
+        return totalDayInMonthExcludeSarAndSun;
+    }
+
+    private double totalWorkingDayOfUser(Long employeeId, int year, int month) {
+        double totalWorkingDay = 0;
+        List<AttendanceRecordEntity> attendanceRecords = attendanceRecordRepository.findByEmployeeIdAndYearAndMonth(employeeId, year, month);
+        for (AttendanceRecordEntity ar : attendanceRecords) {
+            if (Objects.nonNull(ar.getWorkHours()) && !ar.getAttendanceDate().getDayOfWeek().equals(DayOfWeek.SATURDAY) && !ar.getAttendanceDate().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                if (ar.getWorkHours() < 6.5 && ar.getWorkHours() > 3.5) {
+                    totalWorkingDay += 0.5;
+                } else if (ar.getWorkHours() > 6.5) {
+                    totalWorkingDay += 1;
+                }
+            }
+        }
+        return totalWorkingDay;
     }
 }

@@ -40,13 +40,15 @@ message PGetAttendanceRecordsResponse {
 
 message PGetTotalWorkingDayInMonthRequest {
   int64 employee_id = 1;
+  int32 month = 2;
+  int32 year = 3;
 }
 
 message PGetTotalWorkingDayInMonthResponse {
   message Data {
     int32 total_day_of_month = 1;
-    int32 current_system_total_day_working = 2;
-    int32 current_user_total_day_working = 3;
+    double current_system_total_day_working = 2;
+    double current_user_total_day_working = 3;
   }
   int32 code = 1;
   Data data = 2;
