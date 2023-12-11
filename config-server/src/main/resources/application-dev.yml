@@ -1,0 +1,15 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ngdangkiet/ndk-microservices-cloud-config.git
+          skip-ssl-validation: true
+          clone-on-start: true
+  profiles:
+    active: dev

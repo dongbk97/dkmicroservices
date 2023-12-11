@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: recruitment-service
+  config:
+    import: "optional:configserver:http://config-server:8088"
+    activate:
+      on-profile: prod
