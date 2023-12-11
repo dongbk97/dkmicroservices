@@ -13,4 +13,4 @@ spring:
           clone-on-start: true
   config:
     activate:
-      on-profile:
+      on-profile: dev
