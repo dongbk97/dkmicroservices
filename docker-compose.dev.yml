@@ -8,8 +8,6 @@ services:
     ports:
       - "8088:8088"
     restart: unless-stopped
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
 
   # ================== SERVICE REGISTRY ==================
   service-registry:
