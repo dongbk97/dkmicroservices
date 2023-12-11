@@ -11,5 +11,6 @@ spring:
           uri: https://github.com/ngdangkiet/ndk-microservices-cloud-config.git
           skip-ssl-validation: true
           clone-on-start: true
-  profiles:
-    active: prod
+  config:
+    activate:
+      on-profile: prod
