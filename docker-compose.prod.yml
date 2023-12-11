@@ -1,0 +1,434 @@
+version: "3.9"
+
+services:
+  # ================== CONFIG SERVER ==================
+  config-server:
+    container_name: dkmicroservices-config-server
+    image: 01092002/ndk-config-server
+    ports:
+      - "8088:8088"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+  # ================== SERVICE REGISTRY ==================
+  service-registry:
+    container_name: dkmicroservices-service-registry
+    image: 01092002/ndk-service-registry
+    ports:
+      - "8761:8761"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+  # ================== AUTH SERVICE ==================
+  auth-service:
+    container_name: dkmicroservices-auth-service
+    image: 01092002/ndk-auth-service
+    ports:
+      - "8004:8004"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://employee-postgres:5432/dkmicroservices_employee_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_HIBERNATE_DLL_AUTO=update
+      - SPRING_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      employee-postgres:
+        condition: service_healthy
+
+  # ================== DEPARTMENT SERVICE ==================
+  department-service:
+    container_name: dkmicroservices-department-service
+    image: 01092002/ndk-department-service
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://department-postgres:5432/dkmicroservices_department_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      department-postgres:
+        condition: service_healthy
+
+  department-postgres:
+    container_name: dkmicroservices-department-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_department_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ================== EMPLOYEE SERVICE ==================
+  employee-service:
+    container_name: dkmicroservices-employee-service
+    image: 01092002/ndk-employee-service
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://employee-postgres:5432/dkmicroservices_employee_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      message-broker:
+        condition: service_healthy
+      employee-postgres:
+        condition: service_healthy
+
+  employee-postgres:
+    container_name: dkmicroservices-employee-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_employee_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ================== NOTIFICATION SERVICE ==================
+  notification-service:
+    container_name: dkmicroservices-notification-service
+    image: 01092002/ndk-notification-service
+    ports:
+      - "8005:8005"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-postgres:5432/dkmicroservices_notification_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      message-broker:
+        condition: service_healthy
+      notification-postgres:
+        condition: service_healthy
+      employee-service:
+        condition: service_started
+
+  notification-postgres:
+    container_name: dkmicroservices-notification-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_notification_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ================== LOCATION SERVICE ==================
+  location-service:
+    container_name: dkmicroservices-location-service
+    image: 01092002/ndk-location-service
+    ports:
+      - "8006:8006"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/dkmicroservices_location_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      location-postgres:
+        condition: service_healthy
+
+  location-postgres:
+    container_name: dkmicroservices-location-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_location_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ================== TRACKING SERVICE ==================
+  tracking-service:
+    container_name: dkmicroservices-tracking-service
+    image: 01092002/ndk-tracking-service
+    ports:
+      - "8007:8007"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=tracking-service
+      - SPRING_DATA_ELASTICSEARCH_REPOSITORIES_ENABLED=true
+      - SPRING_DATA_ELASTICSEARCH.URIS=http://tracking-elasticsearch:9200
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      message-broker:
+        condition: service_healthy
+      tracking-elasticsearch:
+        condition: service_healthy
+
+  tracking-elasticsearch:
+    container_name: dkmicroservices-tracking-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  # ================== RECRUITMENT SERVICE ==================
+  recruitment-service:
+    container_name: dkmicroservices-recruitment-service
+    image: 01092002/ndk-recruitment-service
+    ports:
+      - "8008:8008"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/dkmicroservices_recruitment_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      message-broker:
+        condition: service_healthy
+      recruitment-postgres:
+        condition: service_healthy
+
+  recruitment-postgres:
+    container_name: dkmicroservices-recruitment-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5438:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_recruitment_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ================== ATTENDANCE SERVICE ==================
+  attendance-service:
+    container_name: dkmicroservices-attendance-service
+    image: 01092002/ndk-attendance-service
+    ports:
+      - "8009:8009"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/dkmicroservices_attendance_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      message-broker:
+        condition: service_healthy
+      attendance-postgres:
+        condition: service_healthy
+
+  attendance-postgres:
+    container_name: dkmicroservices-attendance-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5439:5432"
+    environment:
+      - POSTGRES_DB=dkmicroservices_attendance_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ================== API GATEWAY ==================
+  api-gateway:
+    container_name: dkmicroservices-api-gateway
+    image: 01092002/ndk-api-gateway
+    ports:
+      - "8003:8003"
+    restart: unless-stopped
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      config-server:
+        condition: service_started
+      service-registry:
+        condition: service_started
+      caching-data:
+        condition: service_healthy
+      message-broker:
+        condition: service_healthy
+      hazelcast:
+        condition: service_started
+      management-center:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      department-service:
+        condition: service_started
+      employee-service:
+        condition: service_started
+      location-service:
+        condition: service_started
+      tracking-service:
+        condition: service_started
+      recruitment-service:
+        condition: service_started
+      attendance-service:
+        condition: service_started
+
+  # ================== ZIPKIN ==================
+  distributed-tracing:
+    container_name: dkmicroservices-zipkin
+    image: openzipkin/zipkin
+    restart: unless-stopped
+    ports:
+      - "9411:9411"
+
+  # ================== RABBIT MQ ==================
+  message-broker:
+    container_name: dkmicroservices-rabbitmq
+    image: rabbitmq:3-management-alpine
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  # ================== REDIS ==================
+  caching-data:
+    container_name: dkmicroservices-redis
+    image: redis:7.2-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ================== HAZELCAST ==================
+  hazelcast:
+    container_name: dkmicroservices-hazelcast
+    image: hazelcast/hazelcast:5.2.1
+    restart: unless-stopped
+    ports:
+      - "5701:5701"
+  management-center:
+    container_name: dkmicroservices-hazelcast-management
+    image: hazelcast/management-center:5.2.1
+    ports:
+      - "8082:8080"
+    environment:
+      - MC_DEFAULT_CLUSTER=dev
+      - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast
