@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  # prometheus
+  prometheus:
+    image: prom/prometheus:v2.37.1
+    container_name: dkmicroservices-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # grafana
+  grafana:
+    image: grafana/grafana-oss:8.5.2
+    container_name: dkmicroservices-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=ngdangkiet
+      - GF_SECURITY_ADMIN_PASSWORD=root

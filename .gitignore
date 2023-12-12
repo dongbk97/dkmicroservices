@@ -33,4 +33,8 @@ build/
 .vscode/
 
 ### Docker ###
-docker/*
+docker/es/*
+docker/redis/*
+docker/postgres/*
+docker/jenkins/*
+docker/rabbitmq/*

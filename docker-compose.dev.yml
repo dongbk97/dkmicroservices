@@ -1,6 +1,23 @@
 version: "3.9"
 
 services:
+  # ================== POSTGRES ==================
+  postgres:
+    container_name: dkmicroservices-postgres
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    env_file:
+      - ./docker/.env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ndk-microservices-network
+
   # ================== CONFIG SERVER ==================
   config-server:
     container_name: dkmicroservices-config-server
@@ -32,9 +49,9 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://employee-postgres:5432/dkmicroservices_employee_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://employee-postgres:5432/employee_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=ngdangkiet
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_SHOW_SQL=true
       - SPRING_HIBERNATE_DLL_AUTO=update
@@ -45,7 +62,7 @@ services:
         condition: service_started
       service-registry:
         condition: service_started
-      employee-postgres:
+      postgres:
         condition: service_healthy
     networks:
       - ndk-microservices-network
@@ -59,9 +76,9 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://department-postgres:5432/dkmicroservices_department_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://department-postgres:5432/department_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=ngdangkiet
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_SHOW_SQL=true
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -72,26 +89,8 @@ services:
         condition: service_started
       service-registry:
         condition: service_started
-      department-postgres:
+      postgres:
         condition: service_healthy
-    networks:
-      - ndk-microservices-network
-
-  department-postgres:
-    container_name: dkmicroservices-department-postgres
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5434:5432"
-    environment:
-      - POSTGRES_DB=dkmicroservices_department_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - ndk-microservices-network
 
@@ -104,9 +103,9 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://employee-postgres:5432/dkmicroservices_employee_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://employee-postgres:5432/employee_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=ngdangkiet
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_SHOW_SQL=true
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -119,26 +118,8 @@ services:
         condition: service_started
       message-broker:
         condition: service_healthy
-      employee-postgres:
+      postgres:
         condition: service_healthy
-    networks:
-      - ndk-microservices-network
-
-  employee-postgres:
-    container_name: dkmicroservices-employee-postgres
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5433:5432"
-    environment:
-      - POSTGRES_DB=dkmicroservices_employee_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - ndk-microservices-network
 
@@ -151,9 +132,9 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-postgres:5432/dkmicroservices_notification_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-postgres:5432/notification_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=ngdangkiet
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_SHOW_SQL=true
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -166,28 +147,10 @@ services:
         condition: service_started
       message-broker:
         condition: service_healthy
-      notification-postgres:
+      postgres:
         condition: service_healthy
       employee-service:
         condition: service_started
-    networks:
-      - ndk-microservices-network
-
-  notification-postgres:
-    container_name: dkmicroservices-notification-postgres
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5435:5432"
-    environment:
-      - POSTGRES_DB=dkmicroservices_notification_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - ndk-microservices-network
 
@@ -200,9 +163,9 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/dkmicroservices_location_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/location_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=ngdangkiet
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_SHOW_SQL=true
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -213,26 +176,8 @@ services:
         condition: service_started
       service-registry:
         condition: service_started
-      location-postgres:
+      postgres:
         condition: service_healthy
-    networks:
-      - ndk-microservices-network
-
-  location-postgres:
-    container_name: dkmicroservices-location-postgres
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5436:5432"
-    environment:
-      - POSTGRES_DB=dkmicroservices_location_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - ndk-microservices-network
 
@@ -292,9 +237,9 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/dkmicroservices_recruitment_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/recruitment_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=ngdangkiet
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_SHOW_SQL=true
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -307,26 +252,8 @@ services:
         condition: service_started
       message-broker:
         condition: service_healthy
-      recruitment-postgres:
+      postgres:
         condition: service_healthy
-    networks:
-      - ndk-microservices-network
-
-  recruitment-postgres:
-    container_name: dkmicroservices-recruitment-postgres
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5438:5432"
-    environment:
-      - POSTGRES_DB=dkmicroservices_recruitment_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - ndk-microservices-network
 
@@ -339,9 +266,9 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/dkmicroservices_attendance_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://location-postgres:5432/attendance_db?createDatabaseIfNotExist=true&useEncoding=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=ngdangkiet
+      - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_SHOW_SQL=true
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
@@ -354,26 +281,8 @@ services:
         condition: service_started
       message-broker:
         condition: service_healthy
-      attendance-postgres:
+      postgres:
         condition: service_healthy
-    networks:
-      - ndk-microservices-network
-
-  attendance-postgres:
-    container_name: dkmicroservices-attendance-postgres
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5439:5432"
-    environment:
-      - POSTGRES_DB=dkmicroservices_attendance_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - ndk-microservices-network
 
