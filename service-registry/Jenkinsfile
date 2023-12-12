@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     tag = "${branch}-${env.GIT_COMMIT.substring(0,6)}"
-                    sh "docker build -t ${image}:${tag} ./service-registry"
+                    sh "docker build -t ${image}:latest ./service-registry"
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpw')]) {
                         sh 'docker login -u 01092002 -p ${dockerhubpw}'
-                        sh "docker push ${image}:${tag}"
+                        sh "docker push ${image}:latest"
                     }
                 }
             }
