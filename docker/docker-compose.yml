@@ -1,79 +1,21 @@
 version: "3.9"
 
 services:
-  # employee postgres db
-  postgres-employee-service:
-    container_name: dkmicroservices-employee
+  # postgres db
+  postgres:
+    container_name: dkmicroservices-postgres
     image: postgres:16-alpine
     restart: unless-stopped
     ports:
       - "5433:5432"
     volumes:
-      - ./data/db-employee:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=dkmicroservices_employee_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - ./postgres:/var/lib/postgresql/data
+    env_file:
+      - ./.env
 
-  # department postgres db
-  postgres-department-service:
-    container_name: dkmicroservices-department
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5434:5432"
-    volumes:
-      - ./data/db-department:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=dkmicroservices_department_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-
-  # notification postgres db
-  postgres-notification-service:
-    container_name: dkmicroservices-notification
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5435:5432"
-    volumes:
-      - ./data/db-notification:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=dkmicroservices_notification_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-
-  # recruitment postgres db
-  postgres-recruitment-service:
-    container_name: dkmicroservices-recruitment
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5438:5432"
-    volumes:
-      - ./data/db-recruitment:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=dkmicroservices_recruitment_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-
-  # attendance postgres db
-  postgres-attendance-service:
-    container_name: dkmicroservices-attendance
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5439:5432"
-    volumes:
-      - ./data/db-attendance:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=dkmicroservices_attendance_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-
-  # tracking data elastic search
-  elasticsearch-tracking-service:
-    container_name: dkmicroservices-tracking-elasticsearch
+  # elastic search
+  elasticsearch:
+    container_name: dkmicroservices-elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
     restart: unless-stopped
     ports:
@@ -84,35 +26,21 @@ services:
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
       - xpack.security.enabled=false
     volumes:
-      - ./data/es-tracking:/usr/share/elasticsearch/data
+      - ./es:/usr/share/elasticsearch/data
     ulimits:
       memlock:
         soft: -1
         hard: -1
 
   # tracking data kibana
-  kibana-tracking-service:
-    container_name: dkmicroservices-tracking-kibana
+  kibana:
+    container_name: dkmicroservices-kibana
     image: docker.elastic.co/kibana/kibana:8.11.1
     restart: unless-stopped
     ports:
       - "5601:5601"
     depends_on:
-      - elasticsearch-tracking-service
-
-  # location postgres db
-  postgres-location-service:
-    container_name: dkmicroservices-location
-    image: postgres:16-alpine
-    restart: unless-stopped
-    ports:
-      - "5436:5432"
-    volumes:
-      - ./data/db-location:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=dkmicroservices_location_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - elasticsearch
 
   # distributed tracing zipkin
   distributed-tracing:
@@ -123,7 +51,7 @@ services:
       - "9411:9411"
 
   # message broker
-  message-broker:
+  rabbitmq:
     container_name: dkmicroservices-rabbitmq
     image: rabbitmq:3-management-alpine
     restart: unless-stopped
@@ -135,14 +63,14 @@ services:
       - ./rabbitmq/log:/var/log/rabbitmq
 
   # caching data
-  caching-data:
+  redis:
     container_name: dkmicroservices-redis
     image: redis:7.2-alpine
     restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
-      - ./cache:/data
+      - ./redis:/data
 
   # hazelcast
   hazelcast:
