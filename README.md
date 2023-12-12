@@ -20,6 +20,10 @@ docker-compose up -d
 
   ![docker-containers](./docs/docker-containers.png)
 
+## System Architecture
+
+![system-architecture](./docs/system-architecture.png)
+
 ## Project Structure and Technical Stack
 
 - Project Structure

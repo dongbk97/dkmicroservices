@@ -8,6 +8,8 @@ services:
     ports:
       - "8088:8088"
     restart: unless-stopped
+    networks:
+      - ndk-microservices-network
 
   # ================== SERVICE REGISTRY ==================
   service-registry:
@@ -18,6 +20,8 @@ services:
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+    networks:
+      - ndk-microservices-network
 
   # ================== AUTH SERVICE ==================
   auth-service:
@@ -43,6 +47,8 @@ services:
         condition: service_started
       employee-postgres:
         condition: service_healthy
+    networks:
+      - ndk-microservices-network
 
   # ================== DEPARTMENT SERVICE ==================
   department-service:
@@ -68,6 +74,8 @@ services:
         condition: service_started
       department-postgres:
         condition: service_healthy
+    networks:
+      - ndk-microservices-network
 
   department-postgres:
     container_name: dkmicroservices-department-postgres
@@ -84,6 +92,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - ndk-microservices-network
 
   # ================== EMPLOYEE SERVICE ==================
   employee-service:
@@ -111,6 +121,8 @@ services:
         condition: service_healthy
       employee-postgres:
         condition: service_healthy
+    networks:
+      - ndk-microservices-network
 
   employee-postgres:
     container_name: dkmicroservices-employee-postgres
@@ -127,6 +139,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - ndk-microservices-network
 
   # ================== NOTIFICATION SERVICE ==================
   notification-service:
@@ -156,6 +170,8 @@ services:
         condition: service_healthy
       employee-service:
         condition: service_started
+    networks:
+      - ndk-microservices-network
 
   notification-postgres:
     container_name: dkmicroservices-notification-postgres
@@ -172,6 +188,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - ndk-microservices-network
 
   # ================== LOCATION SERVICE ==================
   location-service:
@@ -197,6 +215,8 @@ services:
         condition: service_started
       location-postgres:
         condition: service_healthy
+    networks:
+      - ndk-microservices-network
 
   location-postgres:
     container_name: dkmicroservices-location-postgres
@@ -213,6 +233,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - ndk-microservices-network
 
   # ================== TRACKING SERVICE ==================
   tracking-service:
@@ -235,6 +257,8 @@ services:
         condition: service_healthy
       tracking-elasticsearch:
         condition: service_healthy
+    networks:
+      - ndk-microservices-network
 
   tracking-elasticsearch:
     container_name: dkmicroservices-tracking-elasticsearch
@@ -256,6 +280,8 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
+    networks:
+      - ndk-microservices-network
 
   # ================== RECRUITMENT SERVICE ==================
   recruitment-service:
@@ -283,6 +309,8 @@ services:
         condition: service_healthy
       recruitment-postgres:
         condition: service_healthy
+    networks:
+      - ndk-microservices-network
 
   recruitment-postgres:
     container_name: dkmicroservices-recruitment-postgres
@@ -299,6 +327,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - ndk-microservices-network
 
   # ================== ATTENDANCE SERVICE ==================
   attendance-service:
@@ -326,6 +356,8 @@ services:
         condition: service_healthy
       attendance-postgres:
         condition: service_healthy
+    networks:
+      - ndk-microservices-network
 
   attendance-postgres:
     container_name: dkmicroservices-attendance-postgres
@@ -342,6 +374,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - ndk-microservices-network
 
   # ================== API GATEWAY ==================
   api-gateway:
@@ -379,6 +413,8 @@ services:
         condition: service_started
       attendance-service:
         condition: service_started
+    networks:
+      - ndk-microservices-network
 
   # ================== ZIPKIN ==================
   distributed-tracing:
@@ -387,6 +423,8 @@ services:
     restart: unless-stopped
     ports:
       - "9411:9411"
+    networks:
+      - ndk-microservices-network
 
   # ================== RABBIT MQ ==================
   message-broker:
@@ -401,6 +439,8 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
+    networks:
+      - ndk-microservices-network
 
   # ================== REDIS ==================
   caching-data:
@@ -414,6 +454,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    networks:
+      - ndk-microservices-network
 
   # ================== HAZELCAST ==================
   hazelcast:
@@ -422,6 +464,8 @@ services:
     restart: unless-stopped
     ports:
       - "5701:5701"
+    networks:
+      - ndk-microservices-network
   management-center:
     container_name: dkmicroservices-hazelcast-management
     image: hazelcast/management-center:5.2.1
@@ -430,3 +474,9 @@ services:
     environment:
       - MC_DEFAULT_CLUSTER=dev
       - MC_DEFAULT_CLUSTER_MEMBERS=hazelcast
+    networks:
+      - ndk-microservices-network
+
+networks:
+  ndk-microservices-network:
+    driver: bridge
