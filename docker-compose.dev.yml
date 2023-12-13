@@ -11,6 +11,7 @@ services:
     environment:
       - POSTGRES_USER=ngdangkiet
       - POSTGRES_PASSWORD=root
+      - ./data/postgres-dev:/var/lib/postgresql/data
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:

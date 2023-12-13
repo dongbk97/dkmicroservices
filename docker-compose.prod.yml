@@ -13,6 +13,7 @@ services:
       - POSTGRES_PASSWORD=root
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/postgres-prod:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
