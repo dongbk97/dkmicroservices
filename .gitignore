@@ -38,3 +38,5 @@ docker/redis/*
 docker/postgres/*
 docker/jenkins/*
 docker/rabbitmq/*
+data/postgres-dev/*
+data/postgres-prod/*
