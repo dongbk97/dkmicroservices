@@ -13,8 +13,10 @@ Simple Microservices with Spring Boot and gRPC
 - Once the prerequisites are installed, run the command in folder ***/docker***.
 
 ```
-docker-compose up -d
+docker-compose -f docker-compose.yml up -d
 ```
+
+![docker-compose](./docs/docker-compose.png)
 
 - Docker Containers
 
@@ -142,6 +144,28 @@ docker-compose up -d
         <td>x</td>
         <td></td>
     </tr>
+    <tr>
+        <td>Recruitment Service</td>
+        <td>x</td>
+        <td></td>
+        <td></td>
+        <td>x</td>
+        <td>x</td>
+        <td>x</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Attendance Service</td>
+        <td>x</td>
+        <td></td>
+        <td></td>
+        <td>x</td>
+        <td>x</td>
+        <td>x</td>
+        <td></td>
+        <td></td>
+    </tr>
 </table>
 
 - Services Port
@@ -196,6 +220,16 @@ docker-compose up -d
       <td>Tracking Service</td>
       <td>8007</td>
       <td>8070</td>
+  </tr>
+  <tr>
+      <td>Recruitment Service</td>
+      <td>8008</td>
+      <td>8080</td>
+  </tr>
+  <tr>
+      <td>Attendance Service</td>
+      <td>8009</td>
+      <td>8090</td>
   </tr>
 </table>
 
