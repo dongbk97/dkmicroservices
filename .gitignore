@@ -34,7 +34,6 @@ build/
 
 ### Docker ###
 docker/es/*
-docker/data
 docker/redis/*
 docker/postgres/*
 docker/jenkins/*
