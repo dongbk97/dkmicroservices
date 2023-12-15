@@ -2,37 +2,40 @@ package dev.ngdangkiet.service.impl;
 
 import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.constant.ThresholdsConstant;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PChangeStatusLeaveRequest;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthResponse;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PLeaveRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.*;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.domain.AttendanceRecordEntity;
+import dev.ngdangkiet.domain.DTO.SearchHolidayDTO;
+import dev.ngdangkiet.domain.HolidayEntity;
 import dev.ngdangkiet.domain.LeaveRequestEntity;
 import dev.ngdangkiet.enums.attendance.AttendanceStatus;
+import dev.ngdangkiet.enums.attendance.HolidayType;
 import dev.ngdangkiet.enums.attendance.LeaveRequestStatus;
 import dev.ngdangkiet.error.ErrorCode;
 import dev.ngdangkiet.mapper.AttendanceRecordMapper;
+import dev.ngdangkiet.mapper.HolidayMapper;
 import dev.ngdangkiet.mapper.LeaveRequestMapper;
+import dev.ngdangkiet.mapper.SearchHolidayMapper;
 import dev.ngdangkiet.rabbitmq.RabbitMQProducer;
 import dev.ngdangkiet.repository.AttendanceRecordRepository;
+import dev.ngdangkiet.repository.HolidayRepository;
+import dev.ngdangkiet.repository.HolidayRepositoryCustom;
 import dev.ngdangkiet.repository.LeaveRequestRepository;
 import dev.ngdangkiet.service.AttendanceRecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.YearMonth;
+import java.time.*;
+import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author ngdangkiet
@@ -46,8 +49,12 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
 
     private final AttendanceRecordRepository attendanceRecordRepository;
     private final LeaveRequestRepository leaveRequestRepository;
+    private final HolidayRepositoryCustom holidayRepositoryCustom;
     private final AttendanceRecordMapper attendanceRecordMapper = AttendanceRecordMapper.INSTANCE;
     private final LeaveRequestMapper leaveRequestMapper = LeaveRequestMapper.INSTANCE;
+    private final HolidayMapper holidayMapper = HolidayMapper.INSTANCE;
+    private final SearchHolidayMapper searchHolidayMapper = SearchHolidayMapper.INSTANCE;
+    private final HolidayRepository holidayRepository;
     private final RabbitMQProducer rabbitMQProducer;
 
     @Override
@@ -220,6 +227,44 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
         return builder.build();
     }
 
+    @Override
+    public EmptyResponse submitHolidays(PListHolidays requestList) {
+        EmptyResponse.Builder builder = EmptyResponse.newBuilder().setCode(ErrorCode.FAILED);
+        try {
+            List<HolidayEntity> holidayEntities = holidayMapper.toDomains(requestList.getDataList());
+            if (!CollectionUtils.isEmpty(holidayEntities)) {
+                // validate duplicate holidate
+                if (validateHolidaysExisted(holidayEntities)) {
+                    return builder.setCode(ErrorCode.ALREADY_EXISTS).build();
+                }
+                holidayEntities.forEach(this::processHolidayEntity);
+                holidayRepository.saveAll(holidayEntities);
+                builder.setCode(ErrorCode.SUCCESS);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return builder.build();
+    }
+
+    @Override
+    public PSearchHolidaysResponse getHolidaysByConditions(PSearchHolidaysRequest search) {
+        PSearchHolidaysResponse.Builder builder = PSearchHolidaysResponse.newBuilder().setCode(ErrorCode.FAILED);
+
+        try {
+            SearchHolidayDTO searchHolidayDTO = searchHolidayMapper.toDomain(search);
+            List<HolidayEntity> holidayEntities = holidayRepositoryCustom.findByConditions(searchHolidayDTO);
+            return builder.setCode(ErrorCode.SUCCESS)
+                    .addAllData(holidayMapper.toProtobufs(holidayEntities))
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Could not fond Holidays with error : " + e.getMessage());
+            return builder.build();
+        }
+    }
+
     private int totalDayExcludeSarAndSun(int year, int month, int days) {
         int totalDayInMonthExcludeSarAndSun = 0;
         for (int i = 1; i <= days; i++) {
@@ -244,5 +289,24 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
             }
         }
         return totalWorkingDay;
+    }
+
+    private void processHolidayEntity(HolidayEntity holiday) {
+        LocalDate date = holiday.getDate();
+        holiday.setDate_year(date.getYear());
+        holiday.setDate_month(date.getMonthValue());
+        holiday.setWeek_day(date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
+        holiday.setDate_day(date.getDayOfMonth());
+
+        //set Default value for type of Holiday
+        if (!StringUtils.hasText(holiday.getType())) {
+            holiday.setType(HolidayType.INTERNAL.toString());
+        }
+    }
+
+    private Boolean validateHolidaysExisted(List<HolidayEntity> holidayEntities) {
+        Set<LocalDate> dateToValidate = holidayEntities.stream().map(HolidayEntity::getDate).collect(Collectors.toSet());
+        List<HolidayEntity> holidaysExited = holidayRepository.findByDates(dateToValidate);
+        return CollectionUtils.isEmpty(holidaysExited) ? Boolean.FALSE : Boolean.TRUE;
     }
 }

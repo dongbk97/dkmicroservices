@@ -17,4 +17,8 @@ service AttendanceService {
 
   rpc submitLeaveRequest (PLeaveRequest) returns (common.protobuf.EmptyResponse);
   rpc changeStatusLeaveRequest (PChangeStatusLeaveRequest) returns (common.protobuf.EmptyResponse);
+
+  rpc submitHolidays (PListHolidays) returns (common.protobuf.EmptyResponse);
+  rpc getHolidaysByConditions(PSearchHolidaysRequest) returns (PSearchHolidaysResponse);
+
 }

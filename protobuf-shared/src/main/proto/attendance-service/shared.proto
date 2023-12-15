@@ -14,6 +14,7 @@ message PAttendanceRecord {
   double work_hours = 6;
   string work_time = 7;
   string status = 8;
+  string date_type = 9;
 }
 
 message PLeaveRequest {
@@ -59,4 +60,33 @@ message PChangeStatusLeaveRequest {
   int64 id = 1;
   int64 employee_id = 2;
   string status = 3;
+}
+
+message PHolidayRecord {
+  int64 id = 1;
+  string name = 2;
+  string type = 3;
+  string date = 4;
+  int64 date_year = 5;
+  int64 date_month = 6;
+  int64 date_day = 7;
+  string week_day = 8;
+}
+
+message PListHolidays {
+  repeated PHolidayRecord data = 1;
+}
+
+message PSearchHolidaysRequest {
+  string dateFrom = 1;
+  string dateTo = 2;
+  string name = 3;
+  string type = 4;
+  int32 year = 5;
+  int32 month = 6;
+}
+
+message PSearchHolidaysResponse {
+  int32 code = 1;
+  repeated PHolidayRecord data = 2;
 }

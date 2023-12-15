@@ -1,12 +1,7 @@
 package dev.ngdangkiet.client;
 
 import com.google.protobuf.Int64Value;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PChangeStatusLeaveRequest;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthResponse;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PLeaveRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.*;
 import dev.ngdangkiet.dkmicroservices.attendance.service.AttendanceServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +38,13 @@ public class AttendanceGrpcClient {
 
     public EmptyResponse changeStatusLeaveRequest(PChangeStatusLeaveRequest request) {
         return attendanceServiceBlockingStub.changeStatusLeaveRequest(request);
+    }
+
+    public EmptyResponse submitHolidays(PListHolidays requestList) {
+        return attendanceServiceBlockingStub.submitHolidays(requestList);
+    }
+
+    public PSearchHolidaysResponse getHolidaysByConditions(PSearchHolidaysRequest requestList) {
+        return attendanceServiceBlockingStub.getHolidaysByConditions(requestList);
     }
 }
