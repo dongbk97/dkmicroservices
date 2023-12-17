@@ -1,5 +1,7 @@
 package dev.ngdangkiet.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Int64Value;
 import dev.ngdangkiet.client.EmployeeGrpcClient;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
@@ -11,6 +13,7 @@ import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsRes
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PNotification;
 import dev.ngdangkiet.domain.NotificationEntity;
 import dev.ngdangkiet.domain.notification.alert.JsonMessage;
+import dev.ngdangkiet.domain.notification.alert.PayrollJsonMessage;
 import dev.ngdangkiet.enums.department.Department;
 import dev.ngdangkiet.enums.notification.NotificationType;
 import dev.ngdangkiet.error.ErrorCode;
@@ -128,5 +131,24 @@ public class NotificationServiceImpl implements NotificationService {
         }
 
         return builder.build();
+    }
+
+    @Override
+    public void receivePayrollNotification(PayrollJsonMessage payrollJsonMessage) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<NotificationEntity> notifications = payrollJsonMessage.getPayrollOfEachEmployees().stream()
+                .map(payrollOfEachEmployee -> {
+                    try {
+                        return NotificationEntity.builder()
+                                .setNotificationType(payrollJsonMessage.getNotificationType())
+                                .setReceiverId(payrollOfEachEmployee.getEmployeeId())
+                                .setMessage(objectMapper.writeValueAsString(payrollOfEachEmployee))
+                                .build();
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toList();
+        notificationRepository.saveAll(notifications);
     }
 }

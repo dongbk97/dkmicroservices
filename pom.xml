@@ -29,6 +29,7 @@
         <module>location-service</module>
         <module>recruitment-service</module>
         <module>attendance-service</module>
+        <module>payroll-service</module>
     </modules>
 
     <properties>

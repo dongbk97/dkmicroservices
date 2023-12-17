@@ -21,6 +21,6 @@ public class ApiError {
     private int statusCode;
     private String message;
     @Builder.Default
-    private String dateTime = DateTimeUtil.formatLocalDateTimeNow();
+    private String localDateTime = DateTimeUtil.formatLocalDateTimeNow(null);
     private Map<String, Object> errors;
 }

@@ -2,6 +2,7 @@ package dev.ngdangkiet.rabbitmq;
 
 import dev.ngdangkiet.constant.RabbitMQConstant;
 import dev.ngdangkiet.domain.notification.alert.JsonMessage;
+import dev.ngdangkiet.domain.notification.alert.PayrollJsonMessage;
 import dev.ngdangkiet.domain.notification.email.JsonMessageEmail;
 import dev.ngdangkiet.service.EmailService;
 import dev.ngdangkiet.service.NotificationService;
@@ -56,5 +57,10 @@ public class RabbitMQConsumer {
         if (Objects.nonNull(message.getReceiverEmail())) {
             emailService.receiveEmailNotification(message);
         }
+    }
+
+    @RabbitListener(queues = {RabbitMQConstant.Notification.PAYROLL_NOTIFICATION_QUEUE})
+    public void receivePayrollNotification(PayrollJsonMessage payrollJsonMessage) {
+        notificationService.receivePayrollNotification(payrollJsonMessage);
     }
 }

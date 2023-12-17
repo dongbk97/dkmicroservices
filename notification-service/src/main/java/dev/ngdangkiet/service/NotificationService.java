@@ -5,6 +5,7 @@ import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsRequest;
 import dev.ngdangkiet.dkmicroservices.notification.protobuf.PGetNotificationsResponse;
 import dev.ngdangkiet.domain.notification.alert.JsonMessage;
+import dev.ngdangkiet.domain.notification.alert.PayrollJsonMessage;
 
 /**
  * @author ngdangkiet
@@ -25,4 +26,5 @@ public interface NotificationService {
 
     EmptyResponse seenOrUnseenNotification(Int64Value request);
 
+    void receivePayrollNotification(PayrollJsonMessage payrollJsonMessage);
 }

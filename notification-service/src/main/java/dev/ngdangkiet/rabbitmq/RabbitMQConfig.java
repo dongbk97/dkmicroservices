@@ -99,6 +99,18 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue payrollNotificationQueue() {
+        return new Queue(RabbitMQConstant.Notification.PAYROLL_NOTIFICATION_QUEUE);
+    }
+
+    @Bean
+    public Binding payrollNotificationBinding() {
+        return BindingBuilder.bind(payrollNotificationQueue())
+                .to(notificationExchange())
+                .with(RabbitMQConstant.Notification.PAYROLL_NOTIFICATION_ROUTING_KEY);
+    }
+
+    @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }

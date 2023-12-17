@@ -35,7 +35,7 @@ public class ApiMessage {
     public ApiMessage(int code, String message) {
         this.code = code;
         this.message = message;
-        this.localDateTime = DateTimeUtil.formatLocalDateTimeNow();
+        this.localDateTime = DateTimeUtil.formatLocalDateTimeNow(null);
     }
 
     public static ApiMessage success(Object data) {

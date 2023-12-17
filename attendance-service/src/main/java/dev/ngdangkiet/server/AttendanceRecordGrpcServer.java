@@ -1,7 +1,15 @@
 package dev.ngdangkiet.server;
 
 import com.google.protobuf.Int64Value;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.*;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PChangeStatusLeaveRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsResponse;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthResponse;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PLeaveRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PListHolidays;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PSearchHolidaysRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PSearchHolidaysResponse;
 import dev.ngdangkiet.dkmicroservices.attendance.service.AttendanceServiceGrpc;
 import dev.ngdangkiet.dkmicroservices.common.protobuf.EmptyResponse;
 import dev.ngdangkiet.service.AttendanceRecordService;
