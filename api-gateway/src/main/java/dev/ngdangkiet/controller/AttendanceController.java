@@ -2,13 +2,21 @@ package dev.ngdangkiet.controller;
 
 import dev.ngdangkiet.client.AttendanceGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
-import dev.ngdangkiet.dkmicroservices.attendance.protobuf.*;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PChangeStatusLeaveRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetAttendanceRecordsRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PGetTotalWorkingDayInMonthRequest;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PHolidayRecord;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PListHolidays;
+import dev.ngdangkiet.dkmicroservices.attendance.protobuf.PSearchHolidaysRequest;
 import dev.ngdangkiet.enums.tracking.Action;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.attendance.LeaveRequestMapper;
 import dev.ngdangkiet.mapper.response.attendance.AttendanceRecordMapper;
 import dev.ngdangkiet.mapper.response.attendance.HolidayRecordMapper;
-import dev.ngdangkiet.payload.request.attendance.*;
+import dev.ngdangkiet.payload.request.attendance.GetAttendanceRecordsRequest;
+import dev.ngdangkiet.payload.request.attendance.GetTotalWorkingDayRequest;
+import dev.ngdangkiet.payload.request.attendance.SubmitHolidaysRequest;
+import dev.ngdangkiet.payload.request.attendance.SubmitLeaveRequest;
 import dev.ngdangkiet.payload.response.attendance.TotalWorkingDayOfUserResponse;
 import dev.ngdangkiet.redis.utils.CacheTrackingUtil;
 import dev.ngdangkiet.security.SecurityHelper;
@@ -16,7 +24,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -171,12 +187,12 @@ public class AttendanceController {
     }
 
     @GetMapping("/search-holidays")
-    public ApiMessage getHolidaysByConditions( @RequestParam(required = false) String dateFrom,
-                                                 @RequestParam(required = false) String dateTo,
-                                                 @RequestParam(required = false) String name,
-                                                 @RequestParam(required = false) String type,
-                                                 @RequestParam(required = false) Integer year,
-                                                 @RequestParam(required = false) Integer month) {
+    public ApiMessage getHolidaysByConditions(@RequestParam(required = false) String dateFrom,
+                                              @RequestParam(required = false) String dateTo,
+                                              @RequestParam(required = false) String name,
+                                              @RequestParam(required = false) String type,
+                                              @RequestParam(required = false) Integer year,
+                                              @RequestParam(required = false) Integer month) {
         var userLogged = SecurityHelper.getUserLogin();
         assert userLogged != null;
 

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * @author ngdangkiet
@@ -18,9 +19,13 @@ public class DateTimeUtil {
     private static final String FULL_DATE_PATTERN = "yyyy-MM-dd";
     private static final String LOCALTIME_PATTERN = "HH:mm:ss";
 
-    public static String formatLocalDateTimeNow() {
+    public static String formatLocalDateTimeNow(LocalDateTime localDateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FULL_DATETIME_PATTERN);
-        return LocalDateTime.now().format(formatter);
+        return Objects.isNull(localDateTime) ? LocalDateTime.now().format(formatter) : localDateTime.format(formatter);
+    }
+
+    public static LocalDateTime convert2LocalDateTime(String localDateTime) {
+        return StringUtils.hasText(localDateTime) ? LocalDateTime.parse(localDateTime, DateTimeFormatter.ofPattern(FULL_DATETIME_PATTERN)) : null;
     }
 
     public static LocalDate convert2Localdate(String date) {

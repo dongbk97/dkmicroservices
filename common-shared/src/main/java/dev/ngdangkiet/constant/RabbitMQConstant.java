@@ -32,5 +32,8 @@ public class RabbitMQConstant {
 
         public static final String NEW_UPDATE_LEAVE_REQUEST_NOTIFICATION_QUEUE = "new_update_leave_request_notification_queue";
         public static final String NEW_UPDATE_LEAVE_REQUEST_NOTIFICATION_ROUTING_KEY = "new_update_leave_request_notification_routing_key";
+
+        public static final String PAYROLL_NOTIFICATION_QUEUE = "payroll_notification_queue";
+        public static final String PAYROLL_NOTIFICATION_ROUTING_KEY = "payroll_notification_routing_key";
     }
 }

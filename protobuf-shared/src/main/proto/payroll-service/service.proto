@@ -1,0 +1,21 @@
+syntax = "proto3";
+package payroll.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.payroll.service";
+option java_outer_classname = "PayrollServiceAPI";
+
+import "payroll-service/shared.proto";
+import "google/protobuf/wrappers.proto";
+
+service PayrollService {
+
+  rpc upsertSalary (PSalary) returns (google.protobuf.Int64Value);
+
+  rpc upsertDeduction (PDeduction) returns (google.protobuf.Int64Value);
+
+  rpc upsertTax (PTax) returns (google.protobuf.Int64Value);
+
+  rpc getPayrolls (PGetPayrollsRequest) returns (PGetPayrollsResponse);
+}
+

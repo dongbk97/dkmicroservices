@@ -1,5 +1,6 @@
 package dev.ngdangkiet.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +36,7 @@ public class NotificationEntity {
 
     private Long receiverId;
 
+    @Column(columnDefinition = "text")
     private String message;
 
     private String notificationType;

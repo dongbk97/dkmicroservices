@@ -1,0 +1,73 @@
+syntax = "proto3";
+package payroll.service;
+
+option java_multiple_files = true;
+option java_package = "dev.ngdangkiet.dkmicroservices.payroll.protobuf";
+option java_outer_classname = "PayrollProtobuf";
+
+message PSalary {
+  int64 id = 1;
+  int64 employee_id = 2;
+  string base_salary = 3;
+  string pay_period = 4;
+  string effective_date = 5;
+}
+
+message PDeduction {
+  int64 id = 1;
+  int64 employee_id = 2;
+  string deduction_type = 3;
+  double rate = 4;
+  string effective_date = 5;
+}
+
+message PTax {
+  int64 id = 1;
+  int64 employee_id = 2;
+  string tax_type = 3;
+  double rate = 4;
+  string effective_date = 5;
+}
+
+message PPayroll {
+  message Deduction {
+    string type = 1;
+    double rate = 2;
+    string deduction = 3;
+  }
+
+  message Tax {
+    string type = 1;
+    double rate = 2;
+    string tax = 3;
+  }
+
+  message DeductionObj {
+    repeated Deduction deductions = 1;
+    string total_deductions = 2;
+  }
+
+  message TaxObj {
+    repeated Tax taxes = 1;
+    string total_taxes = 2;
+  }
+
+  int64 id = 1;
+  int64 employee_id = 2;
+  string gross_pay = 3;
+  string net_pay = 4;
+  DeductionObj deduction_obj = 5;
+  TaxObj tax_obj = 6;
+  string pay_date = 7;
+}
+
+message PGetPayrollsRequest {
+  int64 employee_id = 1;
+  int32 month = 2;
+  int32 year = 3;
+}
+
+message PGetPayrollsResponse {
+  int32 code = 1;
+  repeated PPayroll data = 2;
+}
