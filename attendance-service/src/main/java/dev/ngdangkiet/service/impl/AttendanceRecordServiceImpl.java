@@ -43,6 +43,7 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -226,8 +227,24 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
             leaveRequest.setStatus(status);
             leaveRequestRepository.save(leaveRequest);
 
-            // TODO: Send notification to employee
+            // TODO: Send notification to employee and update attendance record
             if (!isCancelLeaveRequest) {
+                if (LeaveRequestStatus.APPROVED.equals(status)) {
+                    List<LocalDate> datesLeave = leaveRequest.getStartDate().datesUntil(leaveRequest.getEndDate()).toList();
+                    List<AttendanceRecordEntity> upsertAttendanceRecord = new ArrayList<>();
+
+                    datesLeave.forEach(dl -> {
+                        AttendanceRecordEntity attendanceRecord = attendanceRecordRepository.findByEmployeeIdAndAttendanceDate(request.getEmployeeId(), dl).orElseGet(() ->
+                                AttendanceRecordEntity.builder()
+                                        .setEmployeeId(request.getEmployeeId())
+                                        .setAttendanceDate(dl)
+                                        .build());
+                        attendanceRecord.setStatus(AttendanceStatus.ON_LEAVE);
+                        upsertAttendanceRecord.add(attendanceRecord);
+                    });
+
+                    attendanceRecordRepository.saveAll(upsertAttendanceRecord);
+                }
                 rabbitMQProducer.sendNewUpdateLeaveRequestNotification(leaveRequest);
             }
 
@@ -245,7 +262,7 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
         try {
             List<HolidayEntity> holidayEntities = holidayMapper.toDomains(requestList.getDataList());
             if (!CollectionUtils.isEmpty(holidayEntities)) {
-                // validate duplicate holidate
+                // validate duplicate holiday
                 if (validateHolidaysExisted(holidayEntities)) {
                     return builder.setCode(ErrorCode.ALREADY_EXISTS).build();
                 }
@@ -289,18 +306,22 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
     }
 
     private double totalWorkingDayOfUser(Long employeeId, int year, int month) {
-        double totalWorkingDay = 0;
         List<AttendanceRecordEntity> attendanceRecords = attendanceRecordRepository.findByEmployeeIdAndYearAndMonth(employeeId, year, month);
-        for (AttendanceRecordEntity ar : attendanceRecords) {
-            if (Objects.nonNull(ar.getWorkHours()) && !ar.getAttendanceDate().getDayOfWeek().equals(DayOfWeek.SATURDAY) && !ar.getAttendanceDate().getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                if (ar.getWorkHours() < 6.5 && ar.getWorkHours() > 3.5) {
-                    totalWorkingDay += 0.5;
-                } else if (ar.getWorkHours() > 6.5) {
-                    totalWorkingDay += 1;
-                }
-            }
-        }
-        return totalWorkingDay;
+        return attendanceRecords.stream()
+                .filter(ar -> !Set.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(ar.getAttendanceDate().getDayOfWeek()))
+                .mapToDouble(ar -> {
+                    if (AttendanceStatus.ON_LEAVE.equals(ar.getStatus())) {
+                        return 1;
+                    } else if (Objects.nonNull(ar.getWorkHours())) {
+                        if (ar.getWorkHours() < 6.5 && ar.getWorkHours() > 3.5) {
+                            return 0.5;
+                        } else if (ar.getWorkHours() > 6.5) {
+                            return 1;
+                        }
+                    }
+                    return 0;
+                })
+                .sum();
     }
 
     private void processHolidayEntity(HolidayEntity holiday) {
