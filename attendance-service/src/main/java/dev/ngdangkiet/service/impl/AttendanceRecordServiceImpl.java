@@ -310,7 +310,7 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
         return attendanceRecords.stream()
                 .filter(ar -> !Set.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY).contains(ar.getAttendanceDate().getDayOfWeek()))
                 .mapToDouble(ar -> {
-                    if (AttendanceStatus.ON_LEAVE.equals(ar.getStatus())) {
+                    if (AttendanceStatus.ON_LEAVE.equals(ar.getStatus()) || AttendanceStatus.HOLIDAY.equals(ar.getStatus())) {
                         return 1;
                     } else if (Objects.nonNull(ar.getWorkHours())) {
                         if (ar.getWorkHours() < 6.5 && ar.getWorkHours() > 3.5) {

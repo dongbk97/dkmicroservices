@@ -15,7 +15,8 @@ public enum AttendanceStatus {
     EARLY_DEPARTURE,
     ON_LEAVE,
     HALF_DAY,
-    OVERTIME;
+    OVERTIME,
+    HOLIDAY;
 
     public static AttendanceStatus of(String value) {
         return Arrays.stream(AttendanceStatus.values())
