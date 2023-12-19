@@ -260,6 +260,15 @@ mvn clean install
 
   ![swagger](./docs/swagger.png)
 
+## Run Project with Docker
+- Need only download *docker-compose.prod.yml*
+- Run command
+```
+docker-compose up -d
+```
+- Containers
+
+  ![docker-container-prod](./docs/docker-container-prod.png)
 ## CI/CD
 
 - Pipeline
