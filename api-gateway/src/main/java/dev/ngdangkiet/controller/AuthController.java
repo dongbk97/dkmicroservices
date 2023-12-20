@@ -13,12 +13,7 @@ import dev.ngdangkiet.ratelimit.RefreshTokenCounter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author ngdangkiet
@@ -68,6 +63,18 @@ public class AuthController {
             } else {
                 return ApiMessage.TOO_MANY_REQUESTS;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ApiMessage.UNKNOWN_EXCEPTION;
+        }
+    }
+
+    @Operation(summary = "Send mail for receive OTP")
+    @GetMapping("/send-mail-otp")
+    public ApiMessage sendMailOtp(@RequestParam(name = "mailTo") String mailTo) {
+        try {
+            var response = authGrpcClient.sendMailOtp(StringValue.of(mailTo));
+            return ErrorHelper.isSuccess(response.getCode()) ? ApiMessage.SUCCESS : ApiMessage.failed(response.getCode());
         } catch (Exception e) {
             e.printStackTrace();
             return ApiMessage.UNKNOWN_EXCEPTION;

@@ -8,6 +8,8 @@ option java_outer_classname = "AuthProtobuf";
 message PLoginRequest {
   string email = 1;
   string password = 2;
+  bool required_otp = 3;
+  string otp = 4;
 }
 
 message PLoginResponse {
