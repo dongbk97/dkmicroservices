@@ -15,6 +15,7 @@
     <properties>
         <grpc-server.version>2.15.0.RELEASE</grpc-server.version>
         <jsonwebtoken.version>0.11.5</jsonwebtoken.version>
+        <totp.version>1.7.1</totp.version>
     </properties>
 
     <dependencies>
@@ -101,6 +102,13 @@
             <version>${jsonwebtoken.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/dev.samstevens.totp/totp -->
+        <dependency>
+            <groupId>dev.samstevens.totp</groupId>
+            <artifactId>totp</artifactId>
+            <version>${totp.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>dev.ngdangkiet</groupId>
             <artifactId>protobuf-shared</artifactId>

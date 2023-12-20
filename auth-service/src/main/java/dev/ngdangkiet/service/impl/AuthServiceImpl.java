@@ -11,6 +11,7 @@ import dev.ngdangkiet.mapper.UserInfoMapper;
 import dev.ngdangkiet.redis.RedisConfig;
 import dev.ngdangkiet.service.AuthService;
 import dev.ngdangkiet.service.RefreshTokenService;
+import dev.ngdangkiet.utils.TwoFactorAuthUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final EmployeeService employeeService;
     private final RefreshTokenService refreshTokenService;
+    private final TwoFactorAuthUtil twoFactorAuthUtil;
     private final PBKDF2Encoder pbkdf2Encoder;
     private final JwtUtil jwtUtil;
     private final RedisConfig redisConfig;
@@ -42,8 +44,9 @@ public class AuthServiceImpl implements AuthService {
         try {
             Mono<EmployeeEntity> employee = employeeService.loadUserByUsername(request.getEmail());
             return employee.filter(userDetails ->
-                            pbkdf2Encoder.encode(request.getPassword()).equals(userDetails.getPassword())
-                                    || (request.getRequiredOtp() && validOtp(userDetails.getId(), request.getOtp())))
+                            pbkdf2Encoder.encode(request.getPassword()).equals(userDetails.getPassword()) // by email and password
+                                    || (request.getRequiredOtp() && validOtp(userDetails.getId(), request.getOtp())) // by email and otp from email
+                                    || (request.getTwoFactorAuthentication() && Boolean.TRUE.equals(userDetails.getEnable2FA()) && twoFactorAuthUtil.isOtp2FAValid(userDetails.getSecret(), request.getCode())) /* by email and code from 2FA*/)
                     .map(userDetails -> builder.setCode(ErrorCode.SUCCESS)
                             .setToken(jwtUtil.generateToken(userDetails))
                             .setTokenUUID(refreshTokenService.createAndGetRefreshToken(userDetails.getId()))

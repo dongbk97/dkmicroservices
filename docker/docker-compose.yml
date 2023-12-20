@@ -9,6 +9,7 @@ services:
     ports:
       - "5433:5432"
     environment:
+      - PGDATA=/tmp
       - POSTGRES_USER=ngdangkiet
       - POSTGRES_PASSWORD=root
     volumes:
