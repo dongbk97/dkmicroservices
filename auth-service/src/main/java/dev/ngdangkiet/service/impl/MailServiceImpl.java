@@ -48,17 +48,10 @@ public class MailServiceImpl implements MailService {
                 return builder.setCode(ErrorCode.NOT_FOUND).build();
             }
 
-            String text = String.format("<p>Hi <i>%s<i>. Your OTP for login: <strong>%s</strong>.</p>" +
+            String text = String.format("<p>Hi <i>%s</i>. Your OTP for login: <strong>%s</strong>.</p>" +
                     "<p>The OTP will expire after <strong>3 minutes</strong>.</p>", employee.getFullName(), generateOtp(employee.getId()));
 
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
-            mimeMessageHelper.setText(text, true);
-            mimeMessageHelper.setTo(mailTo.getValue());
-            mimeMessageHelper.setSubject("Confirm your email");
-            mimeMessageHelper.setFrom(mailFrom);
-            mimeMessageHelper.setSentDate(new Date());
-            javaMailSender.send(mimeMessage);
+            sendMail(text, mailTo.getValue());
             log.info("Sending mail with OTP for employee email [{}]...", mailTo.getValue());
             builder.setCode(ErrorCode.SUCCESS);
         } catch (MessagingException | MailException e) {
@@ -71,5 +64,16 @@ public class MailServiceImpl implements MailService {
         String otp = RandomStringUtils.random(6, true, true);
         cacheOTPUtil.cacheUserOTP(employeeId, otp);
         return otp;
+    }
+
+    private void sendMail(String text, String mailTo) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
+        mimeMessageHelper.setText(text, true);
+        mimeMessageHelper.setTo(mailTo);
+        mimeMessageHelper.setSubject("Confirm your email");
+        mimeMessageHelper.setFrom(mailFrom);
+        mimeMessageHelper.setSentDate(new Date());
+        javaMailSender.send(mimeMessage);
     }
 }

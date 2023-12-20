@@ -10,6 +10,8 @@ message PLoginRequest {
   string password = 2;
   bool required_otp = 3;
   string otp = 4;
+  bool two_factor_authentication = 5;
+  string code = 6;
 }
 
 message PLoginResponse {
@@ -27,4 +29,9 @@ message PLoginResponse {
 message PRefreshTokenResponse {
   int32 code = 1;
   string token = 2;
+}
+
+message PGenerateQRCodeResponse {
+  int32 code = 1;
+  string qr_code_image_url = 2;
 }

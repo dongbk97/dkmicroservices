@@ -1,6 +1,8 @@
 package dev.ngdangkiet.client;
 
+import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
+import dev.ngdangkiet.dkmicroservices.auth.protobuf.PGenerateQRCodeResponse;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginRequest;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginResponse;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PRefreshTokenResponse;
@@ -32,5 +34,9 @@ public class AuthGrpcClient {
 
     public EmptyResponse sendMailOtp(StringValue mailTo) {
         return authServiceBlockingStub.sendMailOtp(mailTo);
+    }
+
+    public PGenerateQRCodeResponse enable2FA(Int64Value employeeId) {
+        return authServiceBlockingStub.enable2FA(employeeId);
     }
 }

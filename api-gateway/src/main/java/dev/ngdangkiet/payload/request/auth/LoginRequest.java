@@ -18,4 +18,6 @@ public class LoginRequest implements Serializable {
     private String password;
     private Boolean requiredOtp;
     private String otp;
+    private Boolean twoFactorAuthentication;
+    private String code;
 }
