@@ -11,4 +11,9 @@ public class RedisCacheKeyConstant {
 
         public static final String USER_TRACKING_KEY = "user_tracking_key_%s_%s";
     }
+
+    public static class Auth {
+
+        public static final String USER_OTP_KEY = "user_%s_otp";
+    }
 }
