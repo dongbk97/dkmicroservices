@@ -143,12 +143,12 @@ public class ScheduleTasks {
                 payrollOfEachEmployees.add(payrollOfEachEmployee.build());
                 try {
                     payrolls.add(PayrollEntity.builder()
-                            .setEmployeeId(eId)
-                            .setGrossPay(grossPay)
-                            .setNetPay(netPay)
-                            .setDeductionsJson(objectMapper.writeValueAsString(deductionObj))
-                            .setTaxesJson(objectMapper.writeValueAsString(taxObj))
-                            .setPayDate(payDate)
+                            .employeeId(eId)
+                            .grossPay(grossPay)
+                            .netPay(netPay)
+                            .deductionsJson(objectMapper.writeValueAsString(deductionObj))
+                            .taxesJson(objectMapper.writeValueAsString(taxObj))
+                            .payDate(payDate)
                             .build());
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException(e);

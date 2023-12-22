@@ -1,6 +1,6 @@
 package dev.ngdangkiet.service.impl;
 
-import com.google.protobuf.Int64Value;
+import dev.ngdangkiet.dkmicroservices.auth.protobuf.PEnableOrDisable2FARequest;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PGenerateQRCodeResponse;
 import dev.ngdangkiet.domain.EmployeeEntity;
 import dev.ngdangkiet.error.ErrorCode;
@@ -27,18 +27,26 @@ public class TwoFactorAuthServiceImpl implements TwoFactorAuthService {
     private final TwoFactorAuthUtil twoFactorAuthUtil;
 
     @Override
-    public PGenerateQRCodeResponse enable2FA(Int64Value employeeId) {
+    public PGenerateQRCodeResponse enableOrDisable2FA(PEnableOrDisable2FARequest request) {
         PGenerateQRCodeResponse.Builder builder = PGenerateQRCodeResponse.newBuilder().setCode(ErrorCode.FAILED);
 
         try {
-            EmployeeEntity employee = employeeRepository.findById(employeeId.getValue()).orElse(null);
+            EmployeeEntity employee = employeeRepository.findById(request.getUserId()).orElse(null);
             if (Objects.isNull(employee)) {
-                log.error("Employee ID [{}] not found!", employeeId.getValue());
+                log.error("Employee ID [{}] not found!", request.getUserId());
                 return builder.setCode(ErrorCode.NOT_FOUND).build();
             }
 
-            employee.setEnable2FA(true);
-            employee.setSecret(twoFactorAuthUtil.generateNewSecret());
+            if (request.getEnable()) {
+                if (!Boolean.TRUE.equals(employee.getEnable2FA())) {
+                    employee.setEnable2FA(true);
+                    employee.setSecret(twoFactorAuthUtil.generateNewSecret());
+                }
+            } else {
+                employee.setEnable2FA(false);
+                employee.setSecret(null);
+            }
+
             employeeRepository.save(employee);
 
             return builder.setCode(ErrorCode.SUCCESS)

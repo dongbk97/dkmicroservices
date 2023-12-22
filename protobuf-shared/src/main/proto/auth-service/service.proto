@@ -11,8 +11,8 @@ import "google/protobuf/empty.proto";
 import "common/shared.proto";
 
 service AuthService {
-  rpc authentication (auth.service.PLoginRequest) returns (auth.service.PLoginResponse);
-  rpc refreshToken (google.protobuf.StringValue) returns (auth.service.PRefreshTokenResponse);
+  rpc authentication (PLoginRequest) returns (PLoginResponse);
+  rpc refreshToken (google.protobuf.StringValue) returns (PRefreshTokenResponse);
   rpc sendMailOtp (google.protobuf.StringValue) returns (common.protobuf.EmptyResponse);
-  rpc enable2FA (google.protobuf.Int64Value) returns (auth.service.PGenerateQRCodeResponse);
+  rpc enableOrDisable2FA (PEnableOrDisable2FARequest) returns (PGenerateQRCodeResponse);
 }

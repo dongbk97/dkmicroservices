@@ -58,11 +58,11 @@ public class NotificationServiceImpl implements NotificationService {
                 .setPositionId(-1L)
                 .build()).getDataList();
 
-        List<NotificationEntity> notifications = employeesInHRDepartment.stream()
+        var notifications = employeesInHRDepartment.stream()
                 .map(e -> NotificationEntity.builder()
-                        .setReceiverId(e.getId())
-                        .setNotificationType(NotificationType.ALERT.name())
-                        .setMessage(message.getMessage())
+                        .receiverId(e.getId())
+                        .notificationType(NotificationType.ALERT.name())
+                        .message(message.getMessage())
                         .build())
                 .toList();
 
@@ -76,18 +76,18 @@ public class NotificationServiceImpl implements NotificationService {
             throw new RuntimeException(String.format("Employee ID [{%d}] not found!", message.getReceiverId()));
         }
         notificationRepository.save(NotificationEntity.builder()
-                .setReceiverId(message.getReceiverId())
-                .setNotificationType(NotificationType.ALERT.name())
-                .setMessage(message.getMessage())
+                .receiverId(message.getReceiverId())
+                .notificationType(NotificationType.ALERT.name())
+                .message(message.getMessage())
                 .build());
     }
 
     @Override
     public void receiveNewUpdateLeaveRequestNotification(JsonMessage message) {
         notificationRepository.save(NotificationEntity.builder()
-                .setReceiverId(message.getReceiverId())
-                .setNotificationType(NotificationType.ALERT.name())
-                .setMessage(message.getMessage())
+                .receiverId(message.getReceiverId())
+                .notificationType(NotificationType.ALERT.name())
+                .message(message.getMessage())
                 .build());
     }
 
@@ -136,13 +136,13 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void receivePayrollNotification(PayrollJsonMessage payrollJsonMessage) {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<NotificationEntity> notifications = payrollJsonMessage.getPayrollOfEachEmployees().stream()
+        var notifications = payrollJsonMessage.getPayrollOfEachEmployees().stream()
                 .map(payrollOfEachEmployee -> {
                     try {
                         return NotificationEntity.builder()
-                                .setNotificationType(payrollJsonMessage.getNotificationType())
-                                .setReceiverId(payrollOfEachEmployee.getEmployeeId())
-                                .setMessage(objectMapper.writeValueAsString(payrollOfEachEmployee))
+                                .notificationType(payrollJsonMessage.getNotificationType())
+                                .receiverId(payrollOfEachEmployee.getEmployeeId())
+                                .message(objectMapper.writeValueAsString(payrollOfEachEmployee))
                                 .build();
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException(e);

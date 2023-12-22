@@ -1,12 +1,19 @@
 package dev.ngdangkiet.domain;
 
 import dev.ngdangkiet.enums.recruitment.InterviewStatus;
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,14 +28,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(setterPrefix = "set", builderClassName = "newBuilder")
+@SuperBuilder
 @Entity
 @Table(name = "tbl_interview")
-public class InterviewEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class InterviewEntity extends BaseEntity {
 
     @ManyToOne(targetEntity = ApplicantEntity.class)
     @JoinColumn(name = "applicant_id", referencedColumnName = "id")

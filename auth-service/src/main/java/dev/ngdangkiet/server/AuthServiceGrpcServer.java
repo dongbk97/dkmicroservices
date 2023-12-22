@@ -1,7 +1,7 @@
 package dev.ngdangkiet.server;
 
-import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
+import dev.ngdangkiet.dkmicroservices.auth.protobuf.PEnableOrDisable2FARequest;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PGenerateQRCodeResponse;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginRequest;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PLoginResponse;
@@ -52,8 +52,8 @@ public class AuthServiceGrpcServer extends AuthServiceGrpc.AuthServiceImplBase {
     }
 
     @Override
-    public void enable2FA(Int64Value employeeId, StreamObserver<PGenerateQRCodeResponse> responseObserver) {
-        PGenerateQRCodeResponse response = twoFactorAuthService.enable2FA(employeeId);
+    public void enableOrDisable2FA(PEnableOrDisable2FARequest request, StreamObserver<PGenerateQRCodeResponse> responseObserver) {
+        PGenerateQRCodeResponse response = twoFactorAuthService.enableOrDisable2FA(request);
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }

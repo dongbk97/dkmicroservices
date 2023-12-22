@@ -1,5 +1,6 @@
 package dev.ngdangkiet.scheduler;
 
+import dev.ngdangkiet.client.EmployeeGrpcClient;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PEmployee;
 import dev.ngdangkiet.dkmicroservices.employee.protobuf.PGetEmployeesRequest;
 import dev.ngdangkiet.domain.AttendanceRecordEntity;
@@ -12,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import dev.ngdangkiet.client.EmployeeGrpcClient;
 import org.springframework.util.CollectionUtils;
-
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,12 +49,12 @@ public class HolidayScheduler {
                         .toList();
 
                 // TODO: set builder
-                List<AttendanceRecordEntity> recordList = holidays.stream()
+                var recordList = holidays.stream()
                         .flatMap(holiday -> employeeIds.stream()
                                 .map(employeeId -> AttendanceRecordEntity.builder()
-                                        .setEmployeeId(employeeId)
-                                        .setAttendanceDate(holiday.getDate())
-                                        .setStatus(AttendanceStatus.HOLIDAY)
+                                        .employeeId(employeeId)
+                                        .attendanceDate(holiday.getDate())
+                                        .status(AttendanceStatus.HOLIDAY)
                                         .build()))
                         .toList();
 
