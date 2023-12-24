@@ -5,3 +5,10 @@ spring:
     import: "optional:configserver:http://localhost:8088"
     activate:
       on-profile: dev
+  http:
+    multipart:
+      enabled: true
+
+security:
+  dropbox:
+    access-token: ${DROPBOX_ACCESS_TOKEN}
