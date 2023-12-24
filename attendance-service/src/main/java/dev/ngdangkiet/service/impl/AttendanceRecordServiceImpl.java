@@ -81,10 +81,10 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
 
             if (Objects.isNull(attendanceRecord)) {
                 attendanceRecord = AttendanceRecordEntity.builder()
-                        .setEmployeeId(employeeId.getValue())
-                        .setAttendanceDate(LocalDate.now())
-                        .setCheckInTime(LocalTime.now())
-                        .setStatus(AttendanceStatus.PRESENT)
+                        .employeeId(employeeId.getValue())
+                        .attendanceDate(LocalDate.now())
+                        .checkInTime(LocalTime.now())
+                        .status(AttendanceStatus.PRESENT)
                         .build();
 
                 // TODO: Check attendance status
@@ -236,8 +236,8 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
                     datesLeave.forEach(dl -> {
                         AttendanceRecordEntity attendanceRecord = attendanceRecordRepository.findByEmployeeIdAndAttendanceDate(request.getEmployeeId(), dl).orElseGet(() ->
                                 AttendanceRecordEntity.builder()
-                                        .setEmployeeId(request.getEmployeeId())
-                                        .setAttendanceDate(dl)
+                                        .employeeId(request.getEmployeeId())
+                                        .attendanceDate(dl)
                                         .build());
                         attendanceRecord.setStatus(AttendanceStatus.ON_LEAVE);
                         upsertAttendanceRecord.add(attendanceRecord);

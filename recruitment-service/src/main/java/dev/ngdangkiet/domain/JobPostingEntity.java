@@ -4,16 +4,13 @@ import dev.ngdangkiet.enums.recruitment.JobPostingStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
@@ -27,14 +24,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Builder(setterPrefix = "set", builderClassName = "newBuilder")
+@SuperBuilder
 @Entity
 @Table(name = "tbl_job_posting")
-public class JobPostingEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class JobPostingEntity extends BaseEntity {
 
     private String jobTitle;
 

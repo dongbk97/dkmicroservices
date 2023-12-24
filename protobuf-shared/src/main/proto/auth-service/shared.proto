@@ -35,3 +35,8 @@ message PGenerateQRCodeResponse {
   int32 code = 1;
   string qr_code_image_url = 2;
 }
+
+message PEnableOrDisable2FARequest {
+  int64 user_id = 1;
+  bool enable = 2;
+}

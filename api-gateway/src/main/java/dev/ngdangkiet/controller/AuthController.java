@@ -1,9 +1,9 @@
 package dev.ngdangkiet.controller;
 
-import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 import dev.ngdangkiet.client.AuthGrpcClient;
 import dev.ngdangkiet.common.ApiMessage;
+import dev.ngdangkiet.dkmicroservices.auth.protobuf.PEnableOrDisable2FARequest;
 import dev.ngdangkiet.error.ErrorHelper;
 import dev.ngdangkiet.mapper.request.LoginRequestMapper;
 import dev.ngdangkiet.mapper.response.LoginResponseMapper;
@@ -11,6 +11,7 @@ import dev.ngdangkiet.payload.request.auth.LoginRequest;
 import dev.ngdangkiet.payload.response.auth.RefreshTokenResponse;
 import dev.ngdangkiet.ratelimit.RateLimitProperties;
 import dev.ngdangkiet.ratelimit.RefreshTokenCounter;
+import dev.ngdangkiet.security.SecurityHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -87,10 +88,15 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/enable-2FA")
-    public ApiMessage enable2FA(@RequestParam(name = "employeeId") Long employeeId) {
+    @GetMapping("/mode-2FA")
+    public ApiMessage enableOrDisable2FA(@RequestParam(name = "enable") Boolean enable) {
+        var userLogged = SecurityHelper.getUserLogin();
+        assert userLogged != null;
         try {
-            var response = authGrpcClient.enable2FA(Int64Value.of(employeeId));
+            var response = authGrpcClient.enableOrDisable2FA(PEnableOrDisable2FARequest.newBuilder()
+                    .setUserId(userLogged.getUserInfo().getId())
+                    .setEnable(Boolean.TRUE.equals(enable))
+                    .build());
             return ErrorHelper.isSuccess(response.getCode()) ? ApiMessage.success(response.getQrCodeImageUrl()) : ApiMessage.failed(response.getCode());
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,6 @@
 package dev.ngdangkiet.service;
 
-import com.google.protobuf.Int64Value;
+import dev.ngdangkiet.dkmicroservices.auth.protobuf.PEnableOrDisable2FARequest;
 import dev.ngdangkiet.dkmicroservices.auth.protobuf.PGenerateQRCodeResponse;
 
 /**
@@ -10,5 +10,5 @@ import dev.ngdangkiet.dkmicroservices.auth.protobuf.PGenerateQRCodeResponse;
 
 public interface TwoFactorAuthService {
 
-    PGenerateQRCodeResponse enable2FA(Int64Value employeeId);
+    PGenerateQRCodeResponse enableOrDisable2FA(PEnableOrDisable2FARequest employeeId);
 }

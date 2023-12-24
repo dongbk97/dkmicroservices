@@ -54,9 +54,9 @@ public class ScheduleTasks {
         List<NotificationEntity> notifications = new ArrayList<>();
         if (!CollectionUtils.isEmpty(receivers)) {
             receivers.forEach(receiver -> notifications.add(NotificationEntity.builder()
-                    .setReceiverId(receiver.getId())
-                    .setMessage(message)
-                    .setNotificationType(NotificationType.ALERT.name())
+                    .receiverId(receiver.getId())
+                    .message(message)
+                    .notificationType(NotificationType.ALERT.name())
                     .build()));
         }
         if (!CollectionUtils.isEmpty(notifications)) {
@@ -99,9 +99,9 @@ public class ScheduleTasks {
                 if (!e.getBirthDay().equals(EMPTY) && isDateNow(LocalDate.parse(e.getBirthDay(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))) {
                     log.info("Birthday [{}]", e.getFullName());
                     notifications.add(NotificationEntity.builder()
-                            .setReceiverId(e.getId())
-                            .setMessage(MessageConstant.Notification.BirthDay.HAPPY_BIRTHDAY)
-                            .setNotificationType(NotificationType.ALERT.name())
+                            .receiverId(e.getId())
+                            .message(MessageConstant.Notification.BirthDay.HAPPY_BIRTHDAY)
+                            .notificationType(NotificationType.ALERT.name())
                             .build());
 
                     //Send Email
