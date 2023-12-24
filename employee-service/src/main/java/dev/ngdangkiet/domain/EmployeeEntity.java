@@ -42,6 +42,8 @@ public class EmployeeEntity extends BaseEntity {
 
     private LocalDate birthDay;
 
+    private String imageUrl;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
